@@ -1,0 +1,1094 @@
+$(document).ready(function () {
+
+    // CARREGA DADOS DA TELA DE PESSOAS
+    var pessoasColumnDefs = [
+        { className: "dt-body-center", targets: [2, 3, 4, 5, 6, 7] }
+    ];
+    var pessoasOrder = [
+        [6, 'desc'],
+        [0, 'asc']
+    ];
+    initializeDataTable("#tablePessoas", base_url + "api/cadastro/tabela/pessoas", pessoasColumnDefs, pessoasOrder);
+
+    // CARREGA DADOS DA TELA DAS PROFISSOES
+    var profissoesColumnDefs = [
+        { className: "dt-body-center", targets: [1, 2] }
+    ];
+    var profissoesOrder = [
+        [1, 'desc'],
+        [0, 'asc']
+    ];
+    initializeDataTable("#tableProfissoes", base_url + "api/cadastro/tabela/profissoes", profissoesColumnDefs, profissoesOrder);
+
+    // CARREGA DADOS DA TELA DE PRODUTOS
+    var produtosColumnDefs = [
+        { className: "dt-body-center", targets: [0, 3, 4, 5, 6, 7] }
+    ];
+    var produtosOrder = [
+        [6, 'desc'],
+        [0, 'asc']
+    ];
+    initializeDataTable("#tableProdutos", base_url + "api/cadastro/tabela/produtos", produtosColumnDefs, produtosOrder);
+
+    // CARREGA DADOS DA TELA DOS CATEGORIA
+    var categoriasColumnDefs = [
+        { className: "dt-body-center", targets: [1, 2] }
+    ];
+    var categoriasOrder = [
+        [1, 'desc'],
+        [0, 'asc']
+    ];
+    initializeDataTable("#tableCategorias", base_url + "api/cadastro/tabela/categorias", categoriasColumnDefs, categoriasOrder);
+
+    // CARREGA DADOS DA TELA DOS SUBCATEGORIA
+    var subCategoriasColumnDefs = [
+        { className: "dt-body-center", targets: [2, 3] }
+    ];
+    var subCategoriasOrder = [
+        [2, 'desc'],
+        [0, 'asc']
+    ];
+    initializeDataTable("#tableSubCategorias", base_url + "api/cadastro/tabela/subcategorias", subCategoriasColumnDefs, subCategoriasOrder);
+
+    // CARREGA DADOS DA TELA DOS FABRICANTES
+    var fabricantesColumnDefs = [
+        { className: "dt-body-center", targets: [1, 2] }
+    ];
+    var fabricantesOrder = [
+        [1, 'desc'],
+        [0, 'asc']
+    ];
+    initializeDataTable("#tableFabricantes", base_url + "api/cadastro/tabela/fabricantes", fabricantesColumnDefs, fabricantesOrder);
+
+    // CARREGA DADOS DA TELA DOS TAMANHOS
+    var tamanhosColumnDefs = [
+        { className: "dt-body-center", targets: [0, 1, 2, 3, 4] }
+    ];
+    var tamanhosOrder = [
+        [3, 'desc'],
+        [1, 'asc']
+    ];
+    initializeDataTable("#tableTamanhos", base_url + "api/cadastro/tabela/tamanhos", tamanhosColumnDefs, tamanhosOrder);
+});
+
+$(document).ready(function () {
+
+    function limpa_formulário_cep() {
+        // Limpa valores do formulário de cep.
+        $("#cad_cep").val("");
+    }
+
+    //Quando o campo cep perde o foco.
+    $('#cad_cep').change(function () {
+
+        //Nova variável "cep" somente com dígitos.
+        var cad_cep = $(this).val().replace(/\D/g, '');
+
+        //Verifica se campo cep possui valor informado.
+        if (cad_cep != "") {
+
+            //Expressão regular para validar o CEP.
+            var validacep = /^[0-9]{8}$/;
+
+            //Valida o formato do CEP.
+            if (validacep.test(cad_cep)) {
+
+                //Desabilita os campos enquanto consulta webservice.
+                document.getElementById("cad_endereco").disabled = true;
+                document.getElementById("cad_setor").disabled = true;
+                document.getElementById("cad_cidade").disabled = true;
+                document.getElementById("cad_estado").disabled = true;
+
+
+                //Consulta o webservice viacep.com.br/
+                $.getJSON("https://viacep.com.br/ws/" + cad_cep + "/json/?callback=?", function (dados) {
+
+                    if (!("erro" in dados)) {
+                        //Atualiza os campos com os valores da consulta.
+                        $("#cad_endereco").val(dados.logradouro);
+                        $("#cad_setor").val(dados.bairro);
+                        $("#cad_cidade").val(dados.localidade);
+                        $("#cad_estado").val(dados.uf);
+
+                    } //end if.
+                    else {
+                        //CEP pesquisado não foi encontrado.
+                        $(function () {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                            $(function () {
+                                toastr.error('CEP não encontrado.');
+                                campoTexto.value = '';
+                            });
+                        });
+                    }
+                    // Habilita após a consulta
+                    document.getElementById("cad_endereco").disabled = false;
+                    document.getElementById("cad_setor").disabled = false;
+                    document.getElementById("cad_cidade").disabled = false;
+                    document.getElementById("cad_estado").disabled = false;
+                });
+            } //end if.
+            else {
+                //cep é inválido.
+                limpa_formulário_cep();
+                $(function () {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    $(function () {
+                        toastr.error('Formato de CEP inválido.');
+                        campoTexto.value = '';
+                    });
+                });
+            }
+        } //end if.
+        else {
+            //cep sem valor, limpa formulário.
+            limpa_formulário_cep();
+        }
+    });
+});
+
+// MODULO DE CADASTRO
+// GERENCIA AS PESSOAS
+$('#cad_natureza').change(function () {
+    var natureza = document.getElementById('cad_natureza').value
+    if (natureza == "F") {
+        $('#nameDocumento').text('CPF');
+        document.getElementById("container-nascimento").hidden = false;
+        document.getElementById("container-rg").hidden = false;
+    } else if (natureza == "J") {
+        $('#nameDocumento').text('CNPJ');
+        document.getElementById("container-nascimento").hidden = true;
+        document.getElementById("container-rg").hidden = true;
+    }
+});
+
+function formatarCampo(campoTexto) {
+    var cad_codigo = document.getElementById('cad_codigo').value;
+    if (campoTexto.value != '') {
+        $.post(base_url + 'api/cadastro/pessoa/consulta/documento', { cad_documento: campoTexto.value })
+            .done(function (data) {
+                if (cad_codigo == '' || cad_codigo != data.cad_codigo) {
+                    if (data) {
+                        $menssagem = "Documento já cadastrado - COD: " + data.cad_codigo + " Pessoa: " + data.cad_nome;
+                        $(function () {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                            $(function () {
+                                toastr.error($menssagem);
+                                document.getElementById('cad_documento').value = '';
+                            });
+                        });
+                    }
+                }
+            });
+
+        if (campoTexto.value.length == 11) {
+            campoTexto.value = mascaraCpf(campoTexto.value);
+            $('#cad_natureza').val('F').trigger("change");
+        } else if (campoTexto.value.length == 14) {
+            consultaCNPJ(campoTexto.value);
+            campoTexto.value = mascaraCnpj(campoTexto.value);
+            $('#cad_natureza').val('J').trigger("change");
+
+        } else {
+            $(function () {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                $(function () {
+                    toastr.error('Documento informador não é valido');
+                    campoTexto.value = '';
+                });
+            });
+        }
+    }
+}
+
+function consultaCNPJ(cnpj) {
+    $.ajax({
+        'url': "https://www.receitaws.com.br/v1/cnpj/" + cnpj,
+        'type': "GET",
+        'dataType': 'jsonp',
+        'success': function (dado) {
+            if (dado.nome == undefined) {
+                $(function () {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    $(function () {
+                        toastr.error('CNPJ Não encontrado, Preencha Manualmente');
+                        // campoTexto.value = '';
+                    });
+                });
+            } else {
+
+                document.getElementById("cad_nome").value = dado.nome;
+                document.getElementById("cad_apelido").value = dado.fantasia;
+                document.getElementById("cad_cep").value = dado.cep;
+                document.getElementById("cad_endereco").value = dado.logradouro;
+                document.getElementById("cad_numero").value = dado.numero;
+                document.getElementById("cad_setor").value = dado.bairro;
+                document.getElementById("cad_cidade").value = dado.municipio;
+                document.getElementById("cad_estado").value = dado.uf;
+                document.getElementById("cad_complemento").value = dado.complemento;
+                document.getElementById("cad_telefone").value = dado.telefone;
+                document.getElementById("cad_email").value = dado.email;
+            }
+        }
+    });
+}
+
+// GERENCIA OS PESSOAS
+function getEditPessoa(Paramentro) {
+    $.ajax({
+        "url": base_url + "api/cadastro/exibir/pessoa/" + Paramentro,
+        "type": "GET",
+        "dataType": "json",
+        success: function (dado) {
+            document.getElementById('modalTitlePessoa').innerHTML = 'EDITANDO CADASTRO DO ' + dado.cad_nome;
+            $('#cod_pessoa').val(dado.cod_pessoa);
+            $('#cad_tipopessoa').val(dado.cad_tipopessoa).trigger("change");
+            $('#cad_natureza').val(dado.cad_natureza).trigger("change");
+            if (dado.cad_natureza == 'F') {
+                $('#cad_documento').val(dado.cad_cpf);
+            }
+            if (dado.cad_natureza == 'J') {
+                $('#cad_documento').val(dado.cad_cnpj);
+            }
+            $('#cad_nascimeto').val(dado.cad_nascimeto);
+            $('#cad_rg').val(dado.cad_rg);
+            $('#cad_nome').val(dado.cad_nome);
+            $('#cad_apelido').val(dado.cad_apelido);
+            $('#cad_cep').val(dado.cad_cep);
+            $('#cad_endereco').val(dado.cad_endereco);
+            $('#cad_numero').val(dado.cad_numero);
+            $('#cad_setor').val(dado.cad_setor);
+            $('#cad_cidade').val(dado.cad_cidade);
+            $('#cad_estado').val(dado.cad_estado);
+            $('#cad_complemento').val(dado.cad_complemento);
+            $('#cad_telefone').val(dado.cad_telefone);
+            $('#cad_celular').val(dado.cad_celular);
+            $('#cad_email').val(dado.cad_email);
+            $('#pes_profissao').val(dado.cod_profissao).trigger("change");
+            if (dado.status == '1') {
+                document.getElementById("pessoaAtivo").checked = true;
+            }
+            if (dado.status == '2') {
+                document.getElementById("pessoaInativo").checked = true;
+            }
+        }
+    });
+}
+
+function setNewPessoa() {
+    document.getElementById('modalTitlePessoa').innerHTML = 'CADASTRO DE NOVO CLIENTE / FORNECEDOR';
+    var cod_pessoa = document.getElementById('cod_pessoa').value;
+    if (cod_pessoa != '') {
+        document.getElementById("cod_pessoa").value = '';
+        $('#cad_tipopessoa').val(1).trigger("change");
+        $('#cad_natureza').val('F').trigger("change");
+        document.getElementById("cad_documento").value = '';
+        document.getElementById("cad_nascimeto").value = '';
+        document.getElementById("cad_rg").value = '';
+        document.getElementById("cad_nome").value = '';
+        document.getElementById("cad_apelido").value = '';
+        document.getElementById("cad_cep").value = '';
+        document.getElementById("cad_endereco").value = '';
+        document.getElementById("cad_numero").value = '';
+        document.getElementById("cad_setor").value = '';
+        document.getElementById("cad_cidade").value = '';
+        document.getElementById("cad_estado").value = '';
+        document.getElementById("cad_complemento").value = '';
+        document.getElementById("cad_telefone").value = '';
+        document.getElementById("cad_celular").value = '';
+        document.getElementById("cad_email").value = '';
+    }
+}
+
+function SalvaPessoa() {
+    $("#formPessoa").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formPessoa').attr('action'),
+                type: "POST",
+                data: $('#formPessoa').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("SalvarPessoa").disabled = true;
+                },
+                success: function (response) {
+                    respostaSwalFire(response)
+                },
+                error: function () {
+                    document.getElementById("SalvarPessoa").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formPessoa').validate({
+        rules: {
+            cad_nome: {
+                required: true,
+            },
+        },
+        messages: {
+            cad_nome: {
+                required: "O Nome deve ser informada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+function getProfissaoOption() {
+    $.get(base_url + 'api/cadastro/exibir/profissoes', {
+    }, function (response) {
+        options = '<option value="">SELECIONE UMA PROFISSÃO</option>';
+        for (var i = 0; i < response.length; i++) {
+            options += '<option value="' + response[i].cod_profissao + '">' + response[i].cad_profissao + '</option>';
+        }
+        $('#pes_profissao').html(options);
+    });
+}
+
+function getEditProfissao(Paramentro) {
+    $.ajax({
+        "url": base_url + "api/cadastro/exibir/profissao/" + Paramentro,
+        "type": "GET",
+        "dataType": "json",
+        success: function (dado) {
+            document.getElementById('modalTitleProfissao').innerHTML = 'ATUALIZANDO A PROFISSÃO ' + dado.cad_profissao;
+            $('#cod_profissao').val(dado.cod_profissao);
+            $('#cad_profissao').val(dado.cad_profissao);
+            if (dado.status == '1') {
+                document.getElementById("profissaoAtivo").checked = true;
+            }
+            if (dado.status == '2') {
+                document.getElementById("profissaoInativo").checked = true;
+            }
+        }
+    });
+}
+
+function setNewProfissao() {
+    document.getElementById('modalTitleProfissao').innerHTML = 'CADASTRO DE NOVA PROFISSÃO';
+    var cod_profissao = document.getElementById('cod_profissao').value;
+    if (cod_profissao != '') {
+        document.getElementById("cod_profissao").value = '';
+        document.getElementById("cad_profissao").value = '';
+        document.getElementById("profissaoAtivo").checked = true;
+    }
+}
+
+function salvarProfissao() {
+    $("#formProfissao").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formProfissao').attr('action'),
+                type: "POST",
+                data: $('#formProfissao').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("SalvarProfissao").disabled = true;
+                },
+                success: function (response) {
+                    respostaSwalFire(response)
+                },
+                error: function () {
+                    document.getElementById("SalvarProfissao").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formProfissao').validate({
+        rules: {
+            cad_profissao: {
+                required: true,
+            },
+        },
+        messages: {
+            cad_profissao: {
+                required: "A Profissão deve ser informada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+// GERENCIA OS PRODUTOS
+function tableProdutoGrade(Paramentro) {
+    // CARREGA DADOS DA TELA DOS TAMANHOS
+    $("#tableProdutoGrade").DataTable({
+        "ajax": {
+            "url": base_url + "api/cadastro/tabela/grade/produto/" + Paramentro,
+            "type": "GET",
+            "dataType": "json",
+            async: "true"
+        },
+        order: [
+            [5, 'desc'],
+            [4, 'desc'],
+            [0, 'desc']
+        ],
+    });
+}
+
+function getProdutoGradeSelecionado(Paramentro) {
+    $.get(base_url + 'api/cadastro/exibir/grade/produto/tamanho/' + Paramentro, {
+    }, function (response) {
+        options = '<option value="">SELECIONE UMA CATEGORIA</option>';
+        for (var i = 0; i < response.length; i++) {
+            options += '<option value="' + response[i].cod_tamanho + '">' + response[i].cad_tamanho + '</option>';
+        }
+        $('#cod_gradetamanho').html(options);
+    });
+}
+
+function salvarGradeProdutoTamanho() {
+    $("#formProdutoGrade").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formProdutoGrade').attr('action'),
+                type: "POST",
+                data: $('#formProdutoGrade').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("incluirGradeProduto").disabled = true;
+                },
+                success: function (response) {
+                    var cod_produto = response.data.produto_id;
+                    if (response.status === true) {
+                        $('#tableProdutoGrade').dataTable().fnDestroy();
+                        tableProdutoGrade(cod_produto);
+                        getProdutoGradeSelecionado(cod_produto);
+                        document.getElementById("incluirGradeProduto").disabled = false;
+                    }
+                },
+                error: function () {
+                    document.getElementById("incluirGradeProduto").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formProdutoGrade').validate({
+        rules: {
+            cod_produto: {
+                required: true,
+            },
+            cod_gradetamanho: {
+                required: true,
+            }
+        },
+        messages: {
+            cod_produto: {
+                required: "O produto deve ser selecionado!",
+            },
+            cod_gradetamanho: {
+                required: "O tamanho do produto deve ser selecionado!",
+            }
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+function getEditProduto(Paramentro) {
+    getProdutoCategoriaOption();
+    $.ajax({
+        "url": base_url + "api/cadastro/exibir/produto/" + Paramentro,
+        "type": "GET",
+        "dataType": "json",
+        success: function (dado) {
+
+            document.getElementById('modalTitleProduto').innerHTML = 'ATUALIZANDO O PRODUTO ' + dado.cad_produto;
+            $('#cod_produto').val(dado.cod_produto);
+            $('#cad_descricao').val(dado.cad_produto);
+            $('#cad_descricaopdv').val(dado.cad_produto_pdv);
+            $('#pro_categoria').val(dado.cod_categoria).trigger('change');
+            $('#cad_codfabricante').val(dado.cad_fabricante);
+            $('#pro_frabricante').val(dado.cod_fabricante).trigger('change');
+            $('#cad_codbarras').val(dado.cad_codigobarras);
+
+            if (dado.status == '1') {
+                document.getElementById("produtoAtivo").checked = true;
+            }
+            if (dado.status == '2') {
+                document.getElementById("produtoInativo").checked = true;
+            }
+        }
+    });
+}
+
+function selectedSubcategoria() {
+    var cod_produto = $('#cod_produto').val();
+    if (cod_produto) {
+        $.ajax({
+            "url": base_url + "api/cadastro/exibir/produto/" + cod_produto,
+            "type": "GET",
+            "dataType": "json",
+            success: function (response) {
+                $('#pro_subcategoria').val(response.cod_subcategoria).trigger("change");
+            }
+        });
+    } else {
+        document.getElementById("pro_subcategoria").disabled = true;
+    }
+}
+
+function setNewProduto() {
+    getProdutoCategoriaOption();
+    document.getElementById('modalTitleProduto').innerHTML = 'CADASTRO DE NOVO PRODUTO ';
+    var cod_produto = document.getElementById('cod_produto').value;
+    if (cod_produto != '') {
+        document.getElementById("cod_produto").value = '';
+        document.getElementById("cad_descricao").value = '';
+        document.getElementById("cad_descricaopdv").value = '';
+        $('#pro_categoria').val('').trigger('change');
+        document.getElementById("cad_codfabricante").value = '';
+        $('#pro_frabricante').val('').trigger('change');
+        document.getElementById("cad_codbarras").value = '';
+        document.getElementById("produtoAtivo").checked = true;
+    }
+}
+
+function SalvaProdutos() {
+    $("#formProduto").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            var form = $('#formProduto');
+            var url = form.attr('action');
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $('#formProduto').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("SalvaProduto").disabled = true;
+                },
+                success: function (response) {
+                    respostaSwalFire(response)
+                },
+                error: function () {
+                    document.getElementById("SalvaProduto").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formProduto').validate({
+        rules: {
+            cad_descricao: {
+                required: true,
+            },
+            pro_subcategoria: {
+                required: true,
+            },
+        },
+        messages: {
+            cad_descricao: {
+                required: "A descrição do produto deve ser informada!",
+            },
+            pro_categoria: {
+                required: "A categoria do produto deve ser selecionada!",
+            },
+            pro_subcategoria: {
+                required: "A subcategoria do produto deve ser selecionada!",
+            },
+            pro_frabricante: {
+                required: "O fabricante do produto deve ser selecionada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+function getProdutoCategoriaOption() {
+    $.get(base_url + 'api/cadastro/exibir/categorias', {
+    }, function (response) {
+        options = '<option value="">SELECIONE UMA CATEGORIA</option>';
+        for (var i = 0; i < response.length; i++) {
+            options += '<option value="' + response[i].cod_categoria + '">' + response[i].cad_categoria + '</option>';
+        }
+        $('#pro_categoria').html(options);
+    });
+}
+
+function getProdutoSubcategoriaOption(Paramentro) {
+    if (Paramentro === '' || Paramentro === null) {
+        var Paramentro = 0;
+    }
+    $.get(base_url + 'api/cadastro/exibir/categoria/subcategorias/' + Paramentro, {
+    }, function (response) {
+        options = '<option value="">SELECIONE UMA SUBCATEGORIA</option>';
+        for (var i = 0; i < response.length; i++) {
+            options += '<option value="' + response[i].cod_subcategoria + '">' + response[i].cad_subcategoria + '</option>';
+        }
+        $('#pro_subcategoria').html(options);
+        document.getElementById("pro_subcategoria").disabled = false;
+        document.getElementById("pro_subcategoria").required = true;
+    });
+}
+
+function getProdutoFabricanteOption() {
+    $.get(base_url + 'api/cadastro/exibir/fabricantes', {
+    }, function (response) {
+        options = '<option value="">SELECIONE UMA CATEGORIA</option>';
+        for (var i = 0; i < response.length; i++) {
+            options += '<option value="' + response[i].cod_fabricante + '">' + response[i].cad_fabricante + '</option>';
+        }
+        $('#pro_frabricante').html(options);
+    });
+}
+
+function getCategoriaOption() {
+    $.get(base_url + 'api/cadastro/exibir/categorias', {
+    }, function (response) {
+        options = '<option value="">SELECIONE UMA CATEGORIA</option>';
+        for (var i = 0; i < response.length; i++) {
+            options += '<option value="' + response[i].cod_categoria + '">' + response[i].cad_categoria + '</option>';
+        }
+        $('#sub_categoria').html(options);
+    });
+}
+
+function getEditCategoria(Paramentro) {
+    $.ajax({
+        "url": base_url + "api/cadastro/exibir/categoria/" + Paramentro,
+        "type": "GET",
+        "dataType": "json",
+        success: function (dado) {
+            document.getElementById('modalTitleCategoria').innerHTML = 'ATUALIZANDO A CATEGORIA ' + dado.cad_categoria;
+            $('#cod_categoria').val(dado.cod_categoria);
+            $('#cad_categoria').val(dado.cad_categoria);
+            if (dado.status == '1') {
+                document.getElementById("categoriaAtivo").checked = true;
+            }
+            if (dado.status == '2') {
+                document.getElementById("categoriaInativo").checked = true;
+            }
+        }
+    });
+}
+
+function setNewCategoria() {
+    document.getElementById('modalTitleCategoria').innerHTML = 'CADASTRO DE NOVA CATEGORIA DO PRODUTO';
+    var cod_categoria = document.getElementById('cod_categoria').value;
+    if (cod_categoria != '') {
+        document.getElementById("cod_categoria").value = '';
+        document.getElementById("cad_categoria").value = '';
+        document.getElementById("categoriaAtivo").checked = true;
+    }
+}
+
+function salvarCategoria() {
+    $("#formCategoria").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            var form = $('#formCategoria');
+            var url = form.attr('action');
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $('#formCategoria').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("SalvarCategoria").disabled = true;
+                },
+                success: function (response) {
+                    respostaSwalFire(response)
+                },
+                error: function () {
+                    document.getElementById("SalvarCategoria").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formCategoria').validate({
+        rules: {
+            cad_categoria: {
+                required: true,
+            },
+        },
+        messages: {
+            cad_categoria: {
+                required: "A Categoria deve ser informada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+function getEditFabricante(Paramentro) {
+    $.ajax({
+        "url": base_url + "api/cadastro/exibir/fabricante/" + Paramentro,
+        "type": "GET",
+        "dataType": "json",
+        success: function (dado) {
+            document.getElementById('modalTitleFabricante').innerHTML = 'ATUALIZANDO O FABRICANTE ' + dado.cad_fabricante;
+            $('#cod_fabricante').val(dado.cod_fabricante);
+            $('#cad_fabricante').val(dado.cad_fabricante);
+            if (dado.status == '1') {
+                document.getElementById("fabricanteAtivo").checked = true;
+            }
+            if (dado.status == '2') {
+                document.getElementById("fabricanteInativo").checked = true;
+            }
+        }
+    });
+}
+
+function setNewFabricante() {
+    document.getElementById('modalTitleFabricante').innerHTML = 'CADASTRO DE NOVO FABRICANTE DO PRODUTO';
+    var cod_fabricante = document.getElementById('cod_fabricante').value;
+    if (cod_fabricante != '') {
+        document.getElementById("cod_fabricante").value = '';
+        document.getElementById("cad_fabricante").value = '';
+        document.getElementById("fabricanteAtivo").checked = true;
+    }
+}
+
+function salvarFabricante() {
+    $("#formFabricante").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formFabricante').attr('action'),
+                type: "POST",
+                data: $('#formFabricante').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+
+                },
+                success: function (response) {
+                    respostaSwalFire(response)
+                },
+                error: function () {
+
+                }
+            });
+        }
+    });
+
+    $('#formFabricante').validate({
+        rules: {
+            cad_fabricante: {
+                required: true,
+            },
+        },
+        messages: {
+            cad_fabricante: {
+                required: "O Fabricante deve ser informada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+function setNewSubCategoria() {
+    document.getElementById('modalTitleSubCategoria').innerHTML = 'CADASTRO DE NOVA SUBCATEGORIA DO PRODUTO';
+    var cod_subcategoria = document.getElementById('cod_subcategoria').value;
+    if (cod_subcategoria != '') {
+        document.getElementById("cod_subcategoria").value = '';
+        document.getElementById("cad_subcategoria").value = '';
+        $('#sub_categoria').val('').trigger('change');
+        document.getElementById("subcategoriaAtivo").checked = true;
+    }
+}
+
+function salvarSubcategorias() {
+    $("#formSubcategoria").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formSubcategoria').attr('action'),
+                type: "POST",
+                data: $('#formSubcategoria').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("salvarSubcategoria").disabled = true;
+                },
+                success: function (response) {
+                    respostaSwalFire(response)
+                },
+                error: function () {
+                    document.getElementById("salvarSubcategoria").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formSubcategoria').validate({
+        rules: {
+            cod_categoria: {
+                required: true,
+            },
+            cad_subcategoria: {
+                required: true,
+            },
+        },
+        messages: {
+            cod_categoria: {
+                required: "Selecione uma Categoria!",
+            },
+            cad_subcategoria: {
+                required: "A descrição da Subcategoria deve ser informada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+function getEditSubCategoria(Paramentro) {
+    $.ajax({
+        "url": base_url + "api/cadastro/exibir/subcategoria/" + Paramentro,
+        "type": "GET",
+        "dataType": "json",
+        success: function (dado) {
+            document.getElementById('modalTitleSubCategoria').innerHTML = 'ATUALIZANDO A SUBCATEGORIA ' + dado.cad_subcategoria;
+            $('#cod_subcategoria').val(dado.cod_subcategoria);
+            $('#cad_subcategoria').val(dado.cad_subcategoria);
+            $('#sub_categoria').val(dado.cod_categoria).trigger('change');
+            if (dado.status == '1') {
+                document.getElementById("subcategoriaAtivo").checked = true;
+            }
+            if (dado.status == '2') {
+                document.getElementById("subcategoriaInativo").checked = true;
+            }
+        }
+    });
+}
+
+function getEditTamanho(Paramentro) {
+    $.ajax({
+        "url": base_url + "api/cadastro/exibir/tamanho/" + Paramentro,
+        "type": "GET",
+        "dataType": "json",
+        success: function (dado) {
+            document.getElementById('modalTitleTamanho').innerHTML = 'ATUALIZANDO O TAMANHO ' + dado.cad_tamanho;
+            document.getElementById("cod_tamanho").value = dado.cod_tamanho;
+            document.getElementById("cad_tamanho").value = dado.cad_tamanho;
+            document.getElementById("cad_abreviacao").value = dado.cad_abreviacao;
+            document.getElementById("cad_embalagem").value = dado.cad_embalagem;
+
+            if (dado.status == '1') {
+                document.getElementById("tamanhoAtivo").checked = true;
+            }
+            if (dado.status == '2') {
+                document.getElementById("tamanhoInativo").checked = true;
+            }
+        }
+    });
+}
+
+function setNewTamanho() {
+    document.getElementById('modalTitleTamanho').innerHTML = 'CADASTRO DE NOVO TAMANHO DE PRODUTO';
+    var cod_tamanho = document.getElementById('cod_tamanho').value;
+    if (cod_tamanho != '') {
+        document.getElementById("cod_tamanho").value = '';
+        document.getElementById("cad_tamanho").value = '';
+        document.getElementById("cad_abreviacao").value = '';
+        document.getElementById("cad_embalagem").value = '1';
+        document.getElementById("tamanhoAtivo").checked = true;
+    }
+}
+
+function salvarTamanhos() {
+    $("#formTamanho").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formTamanho').attr('action'),
+                type: "POST",
+                data: $('#formTamanho').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("salvarTamanho").disabled = true;
+                },
+                success: function (response) {
+                    respostaSwalFire(response)
+                },
+                error: function () {
+                    document.getElementById("salvarTamanho").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formTamanho').validate({
+        rules: {
+            cad_tamanho: {
+                required: true,
+
+            },
+            cad_embalagem: {
+                required: true,
+
+            },
+            cad_abreviacao: {
+                required: true,
+                maxlength: 5
+            },
+        },
+        messages: {
+            cad_tamanho: {
+                required: "O Tamanho deve ser informado!",
+            },
+            cad_embalagem: {
+                required: "O quantidade da embalagem deve ser informado!",
+            },
+            cad_abreviacao: {
+                required: "A Abreviação deve ser informada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+
+function getArquivar(Paramentro, Codigo) {
+    showConfirmationDialog('Deseja Realmente Arquivar Este Registro?', 'Este Lançamento Não Poderá Ser Desfeito!', 'Sim, Arquivar!')
+        .then((confirmed) => {
+            if (confirmed) {
+                executeAction(base_url + "api/cadastro/arquivar/", Paramentro, Codigo);
+            }
+        });
+}
+
+function getCancelar(Paramentro, Codigo) {
+    showConfirmationDialog('Deseja Realmente Cancelar Este Registro?', 'Este Lançamento Não Poderá Ser Desfeito!', 'Sim, Cancelar!')
+        .then((confirmed) => {
+            if (confirmed) {
+                executeAction(base_url + "api/cadastro/cancelar/", Paramentro, Codigo);
+            }
+        });
+}
