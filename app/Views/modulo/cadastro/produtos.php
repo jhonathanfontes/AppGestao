@@ -20,12 +20,12 @@
             <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalCategoria" onclick="setNewCategoria()">
                 <i class="fa fa-tag"></i> CATEGORIA
             </button>
-            <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalSubCategoria" onclick="setNewSubCategoria()">
+            <!-- <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalSubCategoria" onclick="setNewSubCategoria()">
                 <i class="fa fa-tags"></i> SUBCATEGORIA
             </button>
             <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalFabricante" onclick="setNewFabricante()">
                 <i class="fa fa-briefcase"></i> FABRICANTE
-            </button>
+            </button> -->
             <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalTamanho" onclick="setNewTamanho()">
                 <i class="fa fa-ruler"></i> TAMANHO
             </button>

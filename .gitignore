@@ -17,5 +17,9 @@ application/logs/*
 !application/logs/.htaccess
 
 #codeigniter 4
+*/writable/cache/*
+*/writable/debugbar/*
+*/writable/logs/*
+*/writable/session/*
 /vendor/
 .env

@@ -13,33 +13,52 @@ class Tamanhos extends BaseController
     public function __construct()
     {
         $this->tamanhoModel = new TamanhoModel();
-        $this->validation =  \Config\Services::validation();
+        $this->validation = \Config\Services::validation();
     }
 
     public function getCarregaTabela()
     {
-        $response = array();
+        $response['data'] = array();
 
         $result = $this->tamanhoModel
             ->whereIn('status', ['1', '2'])
             ->withDeleted()
             ->findAll();
 
-        foreach ($result as $key => $value) {
+        if (empty($result)):
+            return $this->response->setJSON($response);
+        endif;
 
-            $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalTamanho" onclick="getEditTamanho(' . $value->id_tamanho . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
-            $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'tamanho'" . ',' . $value->id_tamanho . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+        try {
 
-            $response['data'][$key] = array(
-                esc($value->tam_descricao),
-                esc($value->tam_abreviacao),
-                esc($value->tam_quantidade),
-                convertStatus($value->status),
-                $ops,
+            foreach ($result as $key => $value) {
+
+                $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalTamanho" onclick="getEditTamanho(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+                $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'tamanho'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+
+                $response['data'][$key] = array(
+                    esc($value->tam_descricao),
+                    esc($value->tam_abreviacao),
+                    esc($value->tam_quantidade),
+                    convertStatus($value->status),
+                    $ops,
+                );
+            }
+
+            return $this->response->setJSON($response);
+
+        } catch (\Throwable $th) {
+            return $this->response->setJSON(
+                [
+                    'status' => false,
+                    'menssagem' => [
+                        'status' => 'error',
+                        'heading' => 'NÃO FOI POSSIVEL PROCESSAR O REGISTRO!',
+                        'description' => $th->getMessage()
+                    ]
+                ]
             );
         }
-
-        return $this->response->setJSON($response);
     }
 
     public function save()
@@ -48,15 +67,15 @@ class Tamanhos extends BaseController
             return redirect()->back();
         }
 
-        $data['tam_descricao']  = returnNull($this->request->getPost('cad_tamanho'), 'S');
+        $data['tam_descricao'] = returnNull($this->request->getPost('cad_tamanho'), 'S');
         $data['tam_abreviacao'] = returnNull($this->request->getPost('cad_abreviacao'), 'S');
         $data['tam_quantidade'] = returnNull($this->request->getPost('cad_embalagem'), 'S');
-        $data['status']         = $this->request->getPost('status');
+        $data['status'] = $this->request->getPost('status');
 
         if (!empty($this->request->getPost('cod_tamanho'))) {
-            $data['id_tamanho'] = $this->request->getPost('cod_tamanho');
+            $data['id'] = $this->request->getPost('cod_tamanho');
 
-            $result = $this->buscaRegistro404($data['id_tamanho']);
+            $result = $this->buscaRegistro404($data['id']);
             $result->fill($data);
 
             if ($result->hasChanged() == false) {
@@ -110,7 +129,7 @@ class Tamanhos extends BaseController
     public function show($paramentro)
     {
         $return = $this->tamanhoModel
-            ->where('id_tamanho', $paramentro)
+            ->where('id', $paramentro)
             ->whereIn('status', ['1', '2'])
             ->first();
         return $this->response->setJSON($return);
@@ -118,7 +137,7 @@ class Tamanhos extends BaseController
 
     public function arquivar($paramentro = null)
     {
-        $categoria = $this->tamanhoModel->where('id_tamanho', $paramentro)
+        $categoria = $this->tamanhoModel->where('id', $paramentro)
             ->where('status <>', 0)
             ->where('status <>', 3)
             ->first();

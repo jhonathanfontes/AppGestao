@@ -13,39 +13,56 @@ class Produtos extends BaseController
     public function __construct()
     {
         $this->produtoModel = new ProdutoModel();
-        $this->validation =  \Config\Services::validation();
+        $this->validation = \Config\Services::validation();
     }
     public function getCarregaTabela()
     {
-        $response = array();
 
-        $data['data'] = array();
-
+        $response['data'] = array();
         $result = $this->produtoModel->getProdutos();
-        foreach ($result as $key => $value) {
 
-            $ops = '	<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalProduto" onclick="getEditProduto(' . $value->id_produto . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
-            $ops .= '	<a class="btn btn-xs btn-success" href="produtos/view/' . $value->id_produto . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
+        if (empty($result)):
+            return $this->response->setJSON($response);
+        endif;
 
-            if ($value->status == '1') :
-                $status = '<label class="badge badge-success">Habilitado</label>';
-            elseif ($value->status == '2') :
-                $status = '<label class="badge badge-danger">Desabilitado</label>';
-            endif;
+        try {
+            foreach ($result as $key => $value) {
 
-            $response['data'][$key] = array(
-                esc($value->id_produto),
-                esc($value->pro_descricao_pvd),
-                esc($value->pro_descricao),
-                esc($value->sub_descricao),
-                esc($value->fab_descricao),
-                esc($value->estoque),
-                convertStatus($value->status),
-                $ops,
+                $ops = '	<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalProduto" onclick="getEditProduto(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+                $ops .= '	<a class="btn btn-xs btn-success" href="produtos/view/' . $value->id . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
+
+                if ($value->status == '1'):
+                    $status = '<label class="badge badge-success">Habilitado</label>';
+                elseif ($value->status == '2'):
+                    $status = '<label class="badge badge-danger">Desabilitado</label>';
+                endif;
+
+                $response['data'][$key] = array(
+                    esc($value->id),
+                    esc($value->pro_descricao_pvd),
+                    esc($value->pro_descricao),
+                    esc($value->sub_descricao),
+                    esc($value->fab_descricao),
+                    esc($value->estoque),
+                    convertStatus($value->status),
+                    $ops,
+                );
+            }
+
+            return $this->response->setJSON($response);
+        } catch (\Throwable $th) {
+            return $this->response->setJSON(
+                [
+                    'status' => false,
+                    'menssagem' => [
+                        'status' => 'error',
+                        'heading' => 'NÃO FOI POSSIVEL PROCESSAR O REGISTRO!',
+                        'description' => $th->getMessage()
+                    ]
+                ]
             );
         }
 
-        return $this->response->setJSON($response);
     }
     public function save()
     {
@@ -53,18 +70,18 @@ class Produtos extends BaseController
             return redirect()->back();
         }
 
-        $data['pro_descricao']      = returnNull($this->request->getPost('cad_descricao'), 'S');
-        $data['pro_descricao_pvd']  = ($this->request->getPost('cad_descricaopdv') != null) ? returnNull($this->request->getPost('cad_descricaopdv'), 'S') : returnNull($this->request->getPost('cad_descricao'), 'S');
-        $data['subcategoria_id']    = $this->request->getPost('pro_subcategoria');
+        $data['pro_descricao'] = returnNull($this->request->getPost('cad_descricao'), 'S');
+        $data['pro_descricao_pvd'] = ($this->request->getPost('cad_descricaopdv') != null) ? returnNull($this->request->getPost('cad_descricaopdv'), 'S') : returnNull($this->request->getPost('cad_descricao'), 'S');
+        $data['subcategoria_id'] = $this->request->getPost('pro_subcategoria');
         $data['pro_cod_fabricante'] = $this->request->getPost('cad_codfabricante');
-        $data['pro_codigobarras']   = ($this->request->getPost('cad_codbarras') != null) ? returnNull($this->request->getPost('cad_codbarras'), 'S') : getCodigoBarra($this->request->getPost('pro_subcategoria'), $this->request->getPost('pro_frabricante'));
-        $data['fabricante_id']      = $this->request->getPost('pro_frabricante');
-        $data['status']             = $this->request->getPost('status');
+        $data['pro_codigobarras'] = ($this->request->getPost('cad_codbarras') != null) ? returnNull($this->request->getPost('cad_codbarras'), 'S') : getCodigoBarra($this->request->getPost('pro_subcategoria'), $this->request->getPost('pro_frabricante'));
+        $data['fabricante_id'] = $this->request->getPost('pro_frabricante');
+        $data['status'] = $this->request->getPost('status');
 
         if (!empty($this->request->getPost('cod_produto'))) {
-            $data['id_produto'] = $this->request->getPost('cod_produto');
+            $data['id'] = $this->request->getPost('cod_produto');
 
-            $result = $this->buscaRegistro404($data['id_produto']);
+            $result = $this->buscaRegistro404($data['id']);
             $result->fill($data);
 
             if ($result->hasChanged() == false) {
@@ -123,7 +140,7 @@ class Produtos extends BaseController
 
     public function arquivar($paramentro = null)
     {
-        $result = $this->produtoModel->where('id_produto', $paramentro)
+        $result = $this->produtoModel->where('id', $paramentro)
             ->where('status <>', 0)
             ->where('status <>', 3)
             ->first();
@@ -172,12 +189,12 @@ class Produtos extends BaseController
 
         $produto = $this->produtoModel->selectProdutos()
             ->where('cad_produto.status', 1)
-                ->groupStart()
-                    ->where('pro_descricao LIKE', '%' . $cod_produto . '%')
-                    ->orWhere('pro_descricao_pvd LIKE', '%' . $cod_produto . '%')
-                    ->orWhere('pro_codigobarras LIKE', '%' . $cod_produto . '%')
-                    ->orWhere('fab_descricao LIKE', '%' . $cod_produto . '%')
-                ->groupEnd()
+            ->groupStart()
+            ->where('pro_descricao LIKE', '%' . $cod_produto . '%')
+            ->orWhere('pro_descricao_pvd LIKE', '%' . $cod_produto . '%')
+            ->orWhere('pro_codigobarras LIKE', '%' . $cod_produto . '%')
+            ->orWhere('fab_descricao LIKE', '%' . $cod_produto . '%')
+            ->groupEnd()
             ->orderBy('pro_descricao', 'ASC')
             ->findAll();
 
@@ -190,12 +207,12 @@ class Produtos extends BaseController
 
         $produto = $this->produtoModel->selectProdutos()
             ->where('cad_produto.status', 1)
-                ->groupStart()
-                    ->where('pro_descricao LIKE', '%' . $cod_produto . '%')
-                    ->orWhere('pro_descricao_pvd LIKE', '%' . $cod_produto . '%')
-                    ->orWhere('pro_codigobarras LIKE', '%' . $cod_produto . '%')
-                    ->orWhere('fab_descricao LIKE', '%' . $cod_produto . '%')
-                ->groupEnd()
+            ->groupStart()
+            ->where('pro_descricao LIKE', '%' . $cod_produto . '%')
+            ->orWhere('pro_descricao_pvd LIKE', '%' . $cod_produto . '%')
+            ->orWhere('pro_codigobarras LIKE', '%' . $cod_produto . '%')
+            ->orWhere('fab_descricao LIKE', '%' . $cod_produto . '%')
+            ->groupEnd()
             ->orderBy('pro_descricao', 'ASC')
             ->findAll();
 

@@ -7,7 +7,7 @@ use CodeIgniter\Entity\Entity;
 class Tamanho extends Entity
 {
     protected $datamap = [
-        'cod_tamanho'   => 'id_tamanho',
+        'cod_tamanho'   => 'id',
         'cad_abreviacao' => 'tam_abreviacao',
         'cad_tamanho'   => 'tam_descricao',
         'cad_embalagem' => 'tam_quantidade',

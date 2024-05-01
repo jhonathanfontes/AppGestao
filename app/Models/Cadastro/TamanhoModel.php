@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class TamanhoModel extends Model
 {
     protected $table      = 'cad_tamanho';
-    protected $primaryKey = 'id_tamanho';
+    protected $primaryKey = 'id';
     protected $returnType = \App\Entities\Cadastro\Tamanho::class;
     protected $useSoftDeletes = false;
     protected $allowedFields = [
@@ -40,12 +40,12 @@ class TamanhoModel extends Model
 
     public function returnSave(int $codigo = null)
     {
-        return $this->select('id_tamanho, tam_descricao')->find($codigo);
+        return $this->select('id, tam_descricao')->find($codigo);
     }
     public function arquivarRegistro(int $codigo = null)
     {
         if ($codigo != null) {
-            $data['status'] = 3;
+            $data['status'] = 9;
             return $this->update($codigo, $data);
         }
         return false;

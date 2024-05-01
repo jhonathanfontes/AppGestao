@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class CategoriaModel extends Model
 {
 	protected $table = 'cad_categoria';
-	protected $primaryKey = 'id_categoria';
+	protected $primaryKey = 'id';
 	protected $returnType = \App\Entities\Cadastro\Categoria::class;
 	protected $useSoftDeletes = true;
 	protected $allowedFields = [
@@ -44,13 +44,13 @@ class CategoriaModel extends Model
 
 	public function returnSave(int $codigo = null)
 	{
-		return $this->select('id_categoria, cat_descricao')->find($codigo);
+		return $this->select('id, cat_descricao')->find($codigo);
 	}
 
 	public function arquivarRegistro(int $codigo = null)
 	{
 		if ($codigo != null) {
-			$data['status'] = 3;
+			$data['status'] = 9;
 			return $this->update($codigo, $data);
 		}
 		return false;

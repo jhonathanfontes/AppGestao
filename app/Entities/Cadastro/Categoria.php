@@ -7,34 +7,23 @@ use CodeIgniter\Entity\Entity;
 class Categoria extends Entity
 {
     protected $attributes = [
-        'id_categoria'  => null,
+        'id'  => null,
         'cat_descricao' => null,
         'status'        => null,
 
     ];
 
     protected $datamap = [
-        'cod_categoria' => 'id_categoria',
+        'cod_categoria' => 'id',
         'cad_categoria' => 'cat_descricao'
     ];
 
     protected $dates   = ['created_at', 'updated_at', 'deleted_at'];
 
-    public function setId_categoria(int $cod_categoria)
-    {
-        $this->attributes['id_categoria'] = $cod_categoria;
-        return $this;
-    }
-
-    public function setCat_descricao(string $cad_categoria)
-    {
-        $this->attributes['cat_descricao'] = returnNull(esc($cad_categoria), 'S');
-        return $this;
-    }
 
     public function auditoriaInsertAtributos()
     {
-        $attribute['cod_categoria'] = $this->id_categoria;
+        $attribute['cod_categoria'] = $this->id;
         
         $attribute['cad_categoria'] = [
             'new' => $this->cat_descricao
@@ -51,7 +40,7 @@ class Categoria extends Entity
     {
         $attribute = [];
 
-        $attribute['cod_categoria'] = $this->id_categoria;
+        $attribute['cod_categoria'] = $this->id;
 
         if ($this->hasChanged('cat_descricao')) {
             $attribute['cad_categoria'] = [

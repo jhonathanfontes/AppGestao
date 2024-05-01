@@ -16,29 +16,47 @@ class Categorias extends ApiController
     public function __construct()
     {
         $this->categoriaModel = new \App\Models\Cadastro\CategoriaModel();
-        $this->auditoriaModel = new \App\Models\AuditoriaModel();
-        $this->validation =  \Config\Services::validation();
+        // $this->auditoriaModel = new \App\Models\AuditoriaModel();
+        $this->validation = \Config\Services::validation();
     }
 
     public function getCarregaTabela()
     {
-        $response = array();
+        $response['data'] = array();
 
         $result = $this->categoriaModel->whereIn('status', ['1', '2'])->withDeleted()->findAll();
+        try {
 
-        foreach ($result as $key => $value) {
+            if (empty($result)):
+                return $this->response->setJSON($response);
+            endif;
+            
+            foreach ($result as $key => $value) {
 
-            $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalCategoria" onclick="getEditCategoria(' . $value->id_categoria . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
-            $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'categoria'" . ',' . $value->id_categoria . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+                $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalCategoria" onclick="getEditCategoria(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+                $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'categoria'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
 
-            $response['data'][$key] = array(
-                esc($value->cat_descricao),
-                convertStatus($value->status),
-                $ops,
+                $response['data'][$key] = array(
+                    esc($value->cat_descricao),
+                    convertStatus($value->status),
+                    $ops,
+                );
+            }
+
+            return $this->response->setJSON($response);
+
+        } catch (\Throwable $th) {
+            return $this->response->setJSON(
+                [
+                    'status' => false,
+                    'menssagem' => [
+                        'status' => 'error',
+                        'heading' => 'NÃO FOI POSSIVEL PROCESSAR O REGISTRO!',
+                        'description' => $th->getMessage()
+                    ]
+                ]
             );
         }
-
-        return $this->response->setJSON($response);
     }
 
     public function save()
@@ -48,14 +66,14 @@ class Categorias extends ApiController
         }
 
         $data['cat_descricao'] = returnNull($this->request->getPost('cad_categoria'), 'S');
-        $data['status']        = $this->request->getPost('status');
+        $data['status'] = $this->request->getPost('status');
 
         $entityCategoria = new Categoria($data);
 
         if (!empty($this->request->getPost('cod_categoria'))) {
-            $data['id_categoria'] = $this->request->getPost('cod_categoria');
+            $data['id'] = $this->request->getPost('cod_categoria');
 
-            $result = $this->buscaRegistro404($data['id_categoria']);
+            $result = $this->buscaRegistro404($data['id']);
             $result->fill($data);
 
             if ($result->hasChanged() == false) {
@@ -70,19 +88,20 @@ class Categorias extends ApiController
             }
 
             $metedoAuditoria = 'update';
-            $dataAuditoria = $result->auditoriaUpdateAtributos();
+            // $dataAuditoria = $result->auditoriaUpdateAtributos();
 
         } else {
 
             $metedoAuditoria = 'insert';
-            $dataAuditoria = $entityCategoria->auditoriaInsertAtributos();
+            // $dataAuditoria = $entityCategoria->auditoriaInsertAtributos();
 
-        };
+        }
+        ;
 
         try {
             if ($this->categoriaModel->save($data)) {
 
-                $this->auditoriaModel->insertAuditoria('cadastro', 'categoria', $metedoAuditoria, $dataAuditoria);
+                // $this->auditoriaModel->insertAuditoria('cadastro', 'categoria', $metedoAuditoria, $dataAuditoria);
 
                 $cod_categoria = (!empty($this->request->getPost('cod_categoria'))) ? $this->request->getPost('cod_categoria') : $this->categoriaModel->getInsertID();
 
@@ -122,14 +141,14 @@ class Categorias extends ApiController
 
     public function show($paramentro)
     {
-        $return = $this->categoriaModel->where('id_categoria', $paramentro)
+        $return = $this->categoriaModel->where('id', $paramentro)
             ->first();
         return $this->response->setJSON($return);
     }
 
     public function arquivar($paramentro = null)
     {
-        $categoria = $this->categoriaModel->where('id_categoria', $paramentro)
+        $categoria = $this->categoriaModel->where('id', $paramentro)
             ->where('status <>', 0)
             ->where('status <>', 3)
             ->first();
@@ -150,7 +169,7 @@ class Categorias extends ApiController
         try {
             if ($this->categoriaModel->arquivarRegistro($paramentro)) {
 
-                $this->auditoriaModel->insertAuditoria('cadastro', 'categoria', 'arquivar', $categoria->auditoriaAtributos());
+                // $this->auditoriaModel->insertAuditoria('cadastro', 'categoria', 'arquivar', $categoria->auditoriaAtributos());
 
                 return $this->response->setJSON([
                     'status' => true,

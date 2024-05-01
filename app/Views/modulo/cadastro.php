@@ -21,7 +21,8 @@
                     <div class="icon">
                         <i class="ion ion-person"></i>
                     </div>
-                    <a href="<?= base_url('app/cadastro/pessoas'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url('app/cadastro/pessoas'); ?>" class="small-box-footer"> ACESSAR <i
+                            class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- Small boxes (Stat box) -->
@@ -34,7 +35,8 @@
                     <div class="icon">
                         <i class="ion ion-tshirt"></i>
                     </div>
-                    <a href="<?= base_url('app/cadastro/produtos'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url('app/cadastro/produtos'); ?>" class="small-box-footer"> ACESSAR <i
+                            class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-2 col-4">
@@ -46,7 +48,8 @@
                     <div class="icon">
                         <i class="ion ion-tshirt"></i>
                     </div>
-                    <a href="<?= base_url('app/cadastro/servicos'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url('app/cadastro/servicos'); ?>" class="small-box-footer"> ACESSAR <i
+                            class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>
@@ -63,7 +66,8 @@
                     <div class="icon">
                         <i class="ion ion-hammer"></i>
                     </div>
-                    <a href="<?= base_url('app/cadastro/auxiliar/pessoas/profissoes'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url('app/cadastro/auxiliar/pessoas/profissoes'); ?>" class="small-box-footer">
+                        ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -80,12 +84,12 @@
                     <div class="icon">
                         <i class="ion ion-pricetag"></i>
                     </div>
-                    <a href="<?= base_url('app/cadastro/auxiliar/produtos/categorias'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url('app/cadastro/auxiliar/produtos/categorias'); ?>" class="small-box-footer">
+                        ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-2 col-4">
-                <!-- small box -->
+            <!-- <div class="col-lg-2 col-4">
                 <div class="small-box bg-info">
                     <div class="inner">
                         <p>SUBCATEGORIAS</p>
@@ -95,10 +99,10 @@
                     </div>
                     <a href="<?= base_url('app/cadastro/auxiliar/produtos/subcategorias'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
+            </div> -->
             <!-- ./col -->
-            <div class="col-lg-2 col-4">
-                <!-- small box -->
+            <!-- small box -->
+            <!-- <div class="col-lg-2 col-4">
                 <div class="small-box bg-info">
                     <div class="inner">
                         <p>FABRICANTES</p>
@@ -108,7 +112,7 @@
                     </div>
                     <a href="<?= base_url('app/cadastro/auxiliar/produtos/fabricantes'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
-            </div>
+            </div> -->
             <!-- ./col -->
             <div class="col-lg-2 col-4">
                 <!-- small box -->
@@ -117,9 +121,10 @@
                         <p>TAMANHOS</p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-edit"></i>
+                        <i class="ion ion-pricetags"></i>
                     </div>
-                    <a href="<?= base_url('app/cadastro/auxiliar/produtos/tamanhos'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?= base_url('app/cadastro/auxiliar/produtos/tamanhos'); ?>" class="small-box-footer">
+                        ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->

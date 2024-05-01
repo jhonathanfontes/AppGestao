@@ -8,7 +8,7 @@ class ProdutoModel extends Model
 {
 
 	protected $table = 'cad_produto';
-	protected $primaryKey = 'id_produto';
+	protected $primaryKey = 'id';
 	protected $returnType = \App\Entities\Cadastro\Produto::class;
 	protected $useSoftDeletes = false;
 
@@ -53,13 +53,13 @@ class ProdutoModel extends Model
 
 	public function returnSave(int $codigo = null)
 	{
-		return $this->select('id_produto, pro_descricao')->find($codigo);
+		return $this->select('id, pro_descricao')->find($codigo);
 	}
 
 	public function arquivarRegistro(int $codigo = null)
 	{
 		if ($codigo != null) {
-			$data['status'] = 3;
+			$data['status'] = 9;
 			return $this->update($codigo, $data);
 		}
 		return false;
@@ -80,10 +80,8 @@ class ProdutoModel extends Model
 	{
 		$db      = \Config\Database::connect();
 		$builder = $db->table($this->table);
-		$builder->select('cad_produto.*, cad_subcategoria.sub_descricao, cad_fabricante.fab_descricao,
-		(SELECT COALESCE(SUM(pg.estoque),0) FROM pdv_produtograde pg WHERE pg.produto_id = cad_produto.id_produto and pg.status = 1) AS estoque ');
-		$builder->join('cad_subcategoria', 'cad_subcategoria.id_subcategoria = cad_produto.subcategoria_id');
-		$builder->join('cad_fabricante', 'cad_fabricante.id_fabricante = cad_produto.fabricante_id');
+		$builder->select('cad_produto.*, cad_categoria.cat_descricao');
+		$builder->join('cad_categoria', 'cad_categoria.id = cad_produto.categoria_id');
 		$builder->whereIn('cad_produto.status', ['1', '2']);
 		$result = $builder->get();
 		return $result->getResult();
@@ -94,7 +92,7 @@ class ProdutoModel extends Model
 		$db      = \Config\Database::connect();
 		$builder = $db->table($this->table);
 		$builder->select(
-			'cad_produto.id_produto as cod_produto,
+			'cad_produto.id as cod_produto,
 			cad_produto.subcategoria_id as cod_subcategoria,
 			cad_subcategoria.sub_descricao as des_subcategoria,
 			cad_subcategoria.categoria_id as cod_categoria,
@@ -106,12 +104,12 @@ class ProdutoModel extends Model
 			cad_produto.pro_cod_fabricante as cad_fabricante,
 			cad_produto.pro_codigobarras as cad_codigobarras,
 			cad_produto.status,
-		(SELECT COALESCE(SUM(pg.estoque),0) FROM pdv_produtograde pg WHERE pg.produto_id = cad_produto.id_produto and pg.status = 1) AS estoque '
+		(SELECT COALESCE(SUM(pg.estoque),0) FROM pdv_produtograde pg WHERE pg.produto_id = cad_produto.id and pg.status = 1) AS estoque '
 		);
 		$builder->join('cad_subcategoria', 'cad_subcategoria.id_subcategoria = cad_produto.subcategoria_id');
 		$builder->join('cad_categoria', 'cad_categoria.id_categoria = cad_subcategoria.categoria_id');
 		$builder->join('cad_fabricante', 'cad_fabricante.id_fabricante = cad_produto.fabricante_id');
-		$builder->where('cad_produto.id_produto', $codigo);
+		$builder->where('cad_produto.id', $codigo);
 		$builder->whereIn('cad_produto.status', ['1', '2', '3']);
 		$result = $builder->get();
 		return $result->getRow();
