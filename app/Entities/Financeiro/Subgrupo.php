@@ -7,7 +7,7 @@ use CodeIgniter\Entity\Entity;
 class Subgrupo extends Entity
 {
     protected $datamap = [
-        'cod_subgrupo'  => 'id_subgrupo',
+        'cod_subgrupo'  => 'id',
         'cod_grupo'     => 'grupo_id',
         'cad_subgrupo'  => 'sub_descricao',
         'vendapadrao'   => 'sub_vendapadrao',

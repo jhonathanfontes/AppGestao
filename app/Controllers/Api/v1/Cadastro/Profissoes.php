@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\Cadastro;
+namespace App\Controllers\Api\v1\Cadastro;
 
 use App\Controllers\BaseController;
 use App\Models\Cadastro\ProfissaoModel;
@@ -13,26 +13,44 @@ class Profissoes extends BaseController
   public function __construct()
   {
     $this->profisaoModel = new ProfissaoModel();
-    $this->validation =  \Config\Services::validation();
+    $this->validation = \Config\Services::validation();
   }
 
   public function getCarregaTabela()
   {
-    $response = array();
+    $response['data'] = array();
     $result = $this->profisaoModel->whereIn('status', ['1', '2'])->withDeleted()->findAll();
 
-    foreach ($result as $key => $value) {
+    try {
 
-      $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalProfissao" onclick="getEditProfissao(' . $value->id_profissao . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
-      $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'profissao'" . ',' . $value->id_profissao . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+      if (empty($result)) {
+        return $this->response->setJSON($response);
+      }
 
-      $response['data'][$key] = array(
-        esc($value->prof_descricao),
-        convertStatus($value->status),
-        $ops,
+      foreach ($result as $key => $value) {
+
+        $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalProfissao" onclick="getEditProfissao(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+        $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'profissao'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+
+        $response['data'][$key] = array(
+          esc($value->pro_descricao),
+          convertStatus($value->status),
+          $ops,
+        );
+      }
+      return $this->response->setJSON($response);
+    } catch (\Throwable $th) {
+      return $this->response->setJSON(
+        [
+          'status' => false,
+          'menssagem' => [
+            'status' => 'error',
+            'heading' => 'NÃO FOI POSSIVEL PROCESSAR O REGISTRO!',
+            'description' => $th->getMessage()
+          ]
+        ]
       );
     }
-    return $this->response->setJSON($response);
   }
 
   public function save()
@@ -41,13 +59,13 @@ class Profissoes extends BaseController
       return redirect()->back();
     }
 
-    $data['prof_descricao'] = returnNull($this->request->getPost('cad_profissao'), 'S');
-    $data['status']        = $this->request->getPost('status');
+    $data['pro_descricao'] = returnNull($this->request->getPost('cad_profissao'), 'S');
+    $data['status'] = $this->request->getPost('status');
 
     if (!empty($this->request->getPost('cod_profissao'))) {
-      $data['id_profissao'] = $this->request->getPost('cod_profissao');
+      $data['id'] = $this->request->getPost('cod_profissao');
 
-      $result = $this->buscaRegistro404($data['id_profissao']);
+      $result = $this->buscaRegistro404($data['id']);
       $result->fill($data);
 
       if ($result->hasChanged() == false) {
@@ -100,15 +118,15 @@ class Profissoes extends BaseController
 
   public function show($paramentro)
   {
-    $return = $this->profisaoModel->where('id_profissao', $paramentro)->first();
+    $return = $this->profisaoModel->where('id', $paramentro)->first();
     return $this->response->setJSON($return);
   }
 
   public function arquivar($paramentro = null)
   {
-    $categoria = $this->profisaoModel->where('id_profissao', $paramentro)
+    $categoria = $this->profisaoModel->where('id', $paramentro)
       ->where('status <>', 0)
-      ->where('status <>', 3)
+      ->where('status <>', 9)
       ->first();
 
     if ($categoria === null) {

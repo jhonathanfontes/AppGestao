@@ -106,7 +106,7 @@ class Pessoa extends Migration
             'status' => [
                 'type' => 'INT',
                 'default' => 1,
-                'comment' => '0 - Desativado, 1 - Habilitado, 9 - Arquivado',
+                'comment' => '1 -Habilitado, 2 - Desativado, 3 - Pendente, 9 - Arquivado',
             ],
             'profissao_id' => [
                 'type' => 'INT',

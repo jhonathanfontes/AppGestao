@@ -8,7 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 // $routes->get('/', 'Home::index');
 $routes->addRedirect('/', 'autenticacao/login');
 
-service('auth')->routes($routes);
+// service('auth')->routes($routes);
 
 // Modulo APP Relatorio
 $routes->group('autenticacao', ['namespace' => 'App\Controllers\App'], function ($routes) {
@@ -38,7 +38,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Cadastro
-    $routes->group('cadastro', ['namespace' => 'App\Controllers\Api\Cadastro'], function ($routes) {
+    $routes->group('cadastro', ['namespace' => 'App\Controllers\Api\v1\Cadastro'], function ($routes) {
 
         // Carrega dados da TableDatta
         $routes->group('tabela', function ($routes) {
@@ -146,7 +146,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Configuracao
-    $routes->group('configuracao', ['namespace' => 'App\Controllers\Api\Configuracao'], function ($routes) {
+    $routes->group('configuracao', ['namespace' => 'App\Controllers\Api\v1\Configuracao'], function ($routes) {
 
         // Carrega dados da TableDatta
         $routes->group('tabela', function ($routes) {
@@ -248,7 +248,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Financeiro
-    $routes->group('financeiro', ['namespace' => 'App\Controllers\Api\Financeiro'], function ($routes) {
+    $routes->group('financeiro', ['namespace' => 'App\Controllers\Api\v1\Financeiro'], function ($routes) {
 
         // Carrega dados da TableData
         $routes->group('tabela', function ($routes) {
@@ -340,7 +340,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Relatorio
-    $routes->group('relatorio', ['namespace' => 'App\Controllers\Api\Relatorio'], function ($routes) {
+    $routes->group('relatorio', ['namespace' => 'App\Controllers\Api\v1\Relatorio'], function ($routes) {
         // Contas a Pagar
         $routes->get('contapagar', 'ContaPagar::getAll');
         $routes->get('contapagar/show/(:segment)', 'ContaPagar::show/$1');
@@ -358,7 +358,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Venda
-    $routes->group('venda', ['namespace' => 'App\Controllers\Api\Venda'], function ($routes) {
+    $routes->group('venda', ['namespace' => 'App\Controllers\Api\v1\Venda'], function ($routes) {
 
         // Carrega dados da TableDatta
         $routes->group('tabela', function ($routes) {
@@ -460,7 +460,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Caixa \ Venda
-    $routes->group('caixa', ['namespace' => 'App\Controllers\Api\Venda'], function ($routes) {
+    $routes->group('caixa', ['namespace' => 'App\Controllers\Api\v1\Venda'], function ($routes) {
         // ATUALIZA DADOS DA TABELA
         $routes->group('incluir', function ($routes) {
             $routes->post('suplemento', 'Caixas::addSuplementoCaixa');

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\Configuracao;
+namespace App\Controllers\Api\v1\Configuracao;
 
 use App\Controllers\Api\ApiController;
 
@@ -15,7 +15,7 @@ class Empresa extends ApiController
     {
 
         $this->empresaModel = new \App\Models\Configuracao\EmpresaModel();
-        $this->auditoriaModel = new \App\Models\AuditoriaModel();
+        // $this->auditoriaModel = new \App\Models\AuditoriaModel();
         $this->validation =  \Config\Services::validation();
     }
 
@@ -27,8 +27,8 @@ class Empresa extends ApiController
 
         foreach ($result as $key => $value) {
 
-            $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalEmpresa" onclick="getEditEmpresa(' . $value->id_empresa . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
-            $ops .= '<a class="btn btn-xs btn-success ml-2" href="empresas/view/' . $value->id_empresa . '"><span class="fas fa-tasks"></span> PARAMETRO </a>';
+            $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalEmpresa" onclick="getEditEmpresa(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+            $ops .= '<a class="btn btn-xs btn-success ml-2" href="empresas/view/' . $value->id . '"><span class="fas fa-tasks"></span> PARAMETRO </a>';
 
             $response['data'][$key] = array(
                 esc($value->emp_razao),
@@ -64,7 +64,7 @@ class Empresa extends ApiController
 
         if (!empty($this->request->getPost('cod_empresa'))) {
 
-            $data['id_empresa'] = $this->request->getPost('cod_empresa');
+            $data['id'] = $this->request->getPost('cod_empresa');
             $result = $this->buscaRegistro404($this->request->getPost('cod_empresa'));
 
             $result->fill($data);
@@ -80,7 +80,7 @@ class Empresa extends ApiController
                 ]);
             }
 
-            $this->auditoriaModel->insertAuditoria('configuracao', 'empresa', 'atualizar', $result->auditoriaUpdateAtributos());
+            // $this->auditoriaModel->insertAuditoria('configuracao', 'empresa', 'atualizar', $result->auditoriaUpdateAtributos());
         };
 
         try {
@@ -122,13 +122,13 @@ class Empresa extends ApiController
 
     public function show($paramentro)
     {
-        $return = $this->empresaModel->where('id_empresa', $paramentro)->first();
+        $return = $this->empresaModel->where('id', $paramentro)->first();
         return $this->response->setJSON($return);
     }
 
     public function arquivar($paramentro = null)
     {
-        $empresa = $this->empresaModel->where('id_empresa', $paramentro)->first();
+        $empresa = $this->empresaModel->where('id', $paramentro)->first();
 
         if ($empresa === null) {
             return $this->response->setJSON(

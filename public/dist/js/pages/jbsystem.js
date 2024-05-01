@@ -1,5 +1,5 @@
 var url = window.location.hostname; // obter o dominio
-var base_url = "http://" + url + "/";
+var base_url = "http://" + url + ":8080/";
 
 $(document).ready(function() {
 

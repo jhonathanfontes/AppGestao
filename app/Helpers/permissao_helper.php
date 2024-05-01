@@ -66,7 +66,7 @@ function dadosEmpresa(int $cod_empresa = 1)
     } else {
         return (object)[
             'emp_fantasia' => 'JB SYSTEM',
-            'emp_icone' => ''
+            'emp_icone' => 'DelorisLogo.png'
         ];
     }
 }

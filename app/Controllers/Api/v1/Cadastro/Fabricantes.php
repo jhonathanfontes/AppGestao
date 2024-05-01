@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\Cadastro;
+namespace App\Controllers\Api\v1\Cadastro;
 
 use App\Controllers\BaseController;
 use App\Models\Cadastro\FabricanteModel;

@@ -28,6 +28,7 @@ class Empresa extends Migration
             'emp_slogan' => [
                 'type' => 'VARCHAR',
                 'constraint' => '20',
+                'null' => true,
             ],
             'emp_cnpj' => [
                 'type' => 'VARCHAR',
@@ -110,7 +111,8 @@ class Empresa extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('con_empresa');
+        $attributes = ['ENGINE' => 'InnoDB'];
+        $this->forge->createTable('con_empresa', true, $attributes);
     }
 
     public function down()

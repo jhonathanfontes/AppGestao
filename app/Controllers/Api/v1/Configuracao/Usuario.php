@@ -15,7 +15,7 @@ class Usuario extends ApiController
     public function __construct()
     {
         $this->usuarioModel = new UsuarioModel();
-        $this->auditoriaModel = new \App\Models\AuditoriaModel();
+        // $this->auditoriaModel = new \App\Models\AuditoriaModel();
         $this->validation =  \Config\Services::validation();
     }
 
@@ -34,8 +34,8 @@ class Usuario extends ApiController
                 'width' => '30'
             ];
 
-            $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalUsuario" onclick="getEditUsuario(' . $value->id_usuario . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
-            // $ops .= '<button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#modalAvatarUsuario" onclick="getEditAvatarUsuario(' . $value->id_usuario . ')"><samp class="far fa-edit"></samp> AVATAR</button>';
+            $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalUsuario" onclick="getEditUsuario(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+            // $ops .= '<button type="button" class="btn btn-xs btn-success" data-toggle="modal" data-target="#modalAvatarUsuario" onclick="getEditAvatarUsuario(' . $value->id . ')"><samp class="far fa-edit"></samp> AVATAR</button>';
 
             $response['data'][$key] = array(
                 esc($value->use_nome),
@@ -70,7 +70,7 @@ class Usuario extends ApiController
 
         if (!empty($this->request->getPost('cod_usuario'))) {
 
-            $data['id_usuario'] = $this->request->getPost('cod_usuario');
+            $data['id'] = $this->request->getPost('cod_usuario');
             $result = $this->buscaRegistro404($this->request->getPost('cod_usuario'));
 
             $result->fill($data);
@@ -144,7 +144,7 @@ class Usuario extends ApiController
         $i = 0;
         foreach ($usuarios as $row) {
             $dados[$i] = array(
-                'cad_codigo'        => $row['id_usuario'],
+                'cad_codigo'        => $row['id'],
                 'cad_name'          => $row['use_nome'],
                 'cad_apelido'       => $row['use_apelido'],
                 'cad_email'         => $row['use_email'],

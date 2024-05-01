@@ -12,7 +12,7 @@ class SubGrupo extends BaseController
     public function index()
     {
         $data = [
-            'card_title' => 'RELAÇÃO DAS CONTAS A RECEBER',
+            'card_title' => 'RELAÇÃO DOS SUBGRUPOS - FINANCEIROS',
         ];
         return view('modulo/financeiro/subgrupo', $data);
     }

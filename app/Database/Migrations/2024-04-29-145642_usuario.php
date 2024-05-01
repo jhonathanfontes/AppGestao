@@ -51,6 +51,8 @@ class Usuario extends Migration
             ],
             'status' => [
                 'type' => 'INT',
+                'default' => 3,
+                'comment' => '1 -Habilitado, 2 - Desativado, 3 - Pendente, 9 - Arquivado',
             ],
             'permissao_id' => [
                 'type' => 'INT',
@@ -82,7 +84,8 @@ class Usuario extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('cad_usuario');
+        $attributes = ['ENGINE' => 'InnoDB'];
+        $this->forge->createTable('cad_usuario', true, $attributes);
     }
 
     public function down()

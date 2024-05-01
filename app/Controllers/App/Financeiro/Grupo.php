@@ -12,7 +12,7 @@ class Grupo extends BaseController
     public function index()
     {
         $data = [
-            'card_title' => 'RELAÇÃO DAS CONTAS A RECEBER',
+            'card_title' => 'RELAÇÃO DOS GRUPOS - FINANCEIROS',
         ];
         return view('modulo/financeiro/grupo', $data);
     }

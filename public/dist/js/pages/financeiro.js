@@ -638,7 +638,7 @@ function getGrupoOption() {
     });
 }
 
-// GERENCIA OS SUBGRUPOS
+// GERENCIA OS GRUPOS
 
 function getEditGrupo(Paramentro) {
     $.ajax({

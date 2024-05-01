@@ -8,10 +8,10 @@ class ProfissaoModel extends Model
 {
 
 	protected $table = 'cad_profissao';
-	protected $primaryKey = 'id_profissao';
+	protected $primaryKey = 'id';
 	protected $returnType = \App\Entities\Cadastro\Profissao::class;
 	protected $useSoftDeletes = true;
-	protected $allowedFields = ['prof_descricao', 'status', 'created_user_id', 'updated_user_id', 'deleted_user_id'];
+	protected $allowedFields = ['pro_descricao', 'status', 'created_user_id', 'updated_user_id', 'deleted_user_id'];
 	protected $useTimestamps = false;
 	protected $createdField  = 'created_at';
 	protected $updatedField  = 'updated_at';
@@ -39,7 +39,7 @@ class ProfissaoModel extends Model
 
 	public function returnSave(int $codigo = null)
 	{
-		return $this->select('id_profissao, prof_descricao')->find($codigo);
+		return $this->select('id, pro_descricao')->find($codigo);
 	}
 
 	public function arquivarRegistro(int $codigo = null)
