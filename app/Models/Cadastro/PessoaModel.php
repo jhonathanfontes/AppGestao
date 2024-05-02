@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class PessoaModel extends Model
 {
 	protected $table = 'cad_pessoa';
-	protected $primaryKey = 'id_pessoa';
+	protected $primaryKey = 'id';
 	protected $returnType = \App\Entities\Cadastro\Pessoa::class;
 	protected $useSoftDeletes = true;
 	protected $allowedFields = [
@@ -62,7 +62,7 @@ class PessoaModel extends Model
 	protected function atributos()
 	{
 		return array(
-			'cad_pessoa.id_pessoa AS cod_pessoa',
+			'cad_pessoa.id AS cod_pessoa',
 			'cad_pessoa.tipo_cliente AS cad_tipo',
 			'cad_pessoa.pes_nome AS cad_nome',
 			'cad_pessoa.pes_apelido AS cad_apelido',
@@ -90,7 +90,7 @@ class PessoaModel extends Model
 	protected function atributosPessoas()
 	{
 		return array(
-			'cad_pessoa.id_pessoa AS cod_pessoa',
+			'cad_pessoa.id AS cod_pessoa',
 			'cad_pessoa.tipo_cliente AS cad_tipo',
 			'cad_pessoa.pes_nome AS cad_nome',
 			'cad_pessoa.status AS status',
@@ -100,7 +100,7 @@ class PessoaModel extends Model
 
 	public function returnSave(int $codigo = null)
 	{
-		return $this->select('id_pessoa, pes_nome')->find($codigo);
+		return $this->select('id, pes_nome')->find($codigo);
 	}
 
 	public function arquivarRegistro(int $codigo = null)

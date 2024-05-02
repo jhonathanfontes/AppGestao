@@ -14,7 +14,7 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-body">
-            <button class="btn btn-app bg-orange" data-toggle="modal" data-target="#modalProduto" onclick="setNewProduto()">
+            <button class="btn btn-app bg-orange" data-toggle="modal" data-target="#modalProduto" onclick="setNewServico()">
                 <i class="fa fa-tshirt"></i> SERVIÇO
             </button>
             

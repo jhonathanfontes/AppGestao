@@ -86,25 +86,12 @@
                         <p> &nbsp; AUXILIAR PRODUTOS</p> <i class="right fas fa-angle-left"></i>
                     </a>
                     <ul class="nav nav-treeview">
-
                         <li class="nav-item">
                             <a href="<?= base_url('app/cadastro/auxiliar/produtos/categorias'); ?>" class="nav-link <?= (url_is('app/cadastro/auxiliar/produtos/categorias')) ? 'active' : ''; ?>">
                                 <i class="far <?= (url_is('app/cadastro/auxiliar/produtos/categorias')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
                                 <p>CATEGORIAS</p>
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url('app/cadastro/auxiliar/produtos/subcategorias'); ?>" class="nav-link <?= (url_is('app/cadastro/auxiliar/produtos/subcategorias')) ? 'active' : ''; ?>">
-                                <i class="far <?= (url_is('app/cadastro/auxiliar/produtos/subcategorias')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
-                                <p>SUBCATEGORIAS</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url('app/cadastro/auxiliar/produtos/fabricantes'); ?>" class="nav-link <?= (url_is('app/cadastro/auxiliar/produtos/fabricantes')) ? 'active' : ''; ?>">
-                                <i class="far <?= (url_is('app/cadastro/auxiliar/produtos/fabricantes')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
-                                <p>FABRICANTES</p>
-                            </a>
-                        </li>
+                        </li>                      
                         <li class="nav-item">
                             <a href="<?= base_url('app/cadastro/auxiliar/produtos/tamanhos'); ?>" class="nav-link <?= (url_is('app/cadastro/auxiliar/produtos/tamanhos')) ? 'active' : ''; ?>">
                                 <i class="far <?= (url_is('app/cadastro/auxiliar/produtos/tamanhos')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>

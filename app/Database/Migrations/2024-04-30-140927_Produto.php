@@ -18,36 +18,39 @@ class Produto extends Migration
             ],
             'pro_tipo' => [
                 'type' => 'INT',
-                'constraint' => '1',
+                'default' => 1,
                 'comment' => '1 - Produto, 2 - Serviço',
             ],
             'pro_descricao' => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',
             ],
+            'categoria_id' => [
+                'type' => 'INT',
+                'null' => true,
+            ],
             'pro_codigobarra' => [
                 'type' => 'VARCHAR',
                 'constraint' => '50',
             ],
             'tamanho_id' => [
-                'type' => 'VARCHAR',
-                'constraint' => '20',
+                'type' => 'INT',
+                'null' => true,
             ],
             'valor_custo' => [
-                'type' => 'VARCHAR',
-                'constraint' => '100',
+                'type' => 'double',
+                'null' => true,
             ],
             'valor_venda1' => [
-                'type' => 'VARCHAR',
-                'constraint' => '100',
+                'type' => 'double',
+                'null' => true,
             ],
             'valor_venda2' => [
-                'type' => 'VARCHAR',
-                'constraint' => '100',
+                'type' => 'double',
+                'null' => true,
             ],
             'estoque' => [
-                'type' => 'VARCHAR',
-                'constraint' => '50',
+                'type' => 'INT',
                 'null' => true,
             ],
             'status' => [

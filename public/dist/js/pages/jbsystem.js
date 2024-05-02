@@ -1,11 +1,11 @@
 var url = window.location.hostname; // obter o dominio
 var base_url = "http://" + url + ":8080/";
 
-$(document).ready(function() {
+$(document).ready(function () {
 
     // CARREGA PARAMENTRO POR DEFAULT DATATABLE
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
-        "date-br-pre": function(a) {
+        "date-br-pre": function (a) {
             if (!a || a === "") {
                 return 0;
             }
@@ -13,11 +13,11 @@ $(document).ready(function() {
             return parseInt(brDatea[2] + brDatea[1] + brDatea[0], 10);
         },
 
-        "date-br-asc": function(a, b) {
+        "date-br-asc": function (a, b) {
             return a < b ? -1 : a > b ? 1 : 0;
         },
 
-        "date-br-desc": function(a, b) {
+        "date-br-desc": function (a, b) {
             return a < b ? 1 : a > b ? -1 : 0;
         }
     });
@@ -95,19 +95,44 @@ function mascaraCnpj(valor) {
 
 function consultaReceitaWsCNPJ(cnpj) {
     $.ajax({
-        'url': "https://www.receitaws.com.br/v1/cnpj/" + cnpj,
-        'type': "GET",
-        'dataType': 'jsonp',
-        'success': function(dado) {
-            if (dado.nome == undefined) {
-                return false;
+        url: "https://www.receitaws.com.br/v1/cnpj/" + cnpj,
+        type: "GET",
+        dataType: 'json',
+        success: function (data) {
+            if (data.nome === undefined) {
+                callback(false);
             } else {
-                console.log(dado);
-                //return dado;
+                callback(data);
             }
         }
     });
 }
+
+function consultaReceitaWsCNPJ(cnpj) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "https://www.receitaws.com.br/v1/cnpj/" + cnpj,
+            type: "GET",
+            dataType: 'json',
+            success: function (data) {
+                if (data.nome === undefined) {
+                    reject("CNPJ not found or invalid.");
+                } else {
+                    resolve(data);
+                }
+            },
+            error: function (xhr, status, error) {
+                reject("Error fetching data: " + status + ", " + error);
+            }
+        });
+    });
+}
+
+$('#cad_documento').on('input', function() {
+    if ($(this).val().length > 14) {
+        $(this).val($(this).val().slice(0, 14));
+    }
+});
 
 function initializepPagamentoDataTable(tableId, url, serial, codigo) {
     $(tableId).DataTable({
@@ -158,7 +183,7 @@ function handlePaymentChange(forma, tipo = null) {
     $.post(base_url + 'api/configuracao/consulta/' + consulta, {
         forma: forma,
         tipo: tipo
-    }, function(data) {
+    }, function (data) {
         $('#pag_conta').html(data);
         document.getElementById("pag_conta").disabled = false;
     });
@@ -174,29 +199,29 @@ function handlePaymentChange(forma, tipo = null) {
     document.getElementById("div_troco").hidden = forma !== 1;
 }
 
-$('#radioDinheiro').change(function() {
+$('#radioDinheiro').change(function () {
     handlePaymentChange(1);
 });
 
-$('#radioTransferencia').change(function() {
+$('#radioTransferencia').change(function () {
     var tipoTransferencia = document.getElementById("tipoTransferencia").value;
 
     handlePaymentChange(2, tipoTransferencia);
 });
 
-$('#radioDebito').change(function() {
+$('#radioDebito').change(function () {
     handlePaymentChange(3);
 });
 
-$('#radioCredito').change(function() {
+$('#radioCredito').change(function () {
     handlePaymentChange(4);
 });
 
-$('#radioBoleto').change(function() {
+$('#radioBoleto').change(function () {
     handlePaymentChange(5);
 });
 
-$('#pag_conta').change(function() {
+$('#pag_conta').change(function () {
     var radioCredito = $("#radioCredito").prop("checked");
     var radioDebito = $("#radioDebito").prop("checked");
     if (radioCredito || radioDebito) {
@@ -204,7 +229,7 @@ $('#pag_conta').change(function() {
         $.ajax({
             type: "GET",
             url: base_url + "api/configuracao/consulta/bandeira/" + pag_conta,
-            success: function(response) {
+            success: function (response) {
                 options = '<option value="">SELECIONE UMA BANDEIRA</option>';
                 for (var i = 0; i < response.length; i++) {
                     options += '<option value="' + response[i].cad_bandeira + '">' + response[i].ban_descricao + '</option>';
@@ -217,7 +242,7 @@ $('#pag_conta').change(function() {
     }
 });
 
-$('#pag_bandeira').change(function() {
+$('#pag_bandeira').change(function () {
     var radioCredito = $("#radioCredito").prop("checked");
     var radioDebito = $("#radioDebito").prop("checked");
     if (radioCredito || radioDebito) {
@@ -226,7 +251,7 @@ $('#pag_bandeira').change(function() {
         $.ajax({
             type: "GET",
             url: `${base_url}api/configuracao/exibir/formasparcelamentos/${pag_conta}/${pag_bandeira}`,
-            success: function(response) {
+            success: function (response) {
                 options = '';
                 for (var i = 0; i < response.length; i++) {
                     options += '<option value="' + response[i].cad_parcela + '">' + response[i].cad_parcela + '</option>';
@@ -239,7 +264,7 @@ $('#pag_bandeira').change(function() {
 });
 
 function getParcelaOption() {
-    $.get(base_url + 'api/configuracao/exibir/parcela', {}, function(response) {
+    $.get(base_url + 'api/configuracao/exibir/parcela', {}, function (response) {
         options = '';
         for (var i = 0; i < response.length; i++) {
             options += '<option value="' + response[i].parcela + '">' + response[i].parcela + '</option>';
@@ -249,7 +274,7 @@ function getParcelaOption() {
 }
 
 function getClientesOption() {
-    $.get(base_url + 'api/cadastro/exibir/pessoas/clientes', {}, function(response) {
+    $.get(base_url + 'api/cadastro/exibir/pessoas/clientes', {}, function (response) {
         options = '<option value="">SELECIONE UMA CLIENTE</option>';
         for (var i = 0; i < response.length; i++) {
             options += '<option value="' + response[i].cod_pessoa + '">' + response[i].cad_nome + '</option>';
@@ -259,7 +284,7 @@ function getClientesOption() {
 }
 
 function getFornecedoresOption() {
-    $.get(base_url + 'api/cadastro/exibir/pessoas/fornecedores', {}, function(response) {
+    $.get(base_url + 'api/cadastro/exibir/pessoas/fornecedores', {}, function (response) {
         options = '<option value="">SELECIONE UMA FORNECEDOR</option>';
         for (var i = 0; i < response.length; i++) {
             options += '<option value="' + response[i].cod_pessoa + '">' + response[i].cad_nome + '</option>';
@@ -317,7 +342,7 @@ function respostaSwalFire(response, reload = true) {
 
     // Display the modal dialog
     Swal.fire(options);
-    setTimeout(function() {
+    setTimeout(function () {
         if (reload === true) {
             window.location.reload(1);
         }
@@ -348,7 +373,7 @@ function executeAction(actionUrl, Paramentro, Codigo) {
         url: actionUrl + Paramentro + "/" + Codigo,
         type: "get",
         dataType: "json",
-        success: function(response) {
+        success: function (response) {
             respostaSwalFire(response);
         }
     });

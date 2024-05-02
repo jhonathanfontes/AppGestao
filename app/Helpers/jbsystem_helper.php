@@ -122,6 +122,10 @@ function formatCnpjCpf($value)
 
 function limparCnpjCpf($valor)
 {
+    if (empty($valor)):
+        return null;
+    endif;
+
     $valor = trim($valor);
     $valor = str_replace(".", "", $valor);
     $valor = str_replace(",", "", $valor);
@@ -138,10 +142,10 @@ function formatValorBR($valor)
 function formatValorBD($valor)
 {
     $verificaPonto = ".";
-    if (strpos("[" . $valor . "]", $verificaPonto)) :
+    if (strpos("[" . $valor . "]", $verificaPonto)):
         $valor = str_replace('.', '', $valor);
         $valor = str_replace(',', '.', $valor);
-    else :
+    else:
         $valor = str_replace(',', '.', $valor);
     endif;
     return $valor;
@@ -164,9 +168,9 @@ function returnNull($texto, $strtoupper = null)
     } else {
         if ($strtoupper != null) {
             if ($strtoupper === 'N') {
-                return  mb_strtolower(esc($texto), 'UTF-8');
+                return mb_strtolower(esc($texto), 'UTF-8');
             }
-            return  mb_strtoupper(esc($texto), 'UTF-8');
+            return mb_strtoupper(esc($texto), 'UTF-8');
         } else {
             return $texto;
         }

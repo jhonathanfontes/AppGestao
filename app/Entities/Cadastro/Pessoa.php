@@ -7,7 +7,7 @@ use CodeIgniter\Entity\Entity;
 class Pessoa extends Entity
 {
     protected $datamap = [
-        'cod_pessoa'        => 'id_pessoa',
+        'cod_pessoa'        => 'id',
         'cad_tipopessoa'    => 'tipo_cliente',
         'cad_natureza'      => 'pes_tiponatureza',
         'cad_cpf'           => 'pes_cpf',

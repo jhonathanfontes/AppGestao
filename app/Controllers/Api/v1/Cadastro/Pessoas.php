@@ -30,8 +30,8 @@ class Pessoas extends BaseController
 
             $documento = null;
             // $ops = '<div class="btn-group">';
-            $ops = '	<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalPessoa" onclick="getEditPessoa(' . $value->id_pessoa . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
-            $ops .= '	<a class="btn btn-xs btn-success" href="pessoas/view/' . $value->id_pessoa . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
+            $ops = '	<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalPessoa" onclick="getEditPessoa(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+            $ops .= '	<a class="btn btn-xs btn-success" href="pessoas/view/' . $value->id . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
             // $ops .= '</div>';
 
             if ($value->tipo_cliente == '1') :
@@ -101,11 +101,11 @@ class Pessoas extends BaseController
 
         if (isset($cod_pessoa)) {
             if ($this->validation->check($cod_pessoa, 'required|numeric')) {
-                $result = $this->pessoaModel->where('id_pessoa', $cod_pessoa)->first();
+                $result = $this->pessoaModel->where('id', $cod_pessoa)->first();
                 if (!empty($result)) {
 
                     $response = array(
-                        'cod_pessoa'        => $result->id_pessoa,
+                        'cod_pessoa'        => $result->id,
                         'cad_tipopessoa'    => $result->tipo_cliente,
                         'cad_natureza'      => $result->pes_tiponatureza,
                         'cad_cpf'           => esc($result->pes_cpf),
@@ -147,7 +147,7 @@ class Pessoas extends BaseController
                 $data = $this->pessoaModel->where($where)->first();
                 if (!empty($data)) {
                     $response = array(
-                        'cad_codigo'    => $data->id_pessoa,
+                        'cod_pessoa'    => $data->id,
                         'cad_nome'      => esc($data->pes_nome)
                     );
                     return $this->response->setJSON($response);
@@ -184,17 +184,17 @@ class Pessoas extends BaseController
         $data['status']             = $this->request->getPost('status');
 
         if ($this->request->getPost('cad_natureza') === 'F') {
-            $data['pes_cpf']            = returnNull(esc($this->request->getPost('cad_documento')));
+            $data['pes_cpf']            = limparCnpjCpf(esc($this->request->getPost('cad_documento')));
             $data['pes_datanascimento'] = returnNull(esc($this->request->getPost('cad_nascimeto')));
             $data['pes_rg']             = returnNull(esc($this->request->getPost('cad_rg')), 'S');
         }
         if ($this->request->getPost('cad_natureza') === 'J') {
-            $data['pes_cnpj']           = returnNull(esc($this->request->getPost('cad_documento')));
+            $data['pes_cnpj']           = limparCnpjCpf(esc($this->request->getPost('cad_documento')));
         }
 
         if (!empty($this->request->getPost('cod_pessoa'))) {
-            $data['id_pessoa'] = $this->request->getPost('cod_pessoa');
-            $result = $this->buscaRegistro404($data['id_pessoa']);
+            $data['id'] = $this->request->getPost('cod_pessoa');
+            $result = $this->buscaRegistro404($data['id']);
 
             $result->fill($data);
 
@@ -247,7 +247,7 @@ class Pessoas extends BaseController
                 if (!empty($result)) {
 
                     $response = array(
-                        'cod_pessoa'        => $result->id_pessoa,
+                        'cod_pessoa'        => $result->id,
                         'cad_tipopessoa'    => $result->tipo_cliente,
                         'cad_natureza'      => $result->pes_tiponatureza,
                         'cad_cnpj'          => esc($result->pes_cnpj),
@@ -281,7 +281,7 @@ class Pessoas extends BaseController
 
     public function arquivar($paramentro = null)
     {
-        $result = $this->pessoaModel->where('id_pessoa', $paramentro)
+        $result = $this->pessoaModel->where('id', $paramentro)
             ->where('status <>', 0)
             ->where('status <>', 3)
             ->first();

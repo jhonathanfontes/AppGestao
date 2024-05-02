@@ -13,6 +13,10 @@
                     <input name="cod_pessoa" id="cod_pessoa" hidden>
                 </div>
                 <div class="row">
+                    <div class="form-group col-1">
+                        <label for="">ID</label>
+                        <input id="id" type="number" class="form-control" disabled>
+                    </div>
                     <div class="form-group col-3">
                         <label for="">TIPO</label>
                         <select name="cad_tipopessoa" id="cad_tipopessoa" class="form-control">
@@ -28,27 +32,28 @@
                             <option value="J">JURIDICA</option>
                         </select>
                     </div>
-                    <div class="form-group col-5">
+                    <div class="form-group col-4">
                         <label for=""><span id="nameDocumento">CPF/CNPJ</span></label>
                         <input name="cad_documento" id="cad_documento" class="form-control"
                             onfocus="javascript: retirarFormatacao(this);" onblur="javascript: formatarCampo(this);"
-                            maxlength="14" placeholder="Informe o CPF ou CNPJ">
+                            placeholder="Informe o CPF ou CNPJ">
                     </div>
-                    <div class="form-group col-1" id="container-sync">
-                            <label for="">SYNC</label>
-                            <button type="button" id="buttonSync" class="btn btn-outline-primary btn-block" disabled><i class="fa fa-sync"></i></button>
-                        </div>
+                    <div class="form-group col-1" id="container-sync" hidden>
+                        <label for="">SYNC</label>
+                        <button type="button" id="buttonSyncPessoa" class="btn btn-outline-primary btn-block"
+                            onclick="consultaCNPJ(this)" disabled><i class="fa fa-sync"></i></button>
+                    </div>
                 </div>
-                    <div class="row">
-                        <div class="form-group col-5" id="container-nascimento">
-                            <label for="">DATA NASCIMENTO</label>
-                            <input name="cad_nascimeto" id="cad_nascimeto" type="date" class="form-control">
-                        </div>
-                        <div class="form-group col-5" id="container-rg">
-                            <label for="">RG</label>
-                            <input name="cad_rg" id="cad_rg" type="text" class="form-control">
-                        </div>
+                <div class="row">
+                    <div class="form-group col-5" id="container-nascimento">
+                        <label for="">DATA NASCIMENTO</label>
+                        <input name="cad_nascimeto" id="cad_nascimeto" type="date" class="form-control">
                     </div>
+                    <div class="form-group col-5" id="container-rg">
+                        <label for="">RG</label>
+                        <input name="cad_rg" id="cad_rg" type="text" class="form-control">
+                    </div>
+                </div>
                 <div class="row">
                     <div class="form-group col-6">
                         <label for="">NOME</label>

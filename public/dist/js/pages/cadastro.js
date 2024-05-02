@@ -163,47 +163,48 @@ $('#cad_natureza').change(function () {
     var natureza = document.getElementById('cad_natureza').value
     if (natureza == "F") {
         $('#nameDocumento').text('CPF');
+        document.getElementById("container-sync").hidden = true;
         document.getElementById("container-nascimento").hidden = false;
         document.getElementById("container-rg").hidden = false;
     } else if (natureza == "J") {
         $('#nameDocumento').text('CNPJ');
+        document.getElementById("container-sync").hidden = false;
         document.getElementById("container-nascimento").hidden = true;
         document.getElementById("container-rg").hidden = true;
     }
 });
 
 function formatarCampo(campoTexto) {
-    var cad_codigo = document.getElementById('cad_codigo').value;
+    var cod_pessoa = document.getElementById('cod_pessoa').value;
     if (campoTexto.value != '') {
-        $.post(base_url + 'api/cadastro/pessoa/consulta/documento', { cad_documento: campoTexto.value })
+        $.post(base_url + 'api/cadastro/consulta/pessoa/documento', { cad_documento: campoTexto.value })
             .done(function (data) {
-                if (cad_codigo == '' || cad_codigo != data.cad_codigo) {
+                if (cod_pessoa == '' || cod_pessoa != data.cod_pessoa) {
                     if (data) {
-                        $menssagem = "Documento já cadastrado - COD: " + data.cad_codigo + " Pessoa: " + data.cad_nome;
-                        $(function () {
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000
+                        $menssagem = "Documento já cadastrado - COD: " + data.cod_pessoa + " Pessoa: " + data.cad_nome;
+                        showConfirmationDialog('O CNPJ informado já esta cadastrado em nome de ' + data.cad_nome + '!', 'Deseja atualizar os dados CNPJ!', 'Sim, Atualizar!')
+                            .then((confirmed) => {
+                                if (confirmed) {
+                                    getEditPessoa(data.cod_pessoa);
+                                } else {
+                                    document.getElementById("cad_documento").value = '';
+                                }
                             });
-                            $(function () {
-                                toastr.error($menssagem);
-                                document.getElementById('cad_documento').value = '';
-                            });
-                        });
                     }
                 }
             });
 
         if (campoTexto.value.length == 11) {
+            document.getElementById("buttonSyncPessoa").value = null;
             campoTexto.value = mascaraCpf(campoTexto.value);
             $('#cad_natureza').val('F').trigger("change");
+            document.getElementById("buttonSyncPessoa").disabled = true;
         } else if (campoTexto.value.length == 14) {
-            consultaCNPJ(campoTexto.value);
+            //  consultaCNPJ(campoTexto.value);
+            document.getElementById("buttonSyncPessoa").value = campoTexto.value;
             campoTexto.value = mascaraCnpj(campoTexto.value);
             $('#cad_natureza').val('J').trigger("change");
-
+            document.getElementById("buttonSyncPessoa").disabled = false;
         } else {
             $(function () {
                 const Toast = Swal.mixin({
@@ -221,9 +222,10 @@ function formatarCampo(campoTexto) {
     }
 }
 
+// Cerragar os dados do CNPJ informado
 function consultaCNPJ(cnpj) {
     $.ajax({
-        'url': "https://www.receitaws.com.br/v1/cnpj/" + cnpj,
+        'url': "https://www.receitaws.com.br/v1/cnpj/" + cnpj.value,
         'type': "GET",
         'dataType': 'jsonp',
         'success': function (dado) {
@@ -237,11 +239,9 @@ function consultaCNPJ(cnpj) {
                     });
                     $(function () {
                         toastr.error('CNPJ Não encontrado, Preencha Manualmente');
-                        // campoTexto.value = '';
                     });
                 });
             } else {
-
                 document.getElementById("cad_nome").value = dado.nome;
                 document.getElementById("cad_apelido").value = dado.fantasia;
                 document.getElementById("cad_cep").value = dado.cep;
@@ -266,14 +266,15 @@ function getEditPessoa(Paramentro) {
         "dataType": "json",
         success: function (dado) {
             document.getElementById('modalTitlePessoa').innerHTML = 'EDITANDO CADASTRO DO ' + dado.cad_nome;
+            $('#id').val(dado.cod_pessoa);
             $('#cod_pessoa').val(dado.cod_pessoa);
             $('#cad_tipopessoa').val(dado.cad_tipopessoa).trigger("change");
             $('#cad_natureza').val(dado.cad_natureza).trigger("change");
             if (dado.cad_natureza == 'F') {
-                $('#cad_documento').val(dado.cad_cpf);
+                $('#cad_documento').val(mascaraCpf(dado.cad_cpf));
             }
             if (dado.cad_natureza == 'J') {
-                $('#cad_documento').val(dado.cad_cnpj);
+                $('#cad_documento').val(mascaraCnpj(dado.cad_cnpj));
             }
             $('#cad_nascimeto').val(dado.cad_nascimeto);
             $('#cad_rg').val(dado.cad_rg);
@@ -304,6 +305,7 @@ function setNewPessoa() {
     document.getElementById('modalTitlePessoa').innerHTML = 'CADASTRO DE NOVO CLIENTE / FORNECEDOR';
     var cod_pessoa = document.getElementById('cod_pessoa').value;
     if (cod_pessoa != '') {
+        document.getElementById("id").value = '';
         document.getElementById("cod_pessoa").value = '';
         $('#cad_tipopessoa').val(1).trigger("change");
         $('#cad_natureza').val('F').trigger("change");
@@ -378,10 +380,16 @@ function SalvaPessoa() {
 function getProfissaoOption() {
     $.get(base_url + 'api/cadastro/exibir/profissoes', {
     }, function (response) {
-        options = '<option value="">SELECIONE UMA PROFISSÃO</option>';
-        for (var i = 0; i < response.length; i++) {
-            options += '<option value="' + response[i].cod_profissao + '">' + response[i].cad_profissao + '</option>';
+
+        if (response.length > 0) {
+            options = '<option value="">SELECIONE UMA PROFISSÃO</option>';
+            for (var i = 0; i < response.length; i++) {
+                options += '<option value="' + response[i].cod_profissao + '">' + response[i].cad_profissao + '</option>';
+            }
+        } else {
+            options = '<option value="">NÃO TEM PROFISSÃO CADASTRADA</option>';
         }
+
         $('#pes_profissao').html(options);
     });
 }
@@ -600,8 +608,9 @@ function selectedSubcategoria() {
 }
 
 function setNewProduto() {
-    getProdutoCategoriaOption();
+  
     document.getElementById('modalTitleProduto').innerHTML = 'CADASTRO DE NOVO PRODUTO ';
+    document.getElementById("cad_tipo").value = 1;
     var cod_produto = document.getElementById('cod_produto').value;
     if (cod_produto != '') {
         document.getElementById("cod_produto").value = '';
@@ -679,6 +688,23 @@ function SalvaProdutos() {
     });
 }
 
+function setNewServico() {
+    getProdutoCategoriaOption();
+    document.getElementById('modalTitleProduto').innerHTML = 'CADASTRO DE NOVO SERVIÇO ';
+    document.getElementById("cad_tipo").value = 2;
+    var cod_produto = document.getElementById('cod_produto').value;
+    if (cod_produto != '') {
+        document.getElementById("cod_produto").value = '';
+        document.getElementById("cad_descricao").value = '';
+        document.getElementById("cad_descricaopdv").value = '';
+        $('#pro_categoria').val('').trigger('change');
+        document.getElementById("cad_codfabricante").value = '';
+        $('#pro_frabricante').val('').trigger('change');
+        document.getElementById("cad_codbarras").value = '';
+        document.getElementById("produtoAtivo").checked = true;
+    }
+}
+
 function getProdutoCategoriaOption() {
     $.get(base_url + 'api/cadastro/exibir/categorias', {
     }, function (response) {
@@ -690,41 +716,14 @@ function getProdutoCategoriaOption() {
     });
 }
 
-function getProdutoSubcategoriaOption(Paramentro) {
-    if (Paramentro === '' || Paramentro === null) {
-        var Paramentro = 0;
-    }
-    $.get(base_url + 'api/cadastro/exibir/categoria/subcategorias/' + Paramentro, {
+function getProdutoTamanhoOption() {
+    $.get(base_url + 'api/cadastro/exibir/tamanhos', {
     }, function (response) {
-        options = '<option value="">SELECIONE UMA SUBCATEGORIA</option>';
+        options = '<option value="">SELECIONE UM TAMANHO</option>';
         for (var i = 0; i < response.length; i++) {
-            options += '<option value="' + response[i].cod_subcategoria + '">' + response[i].cad_subcategoria + '</option>';
+            options += '<option value="' + response[i].cod_tamanho + '">' + response[i].cad_abreviacao + ' - ' + response[i].cad_tamanho + '</option>';
         }
-        $('#pro_subcategoria').html(options);
-        document.getElementById("pro_subcategoria").disabled = false;
-        document.getElementById("pro_subcategoria").required = true;
-    });
-}
-
-function getProdutoFabricanteOption() {
-    $.get(base_url + 'api/cadastro/exibir/fabricantes', {
-    }, function (response) {
-        options = '<option value="">SELECIONE UMA CATEGORIA</option>';
-        for (var i = 0; i < response.length; i++) {
-            options += '<option value="' + response[i].cod_fabricante + '">' + response[i].cad_fabricante + '</option>';
-        }
-        $('#pro_frabricante').html(options);
-    });
-}
-
-function getCategoriaOption() {
-    $.get(base_url + 'api/cadastro/exibir/categorias', {
-    }, function (response) {
-        options = '<option value="">SELECIONE UMA CATEGORIA</option>';
-        for (var i = 0; i < response.length; i++) {
-            options += '<option value="' + response[i].cod_categoria + '">' + response[i].cad_categoria + '</option>';
-        }
-        $('#sub_categoria').html(options);
+        $('#pro_tamanho').html(options);
     });
 }
 

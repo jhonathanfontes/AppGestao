@@ -118,7 +118,7 @@ $routes->group('api', function ($routes) {
 
         // Criar as Consultas
         $routes->group('consulta', function ($routes) {
-            $routes->post('pessoa/documento', 'Pessoa::checkDocumento');
+            $routes->post('pessoa/documento', 'Pessoas::checkDocumento');
             $routes->post('contabancaria', 'ContaBancaria::optionContaBancaria');
         });
 

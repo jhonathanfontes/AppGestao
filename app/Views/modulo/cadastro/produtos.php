@@ -87,19 +87,8 @@
 <?= $this->section('script') ?>
 <script>
     $(document).ready(function() {
-
-        $("#pro_categoria").on("change", function() {
-            var pro_categoria = $(this).val();
-
-            getProdutoSubcategoriaOption(pro_categoria);
-            
-            selectedSubcategoria();
-        });
-
-        getProdutoFabricanteOption();
-
-        getCategoriaOption();
-
+        getProdutoCategoriaOption();
+        getProdutoTamanhoOption();
     });
 </script>
 <?= $this->endSection() ?>

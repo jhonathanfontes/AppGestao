@@ -13,12 +13,15 @@ class ProdutoModel extends Model
 	protected $useSoftDeletes = false;
 
 	protected $allowedFields = [
-		'subcategoria_id',
-		'fabricante_id',
+		'pro_tipo',
 		'pro_descricao',
-		'pro_descricao_pvd',
-		'pro_cod_fabricante',
-		'pro_codigobarras',
+		'categoria_id',
+		'pro_codigobarra',
+		'tamanho_id',
+		'valor_custo',
+		'valor_venda1',
+		'valor_venda2',
+		'estoque',
 		'status',
 		'created_user_id',
 		'updated_user_id',
