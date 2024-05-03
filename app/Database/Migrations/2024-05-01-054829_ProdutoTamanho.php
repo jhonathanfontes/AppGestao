@@ -35,18 +35,22 @@ class ProdutoTamanho extends Migration
             ],
             'empresa_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'created_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'updated_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'deleted_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'created_at' => [

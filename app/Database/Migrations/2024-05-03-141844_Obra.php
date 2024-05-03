@@ -24,6 +24,10 @@ class Obra extends Migration
                 'type' => 'DATE',
                 'null' => true,
             ],
+            'endereco_id' => [
+                'type' => 'INT',
+                'null' => true,
+            ],
             'status' => [
                 'type' => 'INT',
                 'default' => 1,
@@ -35,14 +39,17 @@ class Obra extends Migration
             ],
             'created_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'updated_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'deleted_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'created_at' => [

@@ -27,14 +27,17 @@ class EnderecoTipo extends Migration
             ],
             'created_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'updated_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'deleted_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'created_at' => [
@@ -51,12 +54,13 @@ class EnderecoTipo extends Migration
             ],
         ]);
         $this->forge->addKey('id', true);
+        $this->forge->addKey('created_user_id');
+        $this->forge->addKey('updated_user_id');
+        $this->forge->addKey('deleted_user_id');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_enderecotipo');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_enderecotipo');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_enderecotipo');        
         $this->forge->createTable('cad_enderecotipo', true,  ['ENGINE' => 'InnoDB']);
-        
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_enderecotipo');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_enderecotipo');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_enderecotipo');
-        
     }
 
     public function down()

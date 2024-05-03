@@ -18,6 +18,7 @@ class Endereco extends Migration
             ],
             'enderecotipo_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
             ],
             'end_endereco' => [
                 'type' => 'VARCHAR',
@@ -60,14 +61,17 @@ class Endereco extends Migration
             ],
             'created_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'updated_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'deleted_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'created_at' => [
@@ -89,10 +93,10 @@ class Endereco extends Migration
         $this->forge->addKey('created_user_id');
         $this->forge->addKey('updated_user_id');
         $this->forge->addKey('deleted_user_id');
-        $this->forge->addForeignKey('enderecotipo_id', 'cad_enderecotipo', 'id', 'CASCADE', 'CASCADE', 'fk_empresa_endereco');
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_endereco');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_endereco');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_endereco');
+        $this->forge->addForeignKey('enderecotipo_id', 'cad_enderecotipo', 'id', 'CASCADE', 'NO ACTION', 'fk_empresa_endereco');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_endereco');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_endereco');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_endereco');
 
         $attributes = ['ENGINE' => 'InnoDB'];
         $this->forge->createTable('cad_endereco', false, $attributes);
