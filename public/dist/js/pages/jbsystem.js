@@ -128,7 +128,7 @@ function consultaReceitaWsCNPJ(cnpj) {
     });
 }
 
-$('#cad_documento').on('input', function() {
+$('#cad_documento').on('input', function () {
     if ($(this).val().length > 14) {
         $(this).val($(this).val().slice(0, 14));
     }
@@ -379,10 +379,13 @@ function executeAction(actionUrl, Paramentro, Codigo) {
     });
 }
 
-function initializeDataTable(tableId, url, columnDefs, order) {
+function initializeDataTable(tableId, url, columnDefs, order, data) {
     $(tableId).DataTable({
         ajax: {
             url: url,
+            data: {
+                'codigo': data
+            },
             type: "POST",
             dataType: "json",
             async: true

@@ -12,7 +12,7 @@ class Servicos extends BaseController
     public function index()
     {
         $data = [
-            'card_title' => 'RELAÇÃO DOS PRODUTOS',
+            'card_title' => 'RELAÇÃO DOS SERVIÇOS',
         ];
         return view('modulo/cadastro/servicos', $data);
     }

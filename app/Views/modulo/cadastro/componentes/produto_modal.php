@@ -30,7 +30,7 @@
                         <label for="">TAMANHO</label>
                         <select name="pro_tamanho" id="pro_tamanho" class="form-control select2bs4" style="width: 100%;"
                             required="">
-                            <option value="">SELECIONE UMA CATEGORIA</option>
+                            <option value="">SELECIONE UMA TAMANHO</option>
                         </select>
                     </div>
                     <div class="form-group col-2" style="text-align: center;">

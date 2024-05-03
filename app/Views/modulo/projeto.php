@@ -1,4 +1,4 @@
-<?= $this->extend('_layout/venda') ?>
+<?= $this->extend('_layout/projeto') ?>
 
 <?= $this->section('view_content') ?>
 <!-- Main content-header -->
@@ -11,19 +11,19 @@
 <section class="content">
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
-        <h5 class="mt-4 mb-2">GERENCIAMENTO DAS OBRAS</h5>
+        <h5 class="mt-4 mb-2">GERENCIAMENTO DOS PROJETOS</h5>
         <div class="row">
             <!-- Small boxes (Stat box) -->
             <div class="col-lg-2 col-4">
                 <!-- small box -->
                 <div class="small-box bg-orange">
                     <div class="inner">
-                        <p>ORÇAMENTO</p>
+                        <p>OBRAS</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-cash"></i>
                     </div>
-                    <a href="<?= base_url('app/venda/orcamento'); ?>" class="small-box-footer"> ACESSAR <i
+                    <a href="<?= base_url('app/projeto/obra'); ?>" class="small-box-footer"> ACESSAR <i
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>

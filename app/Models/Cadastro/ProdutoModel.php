@@ -30,12 +30,12 @@ class ProdutoModel extends Model
 	];
 
 	protected $useTimestamps = false;
-	protected $createdField  = 'created_at';
-	protected $updatedField  = 'updated_at';
-	protected $deletedField  = 'deleted_at';
-	protected $validationRules    = [];
+	protected $createdField = 'created_at';
+	protected $updatedField = 'updated_at';
+	protected $deletedField = 'deleted_at';
+	protected $validationRules = [];
 	protected $validationMessages = [];
-	protected $skipValidation     = true;
+	protected $skipValidation = true;
 
 	protected $beforeInsert = ['insertAuditoria'];
 	protected $beforeUpdate = ['updateAuditoria'];
@@ -43,14 +43,14 @@ class ProdutoModel extends Model
 	protected function insertAuditoria(array $data)
 	{
 		$data['data']['created_user_id'] = getUsuarioID();
-		$data['data']['created_at'] 	 = getDatetimeAtual();
+		$data['data']['created_at'] = getDatetimeAtual();
 		return $data;
 	}
 
 	protected function updateAuditoria(array $data)
 	{
 		$data['data']['updated_user_id'] = getUsuarioID();
-		$data['data']['updated_at'] 	 = getDatetimeAtual();
+		$data['data']['updated_at'] = getDatetimeAtual();
 		return $data;
 	}
 
@@ -73,47 +73,48 @@ class ProdutoModel extends Model
 		if ($codigo != null) {
 			$data['status'] = 0;
 			$data['deleted_user_id'] = getUsuarioID();
-			$data['deleted_at'] 	 = getDatetimeAtual();
+			$data['deleted_at'] = getDatetimeAtual();
 			return $this->update($codigo, $data);
 		}
 		return false;
 	}
 
-	public function getProdutos()
+	public function getProdutos($cod_produto = null)
 	{
-		$db      = \Config\Database::connect();
+		$db = \Config\Database::connect();
 		$builder = $db->table($this->table);
-		$builder->select('cad_produto.*, cad_categoria.cat_descricao');
+		$builder->select('cad_produto.*, cad_categoria.cat_descricao, cad_tamanho.tam_abreviacao, cad_tamanho.tam_descricao');
 		$builder->join('cad_categoria', 'cad_categoria.id = cad_produto.categoria_id');
+		$builder->join('cad_tamanho', 'cad_tamanho.id = cad_produto.tamanho_id');
 		$builder->whereIn('cad_produto.status', ['1', '2']);
+		$builder->where('cad_produto.pro_tipo', $cod_produto);
 		$result = $builder->get();
 		return $result->getResult();
 	}
 
 	public function getProduto(int $codigo)
 	{
-		$db      = \Config\Database::connect();
+		$db = \Config\Database::connect();
 		$builder = $db->table($this->table);
 		$builder->select(
-			'cad_produto.id as cod_produto,
-			cad_produto.subcategoria_id as cod_subcategoria,
-			cad_subcategoria.sub_descricao as des_subcategoria,
-			cad_subcategoria.categoria_id as cod_categoria,
-			cad_categoria.cat_descricao as des_categoria,
-			cad_produto.fabricante_id as cod_fabricante, 
-			cad_fabricante.fab_descricao as des_fabricante,
+			'cad_produto.id as cod_produto,		
 			cad_produto.pro_descricao as cad_produto,
-			cad_produto.pro_descricao_pvd as cad_produto_pvd,
-			cad_produto.pro_cod_fabricante as cad_fabricante,
-			cad_produto.pro_codigobarras as cad_codigobarras,
-			cad_produto.status,
-		(SELECT COALESCE(SUM(pg.estoque),0) FROM pdv_produtograde pg WHERE pg.produto_id = cad_produto.id and pg.status = 1) AS estoque '
+			cad_produto.pro_tipo as cad_tipo,
+			cad_produto.categoria_id as cod_categoria, 
+			cad_categoria.cat_descricao as cad_categoria,
+			cad_produto.tamanho_id as cod_tamanho,
+			cad_tamanho.tam_descricao as des_tamanho,                  
+			cad_produto.valor_custo,
+			cad_produto.valor_venda1,
+			cad_produto.valor_venda2,
+			COALESCE(cad_produto.estoque, 0) as estoque,
+			pro_codigobarra as cad_codigobarras,
+			cad_produto.status'
 		);
-		$builder->join('cad_subcategoria', 'cad_subcategoria.id_subcategoria = cad_produto.subcategoria_id');
-		$builder->join('cad_categoria', 'cad_categoria.id_categoria = cad_subcategoria.categoria_id');
-		$builder->join('cad_fabricante', 'cad_fabricante.id_fabricante = cad_produto.fabricante_id');
+		$builder->join('cad_categoria', 'cad_categoria.id = cad_produto.categoria_id');
+		$builder->join('cad_tamanho', 'cad_tamanho.id = cad_produto.tamanho_id');
 		$builder->where('cad_produto.id', $codigo);
-		$builder->whereIn('cad_produto.status', ['1', '2', '3']);
+		$builder->whereIn('cad_produto.status', ['1', '2', '9']);
 		$result = $builder->get();
 		return $result->getRow();
 	}

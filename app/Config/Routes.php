@@ -145,6 +145,114 @@ $routes->group('api', function ($routes) {
         });
     });
 
+    // Modulo API Cadastro
+    $routes->group('projeto', ['namespace' => 'App\Controllers\Api\v1\Projeto'], function ($routes) {
+
+        // Carrega dados da TableDatta
+        $routes->group('tabela', function ($routes) {
+            $routes->post('obras', 'Obras::getCarregaTabela');
+            $routes->post('profissoes', 'Profissoes::getCarregaTabela');
+            $routes->post('produtos', 'Produtos::getCarregaTabela');
+            $routes->post('categorias', 'Categorias::getCarregaTabela');
+            $routes->post('subcategorias', 'SubCategorias::getCarregaTabela');
+            $routes->post('fabricantes', 'Fabricantes::getCarregaTabela');
+            $routes->post('tamanhos', 'Tamanhos::getCarregaTabela');
+            $routes->group('grade', function ($routes) {
+                $routes->get('produto/(:segment)', 'ProdutoGrade::getCarregaTabela/$1');
+                $routes->get('tamanho', 'ProdutoGrade::addGradeProduto');
+            });
+        });
+
+        // Salvar dados Cadastro
+        $routes->group('salvar', function ($routes) {
+            $routes->post('obra', 'Obras::save');
+            $routes->post('profissao', 'Profissoes::save');
+            $routes->post('produto', 'Produtos::save');
+            $routes->post('categoria', 'Categorias::save');
+            $routes->post('subcategoria', 'SubCategorias::save');
+            $routes->post('fabricante', 'Fabricantes::save');
+            $routes->post('tamanho', 'Tamanhos::save');
+
+            $routes->group('grade', function ($routes) {
+                $routes->post('produto', 'ProdutoGrade::save');
+            });
+        });
+
+        // Exibir dados Cadastro
+        $routes->group('exibir', function ($routes) {
+
+            $routes->group('pessoas', function ($routes) {
+                $routes->get('/', 'Pessoas::findAll');
+                $routes->get('clientes', 'Pessoas::clientes');
+                $routes->get('fornecedores', 'Pessoas::fornecedores');
+            });
+
+            $routes->get('obra', 'Obras::findAll');
+            $routes->get('produtos', 'Produtos::findAll');
+            $routes->get('categorias', 'Categorias::findAll');
+            $routes->get('subcategorias', 'SubCategorias::findAll');
+            $routes->get('fabricantes', 'Fabricantes::findAll');
+            $routes->get('tamanhos', 'Tamanhos::findAll');
+
+            $routes->get('obra/(:segment)', 'Obras::show/$1');
+            $routes->get('profissao/(:segment)', 'Profissoes::show/$1');
+            $routes->get('produto/(:segment)', 'Produtos::show/$1');
+            $routes->get('categoria/(:segment)', 'Categorias::show/$1');
+            $routes->get('subcategoria/(:segment)', 'SubCategorias::show/$1');
+            $routes->get('fabricante/(:segment)', 'Fabricantes::show/$1');
+            $routes->get('tamanho/(:segment)', 'Tamanhos::show/$1');
+
+            $routes->group('categoria', function ($routes) {
+                $routes->get('subcategorias/(:segment)', 'SubCategorias::getCagetoriaFiltro/$1');
+            });
+
+            $routes->group('grade', function ($routes) {
+                $routes->get('produto/tamanho/(:segment)', 'ProdutoGrade::addGradeProduto/$1');
+            });
+
+            // AUTO COMPLETE E AJAX BUSCAR DE DADOS search
+            $routes->group('busca', function ($routes) {
+                $routes->get('obra', 'Obras::selectBuscaProdutos/$1');
+                $routes->get('obra/(:segment)', 'Produtos::selectBuscaProdutos/$1');
+                $routes->get('produtograde', 'ProdutoGrade::selectBuscaProdutosGrade/$1');
+                $routes->get('produtograde/(:segment)', 'ProdutoGrade::selectBuscaProdutosGrade/$1');
+
+                $routes->group('grade', function ($routes) {
+                    $routes->post('produto', 'ProdutoGrade::getGradeProduto');
+                    $routes->post('produtos', 'ProdutoGrade::getGradesProduto');
+                });
+            });
+        });
+
+        // Criar as Consultas
+        $routes->group('consulta', function ($routes) {
+            $routes->post('pessoa/documento', 'Pessoas::checkDocumento');
+            $routes->post('contabancaria', 'ContaBancaria::optionContaBancaria');
+        });
+
+        // Deletar dados Cadastro
+        $routes->group('remover', function ($routes) {
+            $routes->post('obra/(:segment)', 'Obras::remove/$1');
+            $routes->post('profissao/(:segment)', 'Profissoes::remove/$1');
+            $routes->post('produto/(:segment)', 'Produtos::remove/$1');
+            $routes->post('categoria/(:segment)', 'Categorias::remove/$1');
+            $routes->post('subcategoria/(:segment)', 'SubCategorias::remove/$1');
+            $routes->post('fabricante/(:segment)', 'Fabricantes::remove/$1');
+            $routes->post('tamanho/(:segment)', 'Tamanhos::remove/$1');
+        });
+
+        // Exibir dados Cadastro
+        $routes->group('arquivar', function ($routes) {
+            $routes->get('obra/(:segment)', 'Obras::arquivar/$1');
+            $routes->get('profissao/(:segment)', 'Profissoes::arquivar/$1');
+            $routes->get('produto/(:segment)', 'Produtos::arquivar/$1');
+            $routes->get('categoria/(:segment)', 'Categorias::arquivar/$1');
+            $routes->get('subcategoria/(:segment)', 'SubCategorias::arquivar/$1');
+            $routes->get('fabricante/(:segment)', 'Fabricantes::arquivar/$1');
+            $routes->get('tamanho/(:segment)', 'Tamanhos::arquivar/$1');
+        });
+    });
+
     // Modulo API Configuracao
     $routes->group('configuracao', ['namespace' => 'App\Controllers\Api\v1\Configuracao'], function ($routes) {
 
@@ -503,6 +611,7 @@ $routes->group('app', function ($routes) {
         $routes->get('configuracao', 'App\Modulo::configuracao');
         $routes->get('financeiro', 'App\Modulo::financeiro');
         $routes->get('venda', 'App\Modulo::venda');
+        $routes->get('projeto', 'App\Modulo::projeto');
     });
 
     // Modulo APP Cadastro
@@ -683,6 +792,29 @@ $routes->group('app', function ($routes) {
         // Carrega dados da ORÇAMENTO
         $routes->group('orcamento', function ($routes) {
             $routes->get('/', 'Pdv::Orcamento');
+            $routes->get('selling/(:segment)', 'Pdv::Orcamento_Selling/$1');
+            $routes->get('selling', 'Pdv::Orcamento_Selling');
+        });
+
+        // Carrega dados da PDV
+        $routes->group('pdv', function ($routes) {
+            $routes->get('/', 'Pdv::Pdv');
+            $routes->get('selling/(:segment)', 'Pdv::Pdv_Selling/$1');
+            $routes->get('selling', 'Pdv::Pdv_Selling');
+        });
+    });
+
+    // Modulo APP Venda
+    $routes->group('projeto', ['namespace' => 'App\Controllers\App\Projeto'], function ($routes) {
+        // Redirecionamento  para o modulo Venda
+        $routes->addRedirect('/', 'app/modulo/projeto');
+
+        $routes->get('cancelamento', 'Pdv::Cancelamento');
+        $routes->get('devolucao', 'Pdv::Devolucao');
+
+        // Carrega dados da ORÇAMENTO
+        $routes->group('obra', function ($routes) {
+            $routes->get('/', 'Obra::index');
             $routes->get('selling/(:segment)', 'Pdv::Orcamento_Selling/$1');
             $routes->get('selling', 'Pdv::Orcamento_Selling');
         });

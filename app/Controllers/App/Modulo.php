@@ -22,4 +22,9 @@ class Modulo extends BaseController
     {
        echo view('modulo/venda');
     }
+
+    public function projeto()
+    {
+       echo view('modulo/projeto');
+    }
 }

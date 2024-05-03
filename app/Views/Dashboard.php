@@ -30,6 +30,19 @@
                     <a href="<?= base_url('app/cadastro'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
+             <!-- ./col -->
+             <div class="col-lg-2 col-3">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <p>PROJETOS</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
+                    <a href="<?= base_url('app/projeto'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
             <!-- ./col -->
             <div class="col-lg-2 col-3">
                 <!-- small box -->

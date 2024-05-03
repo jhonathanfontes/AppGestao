@@ -22,13 +22,24 @@ $(document).ready(function () {
 
     // CARREGA DADOS DA TELA DE PRODUTOS
     var produtosColumnDefs = [
-        { className: "dt-body-center", targets: [0, 3, 4, 5, 6, 7] }
+        { className: "dt-body-center", targets: [0, 3, 4, 5, 6, 7, 8, 9] }
     ];
     var produtosOrder = [
-        [6, 'desc'],
-        [0, 'asc']
+        [8, 'desc'],
+        [1, 'asc']
     ];
-    initializeDataTable("#tableProdutos", base_url + "api/cadastro/tabela/produtos", produtosColumnDefs, produtosOrder);
+
+    initializeDataTable("#tableProdutos", base_url + "api/cadastro/tabela/produtos", produtosColumnDefs, produtosOrder, 1);
+
+    // CARREGA DADOS DA TELA DE SERVIÇOS
+    var servicosColumnDefs = [
+        { className: "dt-body-center", targets: [0, 3, 4, 5, 6, 7] }
+    ];
+    var servicosOrder = [
+        [6, 'desc'],
+        [1, 'asc']
+    ];
+    initializeDataTable("#tableServicos", base_url + "api/cadastro/tabela/produtos", servicosColumnDefs, servicosOrder, 2);
 
     // CARREGA DADOS DA TELA DOS CATEGORIA
     var categoriasColumnDefs = [
@@ -474,95 +485,6 @@ function salvarProfissao() {
 }
 
 // GERENCIA OS PRODUTOS
-function tableProdutoGrade(Paramentro) {
-    // CARREGA DADOS DA TELA DOS TAMANHOS
-    $("#tableProdutoGrade").DataTable({
-        "ajax": {
-            "url": base_url + "api/cadastro/tabela/grade/produto/" + Paramentro,
-            "type": "GET",
-            "dataType": "json",
-            async: "true"
-        },
-        order: [
-            [5, 'desc'],
-            [4, 'desc'],
-            [0, 'desc']
-        ],
-    });
-}
-
-function getProdutoGradeSelecionado(Paramentro) {
-    $.get(base_url + 'api/cadastro/exibir/grade/produto/tamanho/' + Paramentro, {
-    }, function (response) {
-        options = '<option value="">SELECIONE UMA CATEGORIA</option>';
-        for (var i = 0; i < response.length; i++) {
-            options += '<option value="' + response[i].cod_tamanho + '">' + response[i].cad_tamanho + '</option>';
-        }
-        $('#cod_gradetamanho').html(options);
-    });
-}
-
-function salvarGradeProdutoTamanho() {
-    $("#formProdutoGrade").submit(function (e) {
-        e.preventDefault();
-    });
-
-    $.validator.setDefaults({
-        submitHandler: function () {
-            $.ajax({
-                url: $('#formProdutoGrade').attr('action'),
-                type: "POST",
-                data: $('#formProdutoGrade').serialize(),
-                dataType: "json",
-                beforeSend: function () {
-                    document.getElementById("incluirGradeProduto").disabled = true;
-                },
-                success: function (response) {
-                    var cod_produto = response.data.produto_id;
-                    if (response.status === true) {
-                        $('#tableProdutoGrade').dataTable().fnDestroy();
-                        tableProdutoGrade(cod_produto);
-                        getProdutoGradeSelecionado(cod_produto);
-                        document.getElementById("incluirGradeProduto").disabled = false;
-                    }
-                },
-                error: function () {
-                    document.getElementById("incluirGradeProduto").disabled = false;
-                }
-            });
-        }
-    });
-
-    $('#formProdutoGrade').validate({
-        rules: {
-            cod_produto: {
-                required: true,
-            },
-            cod_gradetamanho: {
-                required: true,
-            }
-        },
-        messages: {
-            cod_produto: {
-                required: "O produto deve ser selecionado!",
-            },
-            cod_gradetamanho: {
-                required: "O tamanho do produto deve ser selecionado!",
-            }
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        }
-    });
-}
 
 function getEditProduto(Paramentro) {
     getProdutoCategoriaOption();
@@ -571,15 +493,22 @@ function getEditProduto(Paramentro) {
         "type": "GET",
         "dataType": "json",
         success: function (dado) {
-
+            console.log(dado);
             document.getElementById('modalTitleProduto').innerHTML = 'ATUALIZANDO O PRODUTO ' + dado.cad_produto;
+            $('#cad_tipo').val(dado.cad_tipo);
             $('#cod_produto').val(dado.cod_produto);
             $('#cad_descricao').val(dado.cad_produto);
-            $('#cad_descricaopdv').val(dado.cad_produto_pdv);
             $('#pro_categoria').val(dado.cod_categoria).trigger('change');
-            $('#cad_codfabricante').val(dado.cad_fabricante);
-            $('#pro_frabricante').val(dado.cod_fabricante).trigger('change');
-            $('#cad_codbarras').val(dado.cad_codigobarras);
+            $('#pro_tamanho').val(dado.cod_tamanho).trigger('change');
+            if (dado.cad_tipo == 1) {
+                $('#cad_custo').val(formatMoneyBR(dado.valor_custo));
+                $('#cad_codbarras').val(dado.cad_codigobarras);
+            } else {
+                document.getElementById("cad_codbarras").disabled = true;
+                document.getElementById("cad_custo").disabled = true;
+            }
+            $('#cad_valor1').val(formatMoneyBR(dado.valor_venda1));
+            $('#cad_valor2').val(formatMoneyBR(dado.valor_venda2));
 
             if (dado.status == '1') {
                 document.getElementById("produtoAtivo").checked = true;
@@ -608,17 +537,18 @@ function selectedSubcategoria() {
 }
 
 function setNewProduto() {
-  
+
     document.getElementById('modalTitleProduto').innerHTML = 'CADASTRO DE NOVO PRODUTO ';
     document.getElementById("cad_tipo").value = 1;
     var cod_produto = document.getElementById('cod_produto').value;
     if (cod_produto != '') {
         document.getElementById("cod_produto").value = '';
         document.getElementById("cad_descricao").value = '';
-        document.getElementById("cad_descricaopdv").value = '';
         $('#pro_categoria').val('').trigger('change');
-        document.getElementById("cad_codfabricante").value = '';
-        $('#pro_frabricante').val('').trigger('change');
+        $('#pro_tamanho').val('').trigger('change');
+        document.getElementById("cad_custo").value = '';
+        document.getElementById("cad_valor1").value = '';
+        document.getElementById("cad_valor2").value = '';
         document.getElementById("cad_codbarras").value = '';
         document.getElementById("produtoAtivo").checked = true;
     }
@@ -692,14 +622,18 @@ function setNewServico() {
     getProdutoCategoriaOption();
     document.getElementById('modalTitleProduto').innerHTML = 'CADASTRO DE NOVO SERVIÇO ';
     document.getElementById("cad_tipo").value = 2;
+    document.getElementById("cad_codbarras").disabled = true;
+    document.getElementById("cad_custo").disabled = true;
+
     var cod_produto = document.getElementById('cod_produto').value;
     if (cod_produto != '') {
         document.getElementById("cod_produto").value = '';
         document.getElementById("cad_descricao").value = '';
-        document.getElementById("cad_descricaopdv").value = '';
         $('#pro_categoria').val('').trigger('change');
-        document.getElementById("cad_codfabricante").value = '';
-        $('#pro_frabricante').val('').trigger('change');
+        $('#pro_tamanho').val('').trigger('change');
+        document.getElementById("cad_custo").value = '';
+        document.getElementById("cad_valor1").value = '';
+        document.getElementById("cad_valor2").value = '';
         document.getElementById("cad_codbarras").value = '';
         document.getElementById("produtoAtivo").checked = true;
     }
@@ -808,85 +742,6 @@ function salvarCategoria() {
     });
 }
 
-function getEditFabricante(Paramentro) {
-    $.ajax({
-        "url": base_url + "api/cadastro/exibir/fabricante/" + Paramentro,
-        "type": "GET",
-        "dataType": "json",
-        success: function (dado) {
-            document.getElementById('modalTitleFabricante').innerHTML = 'ATUALIZANDO O FABRICANTE ' + dado.cad_fabricante;
-            $('#cod_fabricante').val(dado.cod_fabricante);
-            $('#cad_fabricante').val(dado.cad_fabricante);
-            if (dado.status == '1') {
-                document.getElementById("fabricanteAtivo").checked = true;
-            }
-            if (dado.status == '2') {
-                document.getElementById("fabricanteInativo").checked = true;
-            }
-        }
-    });
-}
-
-function setNewFabricante() {
-    document.getElementById('modalTitleFabricante').innerHTML = 'CADASTRO DE NOVO FABRICANTE DO PRODUTO';
-    var cod_fabricante = document.getElementById('cod_fabricante').value;
-    if (cod_fabricante != '') {
-        document.getElementById("cod_fabricante").value = '';
-        document.getElementById("cad_fabricante").value = '';
-        document.getElementById("fabricanteAtivo").checked = true;
-    }
-}
-
-function salvarFabricante() {
-    $("#formFabricante").submit(function (e) {
-        e.preventDefault();
-    });
-
-    $.validator.setDefaults({
-        submitHandler: function () {
-            $.ajax({
-                url: $('#formFabricante').attr('action'),
-                type: "POST",
-                data: $('#formFabricante').serialize(),
-                dataType: "json",
-                beforeSend: function () {
-
-                },
-                success: function (response) {
-                    respostaSwalFire(response)
-                },
-                error: function () {
-
-                }
-            });
-        }
-    });
-
-    $('#formFabricante').validate({
-        rules: {
-            cad_fabricante: {
-                required: true,
-            },
-        },
-        messages: {
-            cad_fabricante: {
-                required: "O Fabricante deve ser informada!",
-            },
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        }
-    });
-}
-
 function setNewSubCategoria() {
     document.getElementById('modalTitleSubCategoria').innerHTML = 'CADASTRO DE NOVA SUBCATEGORIA DO PRODUTO';
     var cod_subcategoria = document.getElementById('cod_subcategoria').value;
@@ -896,82 +751,6 @@ function setNewSubCategoria() {
         $('#sub_categoria').val('').trigger('change');
         document.getElementById("subcategoriaAtivo").checked = true;
     }
-}
-
-function salvarSubcategorias() {
-    $("#formSubcategoria").submit(function (e) {
-        e.preventDefault();
-    });
-
-    $.validator.setDefaults({
-        submitHandler: function () {
-            $.ajax({
-                url: $('#formSubcategoria').attr('action'),
-                type: "POST",
-                data: $('#formSubcategoria').serialize(),
-                dataType: "json",
-                beforeSend: function () {
-                    document.getElementById("salvarSubcategoria").disabled = true;
-                },
-                success: function (response) {
-                    respostaSwalFire(response)
-                },
-                error: function () {
-                    document.getElementById("salvarSubcategoria").disabled = false;
-                }
-            });
-        }
-    });
-
-    $('#formSubcategoria').validate({
-        rules: {
-            cod_categoria: {
-                required: true,
-            },
-            cad_subcategoria: {
-                required: true,
-            },
-        },
-        messages: {
-            cod_categoria: {
-                required: "Selecione uma Categoria!",
-            },
-            cad_subcategoria: {
-                required: "A descrição da Subcategoria deve ser informada!",
-            },
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        }
-    });
-}
-
-function getEditSubCategoria(Paramentro) {
-    $.ajax({
-        "url": base_url + "api/cadastro/exibir/subcategoria/" + Paramentro,
-        "type": "GET",
-        "dataType": "json",
-        success: function (dado) {
-            document.getElementById('modalTitleSubCategoria').innerHTML = 'ATUALIZANDO A SUBCATEGORIA ' + dado.cad_subcategoria;
-            $('#cod_subcategoria').val(dado.cod_subcategoria);
-            $('#cad_subcategoria').val(dado.cad_subcategoria);
-            $('#sub_categoria').val(dado.cod_categoria).trigger('change');
-            if (dado.status == '1') {
-                document.getElementById("subcategoriaAtivo").checked = true;
-            }
-            if (dado.status == '2') {
-                document.getElementById("subcategoriaInativo").checked = true;
-            }
-        }
-    });
 }
 
 function getEditTamanho(Paramentro) {

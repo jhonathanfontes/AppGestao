@@ -19,7 +19,8 @@ class Produtos extends BaseController
     {
 
         $response['data'] = array();
-        $result = $this->produtoModel->getProdutos();
+        $cod_produto = $this->request->getPost('codigo');
+        $result = $this->produtoModel->getProdutos($cod_produto);
 
         if (empty($result)):
             return $this->response->setJSON($response);
@@ -37,19 +38,33 @@ class Produtos extends BaseController
                     $status = '<label class="badge badge-danger">Desabilitado</label>';
                 endif;
 
-                $response['data'][$key] = array(
-                    esc($value->id),
-                    esc($value->pro_descricao_pvd),
-                    esc($value->pro_descricao),
-                    esc($value->sub_descricao),
-                    esc($value->fab_descricao),
-                    esc($value->estoque),
-                    convertStatus($value->status),
-                    $ops,
-                );
+                if ($value->pro_tipo == '1'):
+                    $response['data'][$key] = array(
+                        esc($value->id),
+                        esc($value->pro_descricao),
+                        esc($value->cat_descricao),
+                        esc($value->tam_abreviacao . ' - ' . $value->tam_descricao),
+                        formatValorBR($value->valor_custo),
+                        formatValorBR($value->valor_venda1),
+                        formatValorBR($value->valor_venda2),
+                        esc($value->estoque ?? 0),
+                        convertStatus($value->status),
+                        $ops,
+                    );
+                elseif ($value->pro_tipo == '2'):
+                    $response['data'][$key] = array(
+                        esc($value->id),
+                        esc($value->pro_descricao),
+                        esc($value->cat_descricao),
+                        esc($value->tam_abreviacao . ' - ' . $value->tam_descricao),
+                        formatValorBR($value->valor_venda1),
+                        formatValorBR($value->valor_venda2),
+                        convertStatus($value->status),
+                        $ops,
+                    );
+                endif;
             }
 
-            return $this->response->setJSON($response);
         } catch (\Throwable $th) {
             return $this->response->setJSON(
                 [
@@ -62,6 +77,7 @@ class Produtos extends BaseController
                 ]
             );
         }
+        return $this->response->setJSON($response);
 
     }
     public function save()
@@ -92,7 +108,7 @@ class Produtos extends BaseController
                     'menssagem' => [
                         'status' => 'error',
                         'heading' => 'NÃO FOI POSSIVEL SALVAR O REGISTRO!',
-                        'description' => "NÃO TEVE ALTERAÇÃO NA produto $result->cad_produto PARA SALVAR!"
+                        'description' => "NÃO TEVE ALTERAÇÃO NA PRODUTO $result->cad_produto PARA SALVAR!"
                     ]
                 ]);
             }
@@ -110,7 +126,7 @@ class Produtos extends BaseController
                     'menssagem' => [
                         'status' => 'success',
                         'heading' => 'REGISTRO SALVO COM SUCESSO!',
-                        'description' => "A produto $return->cad_produto FOI SALVAR!"
+                        'description' => "O PRODUTO $return->cad_produto FOI SALVAR!"
                     ]
                 ]);
             }
