@@ -8,7 +8,7 @@ class Tamanhos extends BaseController
 {
     public function index()
     {
-        $data['card_title'] = 'RELAÇÃO DOS TAMANHOS CADASTRADOS';
+        $data['card_title'] = 'RELAÇÃO DOS TAMANHOS/UNIDADES MEDIDAS CADASTRADOS';
         return view('modulo/cadastro/tamanhos', $data);
     }
 }

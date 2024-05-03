@@ -1,7 +1,7 @@
 <div class="modal fade" id="modalProduto">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-warning">
+            <div class="modal-header <?= getenv('tema.modal.header.color'); ?>">
                 <h4 class="modal-title"><span id="modalTitleProduto"></span></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

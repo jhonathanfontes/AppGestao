@@ -7,9 +7,9 @@
     <!-- Default box -->
     <div class="card card-pink">
         <div class="card-body">
-            <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalCategoria" onclick="setNewCategoria()">
+            <button class="btn btn-app <?= getenv('tema.btn.app1.color'); ?>" data-toggle="modal" data-target="#modalCategoria" onclick="setNewCategoria()">
                 <i class="fas fa-tag"></i>
-                CADASTRAR
+                CATEGORIA
             </button>
         </div>
     </div>
@@ -22,7 +22,7 @@
 <!-- /.content -->
 <section class="content">
     <!-- Default box -->
-    <div class="card card-pink">
+    <div class="card <?= getenv('tema.modal.header.color'); ?>">
         <div class="card-header">
             <h3 class="card-title"><?= isset($card_title) ? $card_title : ''; ?></h3>
             <div class="card-tools">

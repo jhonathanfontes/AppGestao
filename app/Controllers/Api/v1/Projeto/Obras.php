@@ -35,7 +35,8 @@ class Obras extends ApiController
             foreach ($result as $key => $value) {
 
                 $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalObra" onclick="getEditObra(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
-                $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'obra'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+                // $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'obra'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+                $ops .= ' <a class="btn btn-xs btn-success" href="obra/view/' . $value->id . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
 
                 $response['data'][$key] = array(
                     esc($value->obr_descricao),

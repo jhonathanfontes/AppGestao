@@ -14,12 +14,12 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-body">
-            <button class="btn btn-app bg-orange" data-toggle="modal" data-target="#modalProduto"
+            <button class="btn btn-app <?= getenv('tema.btn.app1.color'); ?>" data-toggle="modal" data-target="#modalProduto"
                 onclick="setNewServico()">
                 <i class="fa fa-tshirt"></i> SERVIÇO
             </button>
 
-            <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalTamanho"
+            <button class="btn btn-app <?= getenv('tema.btn.app2.color'); ?>" data-toggle="modal" data-target="#modalTamanho"
                 onclick="setNewTamanho()">
                 <i class="fa fa-ruler"></i> UNIDADE MEDIDA
             </button>
@@ -35,7 +35,7 @@
 <!-- /.content -->
 <section class="content">
     <!-- Default box -->
-    <div class="card card-pink">
+    <div class="card <?= getenv('tema.modal.header.color'); ?>">
         <div class="card-header">
             <h3 class="card-title"><?= isset($card_title) ? $card_title : ''; ?></h3>
             <div class="card-tools">
@@ -59,7 +59,7 @@
                         <th><?= !empty(getenv('tela.valor2')) ? getenv('tela.valor2') : 'VALOR 2'; ?></th>
                         <th>SITUAÇÃO</th>
                         <?php if (/*$this->session->userdata('jb_permissao')*/ 1 == 1): ?>
-                            <th>AÇÃO</th>
+                            <th style="width: 15%;">AÇÕES</th>
                         <?php endif; ?>
                     </tr>
                 </thead>
@@ -77,8 +77,6 @@
 <?= $this->section('modal_content') ?>
 <?php require_once ('componentes/produto_modal.php'); ?>
 <?php require_once ('componentes/categoria_modal.php'); ?>
-<?php require_once ('componentes/subcategoria_modal.php'); ?>
-<?php require_once ('componentes/fabricante_modal.php'); ?>
 <?php require_once ('componentes/tamanho_modal.php'); ?>
 <?= $this->endSection() ?>
 

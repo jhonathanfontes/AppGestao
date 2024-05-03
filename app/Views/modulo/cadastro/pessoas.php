@@ -14,10 +14,10 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-body">
-            <button class="btn btn-app bg-orange" data-toggle="modal" data-target="#modalPessoa" onclick="setNewPessoa()">
-                <i class="fa fa-male"></i> PESSOAS
+            <button class="btn btn-app <?= getenv('tema.btn.app1.color'); ?>" data-toggle="modal" data-target="#modalPessoa" onclick="setNewPessoa()">
+                <i class="fa fa-male"></i> PESSOA
             </button>
-            <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalProfissao" onclick="setNewProfissao()">
+            <button class="btn btn-app <?= getenv('tema.btn.app2.color'); ?>" data-toggle="modal" data-target="#modalProfissao" onclick="setNewProfissao()">
                 <i class="fa fa-hammer"></i> PROFISSÃO
             </button>
         </div>
@@ -31,8 +31,7 @@
 <!-- /.content -->
 <section class="content">
     <!-- Default box -->
-    <div class="card card-pink">
-
+    <div class="card <?= getenv('tema.modal.header.color'); ?>">
         <div class="card-header">
             <h3 class="card-title"><?= isset($card_title) ? $card_title : ''; ?></h3>
             <div class="card-tools">
@@ -46,18 +45,17 @@
             <table id="tablePessoas" class="table table-sm table-bordered table-striped">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>Nome</th>
-                        <th>Apelido</th>
-                        <th>Tipo</th>
-                        <th>Documento</th>
-                        <th>E-mail</th>
-                        <th>Telefone</th>
-                        <th>Status</th>
-                        <th>Acões</th>
+                        <th>NOME/RAZÃO</th>
+                        <th>APELIDO</th>
+                        <th>TIPO</th>
+                        <th>DOCUMENTO</th>
+                        <th>E-MAIL</th>
+                        <th>TELEFONE</th>
+                        <th>STATUS</th>
+                        <th>AÇÕES</th>
                     </tr>
                 </thead>
                 <tbody style="font-size: 12px;">
-
                 </tbody>
             </table>
         </div>

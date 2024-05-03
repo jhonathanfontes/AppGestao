@@ -17,7 +17,7 @@
             <button class="btn btn-app bg-orange" data-toggle="modal" data-target="#modalObra" onclick="setNewObra()">
                 <i class="fa fa-hammer"></i> OBRAS
             </button>
-           
+
         </div>
     </div>
     <!-- /.card -->
@@ -34,9 +34,11 @@
         <div class="card-header">
             <h3 class="card-title"><?= isset($card_title) ? $card_title : ''; ?></h3>
             <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                    title="Collapse">
                     <i class="fas fa-minus"></i></button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                    title="Remove">
                     <i class="fas fa-times"></i></button>
             </div>
         </div>
@@ -46,7 +48,7 @@
                     <tr style="text-align: center;">
                         <th>DESCRICÃO</th>
                         <th>DATA PREVISTA</th>
-                        <th>ACÕES</th>
+                        <th style="width: 20%;">AÇÕES</th>
                     </tr>
                 </thead>
                 <tbody style="font-size: 12px;">
@@ -60,13 +62,13 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('modal_content') ?>
-<?php require_once('componentes/obra_modal.php'); ?>
+<?php require_once ('componentes/obra_modal.php'); ?>
 
 <?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         // getProfissaoOption();
     });
 </script>
