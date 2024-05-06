@@ -27,6 +27,7 @@ class Produto extends Migration
             ],
             'categoria_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'pro_codigobarra' => [
@@ -35,6 +36,7 @@ class Produto extends Migration
             ],
             'tamanho_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'valor_custo' => [
@@ -57,10 +59,6 @@ class Produto extends Migration
                 'type' => 'INT',
                 'default' => 1,
                 'comment' => '1 -Habilitado, 2 - Desativado, 9 - Arquivado',
-            ],
-            'profissao_id' => [
-                'type' => 'INT',
-                'null' => true,
             ],
             'created_user_id' => [
                 'type' => 'INT',
@@ -90,8 +88,17 @@ class Produto extends Migration
                 'null' => true,
             ],
         ]);
-        $this->forge->addKey('id', true);
-        $this->forge->createTable('cad_produto');
+        
+        $this->forge->addPrimaryKey('id');
+
+        $this->forge->addForeignKey('categoria_id', 'cad_categoria', 'id', 'CASCADE', 'NO ACTION', 'fk_categoria_pessoa');
+        $this->forge->addForeignKey('tamanho_id', 'cad_tamanho', 'id', 'CASCADE', 'NO ACTION', 'fk_tamanho_pessoa');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_pessoa');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_pessoa');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_pessoa');
+
+        $this->forge->createTable('cad_produto', false, ['ENGINE' => 'InnoDB']);
+ 
     }
 
     public function down()

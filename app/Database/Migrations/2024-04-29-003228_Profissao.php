@@ -5,7 +5,7 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class EnderecoTipo extends Migration
+class Profissao extends Migration
 {
     public function up()
     {
@@ -16,7 +16,7 @@ class EnderecoTipo extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'end_descricao' => [
+            'pro_descricao' => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',
             ],
@@ -24,6 +24,11 @@ class EnderecoTipo extends Migration
                 'type' => 'INT',
                 'default' => 1,
                 'comment' => '1 -Habilitado, 2 - Desativado, 3 - Pendente, 9 - Arquivado',
+            ],
+            'empresa_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
+                'null' => true,
             ],
             'created_user_id' => [
                 'type' => 'INT',
@@ -53,18 +58,18 @@ class EnderecoTipo extends Migration
                 'null' => true,
             ],
         ]);
-        $this->forge->addKey('id', true);
-        $this->forge->addKey('created_user_id');
-        $this->forge->addKey('updated_user_id');
-        $this->forge->addKey('deleted_user_id');
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_enderecotipo');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_enderecotipo');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_enderecotipo');        
-        $this->forge->createTable('cad_enderecotipo', true,  ['ENGINE' => 'InnoDB']);
+        $this->forge->addPrimaryKey('id');
+        
+        $this->forge->addForeignKey('empresa_id', 'con_empresa', 'id', 'CASCADE', 'CASCADE', 'fk_empresa_profissao');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_profissao');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_profissao');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_profissao');
+        
+        $this->forge->createTable('cad_profissao', true,  ['ENGINE' => 'InnoDB']);
     }
 
     public function down()
     {
-        $this->forge->dropTable('cad_enderecotipo');
+        $this->forge->dropTable('cad_profissao');
     }
 }

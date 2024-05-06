@@ -26,6 +26,7 @@ class Obra extends Migration
             ],
             'endereco_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'status' => [
@@ -35,6 +36,7 @@ class Obra extends Migration
             ],
             'empresa_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'created_user_id' => [
@@ -65,19 +67,14 @@ class Obra extends Migration
                 'null' => true,
             ],
         ]);
-        $this->forge->addKey('id', true);
-        $this->forge->createTable('ger_obra', true,  ['ENGINE' => 'InnoDB']);
-        
-        $this->forge->addKey('empresa_id', true);
-        $this->forge->addKey('created_user_id', true);
-        $this->forge->addKey('updated_user_id', true);
-        $this->forge->addKey('deleted_user_id', true);
-        
-        $this->forge->addForeignKey('empresa_id', 'con_empresa', 'id', 'CASCADE', 'CASCADE', 'fk_empresa_obra');
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_obra');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_obra');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_obra');
-
+        $this->forge->addPrimaryKey('id');
+      
+        $this->forge->addForeignKey('endereco_id', 'cad_endereco', 'id', 'CASCADE', 'NO ACTION', 'fk_endereco_obra');
+        $this->forge->addForeignKey('empresa_id', 'con_empresa', 'id', 'CASCADE', 'NO ACTION', 'fk_empresa_obra');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_obra');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_obra');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_obra');
+        $this->forge->createTable('ger_obra', false, ['ENGINE' => 'InnoDB']);
     }
 
     public function down()

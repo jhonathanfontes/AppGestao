@@ -5,10 +5,11 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class Usuario extends Migration
+class Empresa extends Migration
 {
     public function up()
     {
+
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -16,80 +17,88 @@ class Usuario extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'use_nome' => [
+            'emp_razao' => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',
             ],
-            'use_apelido' => [
+            'emp_fantasia' => [
                 'type' => 'VARCHAR',
                 'constraint' => '50',
             ],
-            'use_cpf' => [
+            'emp_slogan' => [
                 'type' => 'VARCHAR',
                 'constraint' => '20',
+                'null' => true,
             ],
-            'use_password' => [
+            'emp_cnpj' => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',
             ],
-            'use_email' => [
+            'emp_telefone' => [
                 'type' => 'VARCHAR',
-                'constraint' => '100',
+                'constraint' => '20',
+                'null' => true,
             ],
-            'use_telefone' => [
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-            ],
-            'use_avatar' => [
+            'emp_email' => [
                 'type' => 'VARCHAR',
                 'constraint' => '50',
                 'null' => true,
-            ],'use_sexo' => [
+            ],
+            'emp_icone' => [
                 'type' => 'VARCHAR',
-                'constraint' => '1',
+                'constraint' => '20',
+                'null' => true,
+            ],
+            'endereco_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'status' => [
                 'type' => 'INT',
-                'default' => 3,
-                'comment' => '1 -Habilitado, 2 - Desativado, 3 - Pendente, 9 - Arquivado',
-            ],
-            'permissao_id' => [
-                'type' => 'INT',
-                'null' => true,
+                'comment' => '0 - Desativado, 1 - Habilitado, 9 - Arquivado',
             ],
             'created_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'updated_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'deleted_user_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'created_at' => [
-                'type'    => 'TIMESTAMP',
+                'type' => 'TIMESTAMP',
                 'default' => new RawSql('CURRENT_TIMESTAMP'),
             ],
             'updated_at' => [
-                'type'    => 'TIMESTAMP',
+                'type' => 'TIMESTAMP',
                 'null' => true,
             ],
             'deleted_at' => [
-                'type'    => 'TIMESTAMP',
+                'type' => 'TIMESTAMP',
                 'null' => true,
             ],
         ]);
-        $this->forge->addKey('id', true);
+        $this->forge->addPrimaryKey('id');
+
+        $this->forge->addForeignKey('endereco_id', 'cad_endereco', 'id', 'CASCADE', 'NO ACTION', 'fk_endereco_empresa');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_empresa');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_empresa');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_empresa');
+
         $attributes = ['ENGINE' => 'InnoDB'];
-        $this->forge->createTable('cad_usuario', true, $attributes);
+        $this->forge->createTable('con_empresa', true, $attributes);
     }
 
     public function down()
     {
-        $this->forge->dropTable('cad_usuario');
+        $this->forge->dropTable('con_empresa');
     }
 }

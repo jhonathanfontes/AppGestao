@@ -69,10 +69,14 @@ class SubGrupoFinanceiro extends Migration
                 'null' => true,
             ],
         ]);
-        $this->forge->addKey('id', true);
+        $this->forge->addPrimaryKey('id');
+        $this->forge->addForeignKey('empresa_id', 'con_empresa', 'id', 'CASCADE', 'CASCADE', 'fk_empresa_subgrupo');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_subgrupo');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_subgrupo');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_subgrupo');
+        
         $attributes = ['ENGINE' => 'InnoDB'];
         $this->forge->createTable('cad_subgrupo', true, $attributes);
-        $this->forge->addForeignKey('grupo_id', 'cad_grupo', 'id', 'CASCADE', 'CASCADE', 'fk_grupo_subgrupo');
     }
 
     public function down()

@@ -115,6 +115,7 @@ class Pessoa extends Migration
             ],
             'profissao_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'created_user_id' => [
@@ -145,8 +146,15 @@ class Pessoa extends Migration
                 'null' => true,
             ],
         ]);
-        $this->forge->addKey('id', true);
-        $this->forge->createTable('cad_pessoa');
+
+        $this->forge->addPrimaryKey('id');
+
+        $this->forge->addForeignKey('profissao_id', 'cad_profissao', 'id', 'CASCADE', 'NO ACTION', 'fk_profissao_pessoa');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_pessoa');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_pessoa');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_pessoa');
+
+        $this->forge->createTable('cad_pessoa', false, ['ENGINE' => 'InnoDB']);
     }
     public function down()
     {

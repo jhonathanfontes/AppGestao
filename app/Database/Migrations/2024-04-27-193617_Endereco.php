@@ -89,10 +89,7 @@ class Endereco extends Migration
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addKey('enderecotipo_id');
-        $this->forge->addKey('created_user_id');
-        $this->forge->addKey('updated_user_id');
-        $this->forge->addKey('deleted_user_id');
+       
         $this->forge->addForeignKey('enderecotipo_id', 'cad_enderecotipo', 'id', 'CASCADE', 'NO ACTION', 'fk_empresa_endereco');
         $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_endereco');
         $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_endereco');
