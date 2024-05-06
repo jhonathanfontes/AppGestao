@@ -536,22 +536,23 @@ function getEditEmpresa(Paramentro) {
         "type": "GET",
         "dataType": "json",
         success: function (dado) {
-
             document.getElementById('modalTitleEmpresa').innerHTML = 'ATUALIZANDO A EMPRESA ' + dado.cad_razao;
-            $('#cod_empresa').val(dado.cod_empresa);
-            $('#cad_razao').val(dado.cad_razao);
-            $('#cad_fantasia').val(dado.cad_fantasia);
-
-            document.getElementById("cad_slogan").value = dado.cad_slogan;
-            document.getElementById("cad_cnpj").value = dado.cad_cnpj;
-            document.getElementById("cad_cep").value = dado.cad_cep;
-            document.getElementById("cad_cidade").value = dado.cad_cidade;
-            document.getElementById("cad_uf").value = dado.cad_uf;
-            document.getElementById("cad_bairo").value = dado.cad_bairo;
-            document.getElementById("cad_endereco").value = dado.cad_endereco;
-            document.getElementById("cad_complemento").value = dado.cad_complemento;
-            document.getElementById("cad_telefone").value = dado.cad_telefone;
-            document.getElementById("cad_email").value = dado.cad_email;
+            document.getElementById("cod_empresa").value = dado.id;
+            document.getElementById("cod_endereco").value = dado.endereco_id;
+            document.getElementById("cad_razao").value = dado.emp_razao;
+            document.getElementById("cad_fantasia").value = dado.emp_fantasia;
+            document.getElementById("cad_slogan").value = dado.emp_slogan;
+            document.getElementById("cad_cnpj").value = dado.emp_cnpj;
+            document.getElementById("cad_telefone").value = dado.emp_telefone;
+            document.getElementById("cad_email").value = dado.emp_email;
+            //endereço 
+            document.getElementById("cad_endereco").value = dado.end_endereco;
+            document.getElementById("cad_numero").value = dado.end_numero;
+            document.getElementById("cad_bairo").value = dado.end_setor;
+            document.getElementById("cad_complemento").value = dado.end_complemento;
+            document.getElementById("cad_cidade").value = dado.end_cidade;
+            document.getElementById("cad_uf").value = dado.end_estado;
+            document.getElementById("cad_cep").value = dado.end_cep;
         }
     });
 }

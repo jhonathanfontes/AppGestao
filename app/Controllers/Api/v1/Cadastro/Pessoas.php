@@ -180,7 +180,7 @@ class Pessoas extends BaseController
         $data['pes_numero']         = returnNull(esc($this->request->getPost('cad_numero')));
         $data['pes_telefone']       = returnNull(esc($this->request->getPost('cad_telefone')));
         $data['tipo_cliente']       = $this->request->getPost('cad_tipopessoa');
-        $data['profissao_id']       = $this->request->getPost('cod_profissao');
+        $data['profissao_id']       = returnNull(esc($this->request->getPost('cod_profissao')), 'S');
         $data['status']             = $this->request->getPost('status');
 
         if ($this->request->getPost('cad_natureza') === 'F') {

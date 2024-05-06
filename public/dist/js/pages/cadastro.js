@@ -852,7 +852,6 @@ function salvarTamanhos() {
     });
 }
 
-
 function getArquivar(Paramentro, Codigo) {
     showConfirmationDialog('Deseja Realmente Arquivar Este Registro?', 'Este Lançamento Não Poderá Ser Desfeito!', 'Sim, Arquivar!')
         .then((confirmed) => {

@@ -67,6 +67,7 @@ class Obra extends Migration
                 'null' => true,
             ],
         ]);
+        
         $this->forge->addPrimaryKey('id');
       
         $this->forge->addForeignKey('endereco_id', 'cad_endereco', 'id', 'CASCADE', 'NO ACTION', 'fk_endereco_obra');

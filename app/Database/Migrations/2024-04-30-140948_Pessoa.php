@@ -148,7 +148,6 @@ class Pessoa extends Migration
         ]);
 
         $this->forge->addPrimaryKey('id');
-
         $this->forge->addForeignKey('profissao_id', 'cad_profissao', 'id', 'CASCADE', 'NO ACTION', 'fk_profissao_pessoa');
         $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_pessoa');
         $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_pessoa');

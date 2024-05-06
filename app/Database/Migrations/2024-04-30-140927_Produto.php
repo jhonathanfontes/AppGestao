@@ -91,11 +91,11 @@ class Produto extends Migration
         
         $this->forge->addPrimaryKey('id');
 
-        $this->forge->addForeignKey('categoria_id', 'cad_categoria', 'id', 'CASCADE', 'NO ACTION', 'fk_categoria_pessoa');
-        $this->forge->addForeignKey('tamanho_id', 'cad_tamanho', 'id', 'CASCADE', 'NO ACTION', 'fk_tamanho_pessoa');
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_pessoa');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_pessoa');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_pessoa');
+        $this->forge->addForeignKey('categoria_id', 'cad_categoria', 'id', 'CASCADE', 'NO ACTION', 'fk_categoria_produto');
+        $this->forge->addForeignKey('tamanho_id', 'cad_tamanho', 'id', 'CASCADE', 'NO ACTION', 'fk_tamanho_produto');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_produto');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_produto');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_produto');
 
         $this->forge->createTable('cad_produto', false, ['ENGINE' => 'InnoDB']);
  

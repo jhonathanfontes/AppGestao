@@ -8,6 +8,7 @@ class Empresa extends ApiController
 {
 
     private $empresaModel;
+    private $enderecoModel;
     private $auditoriaModel;
     private $validation;
 
@@ -15,8 +16,9 @@ class Empresa extends ApiController
     {
 
         $this->empresaModel = new \App\Models\Configuracao\EmpresaModel();
+        $this->enderecoModel = new \App\Models\EnderecoModel();
         // $this->auditoriaModel = new \App\Models\AuditoriaModel();
-        $this->validation =  \Config\Services::validation();
+        $this->validation = \Config\Services::validation();
     }
 
     public function getCarregaTabela()
@@ -49,18 +51,28 @@ class Empresa extends ApiController
             return redirect()->back();
         }
 
-        $data['emp_razao']          = returnNull($this->request->getPost('cad_razao'), 'S');
-        $data['emp_fantasia']       = returnNull($this->request->getPost('cad_fantasia'), 'S');
-        $data['emp_slogan']         = returnNull($this->request->getPost('cad_slogan'), 'S');
-        $data['emp_cnpj']           = limparCnpjCpf(returnNull($this->request->getPost('cad_cnpj'), 'S'));
-        $data['emp_cep']            = returnNull($this->request->getPost('cad_cep'), 'S');
-        $data['emp_endereco']       = returnNull($this->request->getPost('cad_endereco'), 'S');
-        $data['emp_bairo']          = returnNull($this->request->getPost('cad_bairo'), 'S');
-        $data['emp_cidade']         = returnNull($this->request->getPost('cad_cidade'), 'S');
-        $data['emp_uf']             = returnNull($this->request->getPost('cad_uf'), 'S');
-        $data['emp_complemento']    = returnNull($this->request->getPost('cad_complemento'), 'S');
-        $data['emp_email']          = returnNull($this->request->getPost('cad_email'));
-        $data['emp_telefone']       = returnNull($this->request->getPost('cad_telefone'), 'S');
+        if (!empty($this->request->getPost('cod_endereco'))) {
+            $endereco['id'] = $this->request->getPost('cod_endereco');
+        }
+
+        $endereco['end_endereco'] = returnNull($this->request->getPost('cad_endereco'), 'S');
+        $endereco['end_numero'] = returnNull($this->request->getPost('cad_numero'), 'S');
+        $endereco['end_setor'] = returnNull($this->request->getPost('cad_bairo'), 'S');
+        $endereco['end_cidade'] = returnNull($this->request->getPost('cad_cidade'), 'S');
+        $endereco['end_estado'] = returnNull($this->request->getPost('cad_uf'), 'S');
+        $endereco['end_complemento'] = returnNull($this->request->getPost('cad_complemento'), 'S');
+        $endereco['end_cep'] = returnNull($this->request->getPost('cad_cep'), 'S');
+
+        if ($this->enderecoModel->save($endereco)) {
+            $data['endereco_id'] = (!empty($this->request->getPost('cod_endereco'))) ? $this->request->getPost('cod_endereco') : $this->enderecoModel->getInsertID();
+        }
+
+        $data['emp_razao'] = returnNull($this->request->getPost('cad_razao'), 'S');
+        $data['emp_fantasia'] = returnNull($this->request->getPost('cad_fantasia'), 'S');
+        $data['emp_slogan'] = returnNull($this->request->getPost('cad_slogan'), 'S');
+        $data['emp_cnpj'] = limparCnpjCpf(returnNull($this->request->getPost('cad_cnpj'), 'S'));
+        $data['emp_email'] = returnNull($this->request->getPost('cad_email'));
+        $data['emp_telefone'] = returnNull($this->request->getPost('cad_telefone'), 'S');
 
         if (!empty($this->request->getPost('cod_empresa'))) {
 
@@ -81,7 +93,8 @@ class Empresa extends ApiController
             }
 
             // $this->auditoriaModel->insertAuditoria('configuracao', 'empresa', 'atualizar', $result->auditoriaUpdateAtributos());
-        };
+        }
+        ;
 
         try {
 
@@ -114,15 +127,14 @@ class Empresa extends ApiController
 
     public function findAll()
     {
-        $return = $this->empresaModel
-            ->orderBy('emp_razao', 'asc')
-            ->findAll();
+        $return = $this->empresaModel->getEmpresas();
         return $this->response->setJSON($return);
     }
 
     public function show($paramentro)
     {
-        $return = $this->empresaModel->where('id', $paramentro)->first();
+        $return = $this->empresaModel->getEmpresa($paramentro);
+        // $return = $this->empresaModel->where('id', $paramentro)->first();
         return $this->response->setJSON($return);
     }
 

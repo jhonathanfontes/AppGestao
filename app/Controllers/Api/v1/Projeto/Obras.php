@@ -3,20 +3,19 @@
 namespace App\Controllers\Api\v1\Projeto;
 
 use App\Controllers\Api\ApiController;
-
 use App\Entities\Projeto\Obra;
-use App\Models\Projeto\ObraModel;
 
 class Obras extends ApiController
 {
-
     private $obraModel;
+    private $enderecoModel;
     private $auditoriaModel;
     private $validation;
 
     public function __construct()
     {
-        $this->obraModel = new ObraModel();
+        $this->obraModel = new \App\Models\Projeto\ObraModel();
+        $this->enderecoModel = new \App\Models\EnderecoModel();
         // $this->auditoriaModel = new \App\Models\AuditoriaModel();
         $this->validation = \Config\Services::validation();
     }
@@ -65,6 +64,22 @@ class Obras extends ApiController
     {
         if (!$this->request->isAJAX()) {
             return redirect()->back();
+        }
+
+        if (!empty($this->request->getPost('cod_endereco'))) {
+            $endereco['id'] = $this->request->getPost('cod_endereco');
+        }
+
+        $endereco['end_endereco'] = returnNull($this->request->getPost('cad_endereco'), 'S');
+        $endereco['end_numero'] = returnNull($this->request->getPost('cad_numero'), 'S');
+        $endereco['end_setor'] = returnNull($this->request->getPost('cad_bairo'), 'S');
+        $endereco['end_cidade'] = returnNull($this->request->getPost('cad_cidade'), 'S');
+        $endereco['end_estado'] = returnNull($this->request->getPost('cad_uf'), 'S');
+        $endereco['end_complemento'] = returnNull($this->request->getPost('cad_complemento'), 'S');
+        $endereco['end_cep'] = returnNull($this->request->getPost('cad_cep'), 'S');
+
+        if ($this->enderecoModel->save($endereco)) {
+            $data['endereco_id'] = (!empty($this->request->getPost('cod_endereco'))) ? $this->request->getPost('cod_endereco') : $this->enderecoModel->getInsertID();
         }
 
         $data['obr_descricao'] = returnNull($this->request->getPost('cad_obra'), 'S');

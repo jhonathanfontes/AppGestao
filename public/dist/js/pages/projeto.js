@@ -7,6 +7,83 @@ $(document).ready(function () {
         [0, 'asc']
     ];
     initializeDataTable("#tableObras", base_url + "api/projeto/tabela/obras", pessoasColumnDefs, pessoasOrder);
+
+    //Quando o campo cep perde o foco.
+    $('#cad_cep').change(function () {
+
+        //Nova variável "cep" somente com dígitos.
+        var cad_cep = $(this).val().replace(/\D/g, '');
+        //Verifica se campo cep possui valor informado.
+        if (cad_cep != "") {
+            //Expressão regular para validar o CEP.
+            var validacep = /^[0-9]{8}$/;
+            //Valida o formato do CEP.
+            if (validacep.test(cad_cep)) {
+                //Desabilita os campos enquanto consulta webservice.
+                document.getElementById("cad_endereco").disabled = true;
+                document.getElementById("cad_bairo").disabled = true;
+                document.getElementById("cad_cidade").disabled = true;
+                document.getElementById("cad_uf").disabled = true;
+
+                //Consulta o webservice viacep.com.br/
+                $.getJSON("https://viacep.com.br/ws/" + cad_cep + "/json/?callback=?", function (dados) {
+
+                    if (!("erro" in dados)) {
+                        showConfirmationDialog('FOI LOCALIZADO OS DADOS REFERENTE AO CEP ' + cad_cep + '!', 'DESEJA ATUALIZAR OS DADOS!', 'Sim, Atualizar!')
+                            .then((confirmed) => {
+                                if (confirmed) {
+                                    //Atualiza os campos com os valores da consulta.
+                                    $("#cad_endereco").val(dados.logradouro);
+                                    $("#cad_bairo").val(dados.bairro);
+                                    $("#cad_cidade").val(dados.localidade);
+                                    $("#cad_uf").val(dados.uf);
+                                }
+                            });
+                    } //end if.
+                    else {
+                        //CEP pesquisado não foi encontrado.
+                        $(function () {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                            $(function () {
+                                toastr.error('CEP não encontrado.');
+                                campoTexto.value = '';
+                            });
+                        });
+                    }
+                    // Habilita após a consulta
+                    document.getElementById("cad_endereco").disabled = false;
+                    document.getElementById("cad_bairo").disabled = false;
+                    document.getElementById("cad_cidade").disabled = false;
+                    document.getElementById("cad_uf").disabled = false;
+                });
+            } //end if.
+            else {
+                //cep é inválido.
+                limpa_formulário_cep();
+                $(function () {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    $(function () {
+                        toastr.error('Formato de CEP inválido.');
+                        campoTexto.value = '';
+                    });
+                });
+            }
+        } //end if.
+        else {
+            //cep sem valor, limpa formulário.
+            limpa_formulário_cep();
+        }
+    });
 });
 
 // GERENCIAMENTO DAS OBRAS

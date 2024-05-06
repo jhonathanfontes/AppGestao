@@ -11,7 +11,8 @@
     <link rel="stylesheet"
         href="<?php echo site_url('dist/css/fontsgoogleapis.css?family=Source+Sans+Pro:300,400,400i,700&display=fallback'); ?>">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="<?php echo site_url('plugins/fontawesome-free/css/all.min.css'); ?>">
+    <!-- <link rel="stylesheet" href="<?php echo site_url('plugins/fontawesome-free/css/all.min.css'); ?>"> -->
+    <link rel="stylesheet" href="<?php echo site_url('plugins/fontawesome-free-5.15.4/css/all.min.css'); ?>">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- SweetAlert2 -->

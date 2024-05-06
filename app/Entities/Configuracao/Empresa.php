@@ -13,12 +13,6 @@ class Empresa extends Entity
         'emp_fantasia'      => null,
         'emp_slogan'        => null,
         'emp_cnpj'          => null,
-        'emp_cep'           => null,
-        'emp_cidade'        => null,
-        'emp_uf'            => null,
-        'emp_endereco'      => null,
-        'emp_bairo'         => null,
-        'emp_complemento'   => null,
         'emp_telefone'      => null,
         'emp_email'         => null,
         'media_preco'       => null,
@@ -32,12 +26,6 @@ class Empresa extends Entity
         'cad_fantasia'      => 'emp_fantasia',
         'cad_slogan'        => 'emp_slogan',
         'cad_cnpj'          => 'emp_cnpj',
-        'cad_cep'           => 'emp_cep',
-        'cad_cidade'        => 'emp_cidade',
-        'cad_uf'            => 'emp_uf',
-        'cad_endereco'      => 'emp_endereco',
-        'cad_bairo'         => 'emp_bairo',
-        'cad_complemento'   => 'emp_complemento',
         'cad_telefone'      => 'emp_telefone',
         'cad_email'         => 'emp_email',
         'cad_mdpreco'       => 'media_preco',
@@ -76,27 +64,6 @@ class Empresa extends Entity
             $attribute['cad_cnpj'] = [
                 'old' => $this->original['emp_cnpj'],
                 'new' => $this->emp_cnpj
-            ];
-        }
-
-        if ($this->hasChanged('emp_endereco')) {
-            $attribute['cad_cep'] = [
-                'old' => $this->original['emp_endereco'],
-                'new' => $this->emp_endereco
-            ];
-        }
-
-        if ($this->hasChanged('emp_bairo')) {
-            $attribute['cad_bairo'] = [
-                'old' => $this->original['emp_bairo'],
-                'new' => $this->emp_bairo
-            ];
-        }
-
-        if ($this->hasChanged('emp_complemento')) {
-            $attribute['cad_complemento'] = [
-                'old' => $this->original['emp_complemento'],
-                'new' => $this->emp_complemento
             ];
         }
 

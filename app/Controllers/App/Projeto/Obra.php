@@ -21,4 +21,13 @@ class Obra extends BaseController
         return $paramentro;
     }
 
+    public function view(int $codigo = null)
+    {
+        $data = [
+            'card_title' => 'CADASTRO DA PESSOA' . $codigo,
+            // 'pessoa'     => $this->setPessoaSelecionado($codigo),
+        ];
+        return view('modulo/projeto/obra_view', $data);
+    }
+
 }

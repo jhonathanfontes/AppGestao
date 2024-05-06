@@ -13,10 +13,11 @@
 
                 <div class="hidden">
                     <input type="hidden" name="cod_obra" id="cod_obra" />
+                    <input type="hidden" name="cod_endereco" id="cod_endereco" />
                 </div>
                 <div class="row">
                     <div class="form-group col-7">
-                        <label for="">Descrição</label>
+                        <label for="">DESCRIÇÃO</label>
                         <input name="cad_obra" id="cad_obra" type="text" class="form-control" placeholder="">
                     </div>
                     <div class="form-group col-5" id="container-nascimento">
@@ -24,10 +25,42 @@
                         <input name="cad_datainicio" id="cad_datainicio" type="date" class="form-control">
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label for="">CEP</label>
+                        <input name="cad_cep" id="cad_cep" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group col-7">
+                        <label for="">ENDEREÇO</label>
+                        <input name="cad_endereco" id="cad_endereco" type="text" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="">NUMERO</label>
+                        <input name="cad_numero" id="cad_numero" type="text" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group col-4">
+                        <label for="">SETOR/BAIRRO</label>
+                        <input name="cad_bairo" id="cad_bairo" type="text" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group col-4">
+                        <label for="">CIDADE</label>
+                        <input name="cad_cidade" id="cad_cidade" type="text" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group col-4">
+                        <label for="">ESTADO</label>
+                        <input name="cad_uf" id="cad_uf" type="text" class="form-control" maxlength="2" placeholder="">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="">COMPLEMENTO</label>
+                        <input name="cad_complemento" id="cad_complemento" type="text" class="form-control"
+                            placeholder="">
+                    </div>
+                </div>
 
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary " id="SalvarObra" onclick="salvarObra()">Salvar</button>
+                    <button type="submit" class="btn btn-primary " id="SalvarObra"
+                        onclick="salvarObra()">Salvar</button>
                 </div>
                 <?= form_close(); ?>
             </div>

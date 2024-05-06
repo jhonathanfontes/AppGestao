@@ -11,6 +11,7 @@
             <div class="card-body">
                 <div hidden>
                     <input name="cod_empresa" id="cod_empresa" type="text">
+                    <input name="cod_endereco" id="cod_endereco" type="text">
                 </div>
                 <div class="row">
                     <div class="form-group col-3">
@@ -41,7 +42,11 @@
                         <label for="">ENDEREÇO</label>
                         <input name="cad_endereco" id="cad_endereco" type="text" class="form-control" placeholder="">
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group col-1">
+                        <label for="">NUMERO</label>
+                        <input name="cad_numero" id="cad_numero" type="text" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group col-3">
                         <label for="">SETOR/BAIRRO</label>
                         <input name="cad_bairo" id="cad_bairo" type="text" class="form-control" placeholder="">
                     </div>
@@ -55,7 +60,8 @@
                     </div>
                     <div class="form-group col-4">
                         <label for="">COMPLEMENTO</label>
-                        <input name="cad_complemento" id="cad_complemento" type="text" class="form-control" placeholder="">
+                        <input name="cad_complemento" id="cad_complemento" type="text" class="form-control"
+                            placeholder="">
                     </div>
                 </div>
                 <div class="row">
@@ -71,7 +77,8 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">CANCELAR</button>
-                <button type="submit" class="btn btn-primary" id="SalvarEmpresa" onclick="salvarEmpresa()">SALVAR</button>
+                <button type="submit" class="btn btn-primary" id="SalvarEmpresa"
+                    onclick="salvarEmpresa()">SALVAR</button>
             </div>
             <?= form_close(); ?>
         </div>

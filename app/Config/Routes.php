@@ -22,7 +22,6 @@ $routes->group('autenticacao', ['namespace' => 'App\Controllers\App'], function 
     $routes->get('recover/password', 'Autenticacao::RedefinirSenha');
 });
 
-
 // Rota Api
 $routes->group('api', function ($routes) {
 
@@ -594,7 +593,6 @@ $routes->group('api', function ($routes) {
     });
 });
 
-
 // Rota app
 // $routes->group('app', ['filter' => 'login'], function ($routes) {
 $routes->group('app', function ($routes) {
@@ -632,7 +630,7 @@ $routes->group('app', function ($routes) {
             $routes->get('(:segment)', 'Produtos::show/$1');
             $routes->get('view/(:segment)', 'Produtos::view/$1');
         });
-        
+
         // Rota Cadastro/Servico
         $routes->group('servicos', function ($routes) {
             $routes->get('/', 'Servicos::index');
@@ -661,7 +659,7 @@ $routes->group('app', function ($routes) {
             });
 
             $routes->group('servicos', function ($routes) {
-               
+
                 // Rota Cadastro/Tamanho
                 $routes->get('unidade', 'Tamanhos::index');
             });
@@ -809,14 +807,10 @@ $routes->group('app', function ($routes) {
         // Redirecionamento  para o modulo Venda
         $routes->addRedirect('/', 'app/modulo/projeto');
 
-        $routes->get('cancelamento', 'Pdv::Cancelamento');
-        $routes->get('devolucao', 'Pdv::Devolucao');
-
-        // Carrega dados da ORÇAMENTO
+        // Carrega dados da OBRA
         $routes->group('obra', function ($routes) {
             $routes->get('/', 'Obra::index');
-            $routes->get('selling/(:segment)', 'Pdv::Orcamento_Selling/$1');
-            $routes->get('selling', 'Pdv::Orcamento_Selling');
+            $routes->get('view/(:segment)', 'Obra::view/$1');
         });
 
         // Carrega dados da PDV
