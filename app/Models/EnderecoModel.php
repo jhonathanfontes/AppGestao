@@ -29,9 +29,21 @@ class EnderecoModel extends Model
     protected $updatedField = 'updated_at';
     protected $deletedField = 'deleted_at';
 
-    // Callbacks
-    protected $allowCallbacks = true;
-    protected $beforeInsert = [];
-    protected $beforeUpdate = [];
+    protected $beforeInsert = ['insertAuditoria'];
+    protected $beforeUpdate = ['updateAuditoria'];
+
+    protected function insertAuditoria(array $data)
+    {
+        $data['data']['created_user_id'] = getUsuarioID();
+        $data['data']['created_at'] = getDatetimeAtual();
+        return $data;
+    }
+
+    protected function updateAuditoria(array $data)
+    {
+        $data['data']['updated_user_id'] = getUsuarioID();
+        $data['data']['updated_at'] = getDatetimeAtual();
+        return $data;
+    }
 
 }

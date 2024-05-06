@@ -19,6 +19,7 @@ class Endereco extends Migration
             'enderecotipo_id' => [
                 'type' => 'INT',
                 'unsigned' => true,
+                'null' => true,
             ],
             'end_endereco' => [
                 'type' => 'VARCHAR',

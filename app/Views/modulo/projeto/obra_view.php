@@ -14,7 +14,8 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-body">
-            <button class="btn btn-app bg-orange" data-toggle="modal" data-target="#modalLocal" onclick="setNewLocal()">
+            <button class="btn btn-app bg-orange" data-toggle="modal" data-target="#modalLocal"
+                onclick="setNewLocal(<?= isset($obra->cod_obra) ? $obra->cod_obra : ''; ?>)" <?= !isset($obra->cod_obra) ? 'disabled' : ''; ?>>
                 <i class="fas fa-warehouse"></i></i> LOCAL
             </button>
         </div>
@@ -61,12 +62,18 @@
                         <table>
                             <tr style="width: 40px;">
                                 <th>OBRA</th>
-                                <td><?= isset($pessoa->cad_nome) ? $pessoa->cad_nome : 'CADASTRO NÃO LOCALIZADO!'; ?>
+                                <td><?= isset($obra->cod_obra) ? $obra->cod_obra : 'CADASTRO NÃO LOCALIZADO!'; ?>
+                                </td>
+                            </tr>
+                            <tr style="width: 40px;">
+                                <th>OBRA</th>
+                                <td><?= isset($obra->cad_obra) ? $obra->cad_obra : 'CADASTRO NÃO LOCALIZADO!'; ?>
                                 </td>
                             </tr>
                             <tr>
                                 <th>PREVISÃO INICIO</th>
-                                <td><?= isset($pessoa->cad_apelido) ? $pessoa->cad_apelido : ''; ?></td>
+                                <td><?= isset($obra->cad_datainicio) ? date("d/m/Y", strtotime($obra->cad_datainicio)) : '<label class="badge badge-danger">SEM DATA PREVISTA</label>'; ?>
+                                </td>
                             </tr>
                             <tr>
                                 <th></th>
@@ -105,28 +112,28 @@
                             <tr>
                                 <th style="width: 30px;">ENDEREÇO</th>
                                 <td>
-                                    <?= isset($pessoa->cad_endereco) ? $pessoa->cad_endereco : ''; ?>
-                                    <?= (isset($pessoa->cad_endereco) && !empty($pessoa->cad_numero)) ? ' Nº ' . $pessoa->cad_numero : ''; ?>
+                                    <?= isset($obra->cad_endereco) ? $obra->cad_endereco : ''; ?>
+                                    <?= (isset($obra->cad_endereco) && !empty($obra->cad_numero)) ? ', Nº ' . $obra->cad_numero : ''; ?>
                                 </td>
                             </tr>
                             <tr>
                                 <th>BAIRO/SETOR</th>
-                                <td><?= isset($pessoa->cad_setor) ? $pessoa->cad_cep : ''; ?></td>
+                                <td><?= isset($obra->cad_setor) ? $obra->cad_cep : ''; ?></td>
                             </tr>
                             <tr>
                                 <th>CIDADE</th>
                                 <td>
-                                    <?= isset($pessoa->cad_cidade) ? $pessoa->cad_cidade : ''; ?>
-                                    <?= (isset($pessoa->cad_cidade) && !empty($pessoa->cad_estado)) ? ' - ' . $pessoa->cad_estado : ''; ?>
+                                    <?= isset($obra->cad_cidade) ? $obra->cad_cidade : ''; ?>
+                                    <?= (isset($obra->cad_cidade) && !empty($obra->cad_estado)) ? ' - ' . $obra->cad_estado : ''; ?>
                                 </td>
                             </tr>
                             <tr>
                                 <th>CEP</th>
-                                <td><?= isset($pessoa->cad_cep) ? $pessoa->cad_cep : ''; ?></td>
+                                <td><?= isset($obra->cad_cep) ? $obra->cad_cep : ''; ?></td>
                             </tr>
                             <!-- <tr>
                                 <th>SITUAÇÃO</th>
-                                <td><?= isset($pessoa->status) ? convertStatus($pessoa->status) : ''; ?></td>
+                                <td><?= isset($obra->status) ? convertStatus($obra->status) : ''; ?></td>
                             </tr> -->
                         </table>
                     </address>
@@ -138,13 +145,14 @@
     </div>
 </section>
 
-<?php if (!empty($vendas)): ?>
+<?php // var_dump($obra); ?>
+
+<?php if (!empty($locais)): ?>
     <section class="content">
         <!-- Default box -->
         <div class="card card-warning">
             <div class="card-header">
-                <h3 class="card-title"><?php // echo $titulo; 
-                    ?></h3>
+                <h3 class="card-title"><?= isset($card_title) ? $card_title : ''; ?></h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
                         title="Collapse">
@@ -159,52 +167,31 @@
                     <table id="tablePessoaCompras" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr style="text-align: center;">
-                                <th>DATA</th>
-                                <th>VENDA</th>
-                                <th>PEÇAS</th>
-                                <th>VALOR BRUTO</th>
-                                <th>DESCONTO</th>
-                                <th>VALOR LIQUIDO</th>
-                                <th>DEVOLUÇÃO</th>
-                                <th>VENDEDOR</th>
+                                <th>SEQUENCIA</th>
+                                <th>LOCAL</th>
+                                <th>DATA PREVISTA</th>
                                 <th class="no-print">AÇÕES</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (!empty($vendas)): ?>
+                            <?php if (!empty($locais)): ?>
                                 <?php $sequencia = 1; ?>
-                                <?php foreach ($vendas as $row): ?>
+                                <?php foreach ($locais as $row): ?>
                                     <tr style="text-align: center;">
-                                        <td><?= date("d/m/Y", strtotime($row->data_compra)) ?></td>
-                                        <td><?= $row->cod_venda . '/' . date("Y", strtotime($row->data_compra)) ?></td>
-                                        <td><?= $row->qtn_produto ?></td>
-                                        <td><?= "R$ " . number_format($row->valor_bruto, 2, ',', '.') ?></td>
-                                        <td><?= "R$ " . number_format($row->valor_desconto, 2, ',', '.') ?></td>
-                                        <td><?= "R$ " . number_format($row->valor_total, 2, ',', '.') ?></td>
-                                        <td><?= $row->qtn_devolvido ?></td>
-                                        <td><?= $row->usuario ?></td>
-                                        <td class="text-right no-print">
-                                            <a href="<?php // echo base_url(); 
-                                                        ?>report/consultarvenda/<?php // echo $row->serial 
-                                                                    ?>" class="btn btn-xs btn-primary"><span
-                                                    class="far fa-eye"></span> VISUALIZAR</a>
+                                        <td><?= esc($sequencia) ?></td>
+                                        <td><?= esc($row->cad_local) ?></td>
+                                        <td><?= esc($row->cad_datainicio) ? date("d/m/Y", strtotime($row->cad_datainicio)) : '<label class="badge badge-danger">SEM DATA PREVISTA</label>' ?>
+                                        </td>
+                                        <td class="text-right no-print" style="width: 15%;">
+                                            <button type="button" class="btn btn-xs btn-warning" data-toggle="modal"
+                                                data-target="#modalLocal" onclick="getEditLocal(<?= $row->cod_local ?>)"><samp
+                                                    class="far fa-edit"></samp> EDITAR</button>
+                                            <a class="btn btn-xs btn-success" href="obra/view/"><span class="fas fa-tasks"></span>
+                                                GERENCIAR </a>
                                         </td>
                                     </tr>
                                     <?php $sequencia++; ?>
                                 <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
                             <?php endif; ?>
                         </tbody>
 
@@ -218,5 +205,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('modal_content') ?>
-
+<?php require_once ('componentes/local_modal.php'); ?>
 <?= $this->endSection() ?>

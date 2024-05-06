@@ -165,16 +165,7 @@ $routes->group('api', function ($routes) {
         // Salvar dados Cadastro
         $routes->group('salvar', function ($routes) {
             $routes->post('obra', 'Obras::save');
-            $routes->post('profissao', 'Profissoes::save');
-            $routes->post('produto', 'Produtos::save');
-            $routes->post('categoria', 'Categorias::save');
-            $routes->post('subcategoria', 'SubCategorias::save');
-            $routes->post('fabricante', 'Fabricantes::save');
-            $routes->post('tamanho', 'Tamanhos::save');
-
-            $routes->group('grade', function ($routes) {
-                $routes->post('produto', 'ProdutoGrade::save');
-            });
+            $routes->post('local', 'Locais::save');
         });
 
         // Exibir dados Cadastro
@@ -187,14 +178,14 @@ $routes->group('api', function ($routes) {
             });
 
             $routes->get('obra', 'Obras::findAll');
-            $routes->get('produtos', 'Produtos::findAll');
+            $routes->get('local', 'Locais::findAll');
             $routes->get('categorias', 'Categorias::findAll');
             $routes->get('subcategorias', 'SubCategorias::findAll');
             $routes->get('fabricantes', 'Fabricantes::findAll');
             $routes->get('tamanhos', 'Tamanhos::findAll');
 
             $routes->get('obra/(:segment)', 'Obras::show/$1');
-            $routes->get('profissao/(:segment)', 'Profissoes::show/$1');
+            $routes->get('local/(:segment)', 'Locais::show/$1');
             $routes->get('produto/(:segment)', 'Produtos::show/$1');
             $routes->get('categoria/(:segment)', 'Categorias::show/$1');
             $routes->get('subcategoria/(:segment)', 'SubCategorias::show/$1');
@@ -811,6 +802,7 @@ $routes->group('app', function ($routes) {
         $routes->group('obra', function ($routes) {
             $routes->get('/', 'Obra::index');
             $routes->get('view/(:segment)', 'Obra::view/$1');
+            $routes->get('view/(:segment)/(:segment)', 'Obra::view_local/$1/$2');
         });
 
         // Carrega dados da PDV

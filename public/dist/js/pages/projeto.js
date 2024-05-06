@@ -161,6 +161,90 @@ function salvarObra() {
     });
 }
 
+// GERENCIAMENTO DOS LOCAIS DA OBRA
 
+function getEditLocal(Paramentro) {
+    $.ajax({
+        "url": base_url + "api/projeto/exibir/local/" + Paramentro,
+        "type": "GET",
+        "dataType": "json",
+        success: function (dado) {
+            console.log(dado);
+            document.getElementById('modalTitleLocal').innerHTML = 'ATUALIZANDO A PROFISSÃO ' + dado.cad_local;
+            $('#cod_local').val(dado.cod_local);
+            $('#cod_obra').val(dado.cod_obra);
+            $('#cad_local').val(dado.cad_local);
+            $('#cad_datainicio').val(dado.cad_datainicio);
+        }
+    });
+}
 
+function setNewLocal(cod_obra = null) {
+    document.getElementById('modalTitleLocal').innerHTML = 'CADASTRO DOS LOCAIS DA OBRA';
+    if (cod_obra == null) {
+        document.getElementById("cad_local").disabled = true;
+        document.getElementById("cad_datainicio").disabled = true;
+        document.getElementById("SalvarLocal").disabled = true;
 
+        // Show an error message using Toastr
+        toastr.error('ERRO: Não foi possível localizar a obra');
+    }
+
+    document.getElementById("cod_obra").value = cod_obra;
+    var cod_local = document.getElementById('cod_local').value;
+    if (cod_local != '') {
+        document.getElementById("cod_local").value = '';
+        document.getElementById("cad_local").value = '';
+        document.getElementById("cad_datainicio").value = '';
+    }
+}
+
+function salvarLocal() {
+    $("#formLocal").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formLocal').attr('action'),
+                type: "POST",
+                data: $('#formLocal').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("SalvarLocal").disabled = true;
+                },
+                success: function (response) {
+                    respostaSwalFire(response, true)
+                },
+                error: function () {
+                    document.getElementById("SalvarLocal").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formLocal').validate({
+        rules: {
+            cad_local: {
+                required: true,
+            },
+        },
+        messages: {
+            cad_local: {
+                required: "A descricção deve ser informada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}

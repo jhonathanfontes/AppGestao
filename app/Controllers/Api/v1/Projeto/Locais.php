@@ -3,19 +3,17 @@
 namespace App\Controllers\Api\v1\Projeto;
 
 use App\Controllers\Api\ApiController;
-use App\Entities\Projeto\Obra;
+use App\Entities\Projeto\Local;
 
-class Obras extends ApiController
+class Locais extends ApiController
 {
-    private $obraModel;
-    private $enderecoModel;
+    private $localModel;
     private $auditoriaModel;
     private $validation;
 
     public function __construct()
     {
-        $this->obraModel = new \App\Models\Projeto\ObraModel();
-        $this->enderecoModel = new \App\Models\EnderecoModel();
+        $this->localModel = new \App\Models\Projeto\LocalModel();
         // $this->auditoriaModel = new \App\Models\AuditoriaModel();
         $this->validation = \Config\Services::validation();
     }
@@ -24,7 +22,7 @@ class Obras extends ApiController
     {
         $response['data'] = array();
 
-        $result = $this->obraModel->whereIn('status', ['1', '2'])->withDeleted()->findAll();
+        $result = $this->localModel->whereIn('status', ['1', '2'])->withDeleted()->findAll();
         try {
 
             if (empty($result)):
@@ -33,9 +31,9 @@ class Obras extends ApiController
 
             foreach ($result as $key => $value) {
 
-                $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalObra" onclick="getEditObra(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
-                // $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'obra'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
-                $ops .= ' <a class="btn btn-xs btn-success" href="obra/view/' . $value->id . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
+                $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalLocal" onclick="getEditLocal(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+                // $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'local'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+                $ops .= ' <a class="btn btn-xs btn-success" href="local/view/' . $value->id . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
 
                 $response['data'][$key] = array(
                     esc($value->obr_descricao),
@@ -66,41 +64,14 @@ class Obras extends ApiController
             return redirect()->back();
         }
 
-        $endereco = [];
+        $data['loc_descricao'] = returnNull($this->request->getPost('cad_local'), 'S');
+        $data['loc_datainicio'] = returnNull(esc($this->request->getPost('cad_datainicio')));
+        $data['obra_id'] = $this->request->getPost('cod_obra');
 
-
-        if (!empty($this->request->getPost('cod_endereco'))) {
-            $endereco['id'] = $this->request->getPost('cod_endereco');
-        }
-
-        if (!empty($this->request->getPost('cad_endereco'))) {
-            $endereco['end_endereco'] = returnNull($this->request->getPost('cad_endereco'), 'S');
-            $endereco['end_numero'] = returnNull($this->request->getPost('cad_numero'), 'S');
-            $endereco['end_setor'] = returnNull($this->request->getPost('cad_bairo'), 'S');
-            $endereco['end_cidade'] = returnNull($this->request->getPost('cad_cidade'), 'S');
-            $endereco['end_estado'] = returnNull($this->request->getPost('cad_uf'), 'S');
-            $endereco['end_complemento'] = returnNull($this->request->getPost('cad_complemento'), 'S');
-            $endereco['end_cep'] = returnNull($this->request->getPost('cad_cep'), 'S');
-
-        }
-
-        // return $this->response->setJSON($endereco);
-
-        if (!empty($endereco)) {
-            if ($this->enderecoModel->save($endereco)) {
-                $data['endereco_id'] = (!empty($this->request->getPost('cod_endereco'))) ? $this->request->getPost('cod_endereco') : $this->enderecoModel->getInsertID();
-            }
-        }
-
-
-
-        $data['obr_descricao'] = returnNull($this->request->getPost('cad_obra'), 'S');
-        $data['obr_datainicio'] = returnNull(esc($this->request->getPost('cad_datainicio')));
-
-        $entityObra = new Obra($data);
-
-        if (!empty($this->request->getPost('cod_obra'))) {
-            $data['id'] = $this->request->getPost('cod_obra');
+        $entityLocal = new Local($data);
+        // return $this->response->setJSON($data);
+        if (!empty($this->request->getPost('cod_local'))) {
+            $data['id'] = $this->request->getPost('cod_local');
 
             $result = $this->buscaRegistro404($data['id']);
             $result->fill($data);
@@ -111,7 +82,7 @@ class Obras extends ApiController
                     'menssagem' => [
                         'status' => 'error',
                         'heading' => 'NÃO FOI POSSIVEL SALVAR O REGISTRO!',
-                        'description' => "NÃO TEVE ALTERAÇÃO NA OBRA $result->cad_obra PARA SALVAR!"
+                        'description' => "NÃO TEVE ALTERAÇÃO NA OBRA $result->cad_local PARA SALVAR!"
                     ]
                 ]);
             }
@@ -122,24 +93,24 @@ class Obras extends ApiController
         } else {
 
             $metedoAuditoria = 'insert';
-            // $dataAuditoria = $entityObra->auditoriaInsertAtributos();
+            // $dataAuditoria = $entityLocal->auditoriaInsertAtributos();
 
         }
         try {
-            if ($this->obraModel->save($data)) {
+            if ($this->localModel->save($data)) {
 
-                // $this->auditoriaModel->insertAuditoria('cadastro', 'obra', $metedoAuditoria, $dataAuditoria);
+                // $this->auditoriaModel->insertAuditoria('cadastro', 'local', $metedoAuditoria, $dataAuditoria);
 
-                $cod_obra = (!empty($this->request->getPost('cod_obra'))) ? $this->request->getPost('cod_obra') : $this->obraModel->getInsertID();
+                $cod_local = (!empty($this->request->getPost('cod_local'))) ? $this->request->getPost('cod_local') : $this->localModel->getInsertID();
 
-                $return = $this->obraModel->returnSave($cod_obra);
+                $return = $this->localModel->returnSave($cod_local);
 
                 return $this->response->setJSON([
                     'status' => true,
                     'menssagem' => [
                         'status' => 'success',
                         'heading' => 'REGISTRO SALVO COM SUCESSO!',
-                        'description' => "A OBRA $return->cad_obra FOI SALVAR!"
+                        'description' => "A OBRA $return->cad_local FOI SALVAR!"
                     ]
                 ]);
             }
@@ -159,7 +130,7 @@ class Obras extends ApiController
 
     public function findAll()
     {
-        $return = $this->obraModel
+        $return = $this->localModel
             ->where('status', 1)
             ->orderBy('cat_descricao', 'asc')
             ->findAll();
@@ -168,19 +139,19 @@ class Obras extends ApiController
 
     public function show($paramentro)
     {
-        $return = $this->obraModel->where('id', $paramentro)
+        $return = $this->localModel->where('id', $paramentro)
             ->first();
         return $this->response->setJSON($return);
     }
 
     public function arquivar($paramentro = null)
     {
-        $obra = $this->obraModel->where('id', $paramentro)
+        $local = $this->localModel->where('id', $paramentro)
             ->where('status <>', 0)
             ->where('status <>', 3)
             ->first();
 
-        if ($obra === null) {
+        if ($local === null) {
             return $this->response->setJSON(
                 [
                     'status' => false,
@@ -194,16 +165,16 @@ class Obras extends ApiController
         }
 
         try {
-            if ($this->obraModel->arquivarRegistro($paramentro)) {
+            if ($this->localModel->arquivarRegistro($paramentro)) {
 
-                // $this->auditoriaModel->insertAuditoria('cadastro', 'obra', 'arquivar', $obra->auditoriaAtributos());
+                // $this->auditoriaModel->insertAuditoria('cadastro', 'local', 'arquivar', $local->auditoriaAtributos());
 
                 return $this->response->setJSON([
                     'status' => true,
                     'menssagem' => [
                         'status' => 'success',
                         'heading' => 'REGISTRO ARQUIVADO COM SUCESSO!',
-                        'description' => "A OBRA $obra->cad_obra FOI ARQUIVADA!"
+                        'description' => "A OBRA $local->cad_local FOI ARQUIVADA!"
                     ]
                 ]);
             }
@@ -223,7 +194,7 @@ class Obras extends ApiController
 
     private function buscaRegistro404(int $codigo = null)
     {
-        if (!$codigo || !$resultado = $this->obraModel->withDeleted(true)->find($codigo)) {
+        if (!$codigo || !$resultado = $this->localModel->withDeleted(true)->find($codigo)) {
             return null;
         }
         return $resultado;
