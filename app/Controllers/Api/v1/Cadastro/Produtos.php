@@ -209,9 +209,7 @@ class Produtos extends BaseController
             ->where('cad_produto.status', 1)
             ->groupStart()
             ->where('pro_descricao LIKE', '%' . $cod_produto . '%')
-            ->orWhere('pro_descricao_pvd LIKE', '%' . $cod_produto . '%')
-            ->orWhere('pro_codigobarras LIKE', '%' . $cod_produto . '%')
-            ->orWhere('fab_descricao LIKE', '%' . $cod_produto . '%')
+            ->orWhere('pro_codigobarra LIKE', '%' . $cod_produto . '%')
             ->groupEnd()
             ->orderBy('pro_descricao', 'ASC')
             ->findAll();

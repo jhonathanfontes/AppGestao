@@ -32,8 +32,9 @@ class Obra extends BaseController
     }
     public function view_local(int $cod_obra = null, int $cod_local = null)
     {
-        if(!isset($this->setLocal($cod_obra, $cod_local))){
-
+        $local = $this->setLocal($cod_obra, $cod_local);
+        if (!isset($local)) {
+            echo 'Local Não existe';
         }
         $data = [
             'card_title' => 'CADASTRO DA PESSOA ' . $cod_obra . ' CADASTRO DA PESSOA ' . $cod_local,

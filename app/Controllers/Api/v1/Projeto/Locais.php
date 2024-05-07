@@ -8,12 +8,18 @@ use App\Entities\Projeto\Local;
 class Locais extends ApiController
 {
     private $localModel;
+    private $localServicoModel;
+
+    private $produtoModel;
+
     private $auditoriaModel;
     private $validation;
 
     public function __construct()
     {
         $this->localModel = new \App\Models\Projeto\LocalModel();
+        $this->localServicoModel = new \App\Models\Projeto\LocalServicoModel();
+        $this->produtoModel = new \App\Models\Cadastro\ProdutoModel;
         // $this->auditoriaModel = new \App\Models\AuditoriaModel();
         $this->validation = \Config\Services::validation();
     }
@@ -40,6 +46,65 @@ class Locais extends ApiController
                     esc($value->obr_datainicio) ? esc(formatDataBR($value->obr_datainicio)) : '<label class="badge badge-danger">SEM DATA PREVISTA</label>',
                     $ops,
                 );
+            }
+
+            return $this->response->setJSON($response);
+
+        } catch (\Throwable $th) {
+            return $this->response->setJSON(
+                [
+                    'status' => false,
+                    'menssagem' => [
+                        'status' => 'error',
+                        'heading' => 'NÃO FOI POSSIVEL PROCESSAR O REGISTRO!',
+                        'description' => $th->getMessage()
+                    ]
+                ]
+            );
+        }
+    }
+
+    public function getCarregaTabelaLocalServico()
+    {
+        $response['data'] = array();
+
+        $result = $this->localServicoModel->
+            getProdutoDetalhe()
+            ->where('local_id', $this->request->getPost('cod_local'))
+            ->whereIn('ger_localservico.status', ['1', '2', '3'])
+            ->withDeleted()->findAll();
+        try {
+
+            if (empty($result)):
+                return $this->response->setJSON($response);
+            endif;
+
+            $sequencia = 0;
+
+            foreach ($result as $key => $value) {
+
+                $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalLocal" onclick="getEditLocal(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+                // $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'local'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+                $ops .= ' <a class="btn btn-xs btn-success" href="local/view/' . $value->id . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
+
+                $ops2 = '<div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox"
+                                id="deleteCheckbox[' . $sequencia . ']" name="cod_detalhe[]"
+                                value="' . $value->id . '">
+                            <label for="deleteCheckbox[' . $sequencia . ']"
+                                class="custom-control-label"></label>
+                        </div>';
+
+                $response['data'][$key] = array(
+                    esc($value->id),
+                    esc($value->pro_descricao),
+                    esc($value->lsv_quantidade),
+                    esc($value->lsv_valor),
+                    esc($value->lsv_total),
+                    $ops,
+                    $ops2
+                );
+                $sequencia++;
             }
 
             return $this->response->setJSON($response);
@@ -190,6 +255,80 @@ class Locais extends ApiController
                 ]
             );
         }
+    }
+
+    public function addProdutoOrcamento()
+    {
+        if (!$this->request->isAJAX()) {
+            return redirect()->back();
+        }
+
+        try {
+
+            $quantidade = $this->request->getPost('quantidade');
+            $produto = $this->produtoModel->where('id', $this->request->getPost('cod_produto'))->first();
+
+            $data['local_id'] = $this->request->getPost('cod_local');
+            $data['produto_id'] = $produto->id;
+            // $data['tamanho_id'] = $produto->tamanho_id;
+            // $data['mvd_tipo'] = 'S';
+            $data['lsv_quantidade'] = $quantidade;
+            $data['lsv_valor'] = bcadd($produto->cad_valor1, '0', 2);
+            // $data['mvd_val_unad'] = bcadd($produto->cad_valor1, '0', 2);
+            $data['lsv_total'] = bcadd(($produto->cad_valor1 * $quantidade), '0', 2);
+            // $data['mvd_total_unad'] = bcadd(($produto->cad_valor1 * $quantidade), '0', 2);
+
+            // $data['lsv_observacao'] = $this->request->getPost('cad_observacao');
+
+            // $data['mpd_val_un'] = bcadd($produto->cad_valor2, '0', 2);
+            // $data['mpd_val_unad'] = bcadd($produto->cad_valor2, '0', 2);
+            // $data['mpd_total'] = bcadd(($produto->cad_valor2 * $quantidade), '0', 2);
+            // $data['mpd_total_unad'] = bcadd(($produto->cad_valor2 * $quantidade), '0', 2);
+
+
+            // $data['fleg_atualiza'] = null;
+
+            // return $this->response->setJSON($data);
+
+
+            if ($this->localServicoModel->save($data)) {
+
+                $cod_detalhe = (!empty($this->request->getPost('cod_detalhe'))) ? $this->request->getPost('cod_detalhe') : $this->localServicoModel->getInsertID();
+
+                return $this->response->setJSON([
+                    'status' => true,
+                    'menssagem' => [
+                        'status' => 'success',
+                        'heading' => 'REGISTRO SALVO COM SUCESSO!',
+                        'description' => "O PRODUTO FOI ADICIONADO COM SUCESSO!"
+                    ],
+                    'data' => [
+                        'cod_obra' => $this->request->getPost('cod_obra'),
+                        'cod_local' => $this->request->getPost('cod_local')
+                    ]
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return $this->response->setJSON(
+                [
+                    'status' => false,
+                    'menssagem' => [
+                        'status' => 'error',
+                        'heading' => 'NÃO FOI POSSIVEL SALVAR O REGISTRO!',
+                        'description' => $th->getMessage()
+                    ]
+                ]
+            );
+        }
+
+        // return $this->response->setJSON(
+        //     [
+        //         'data' => $data,
+        //         'orcamento' => $orcamento,
+        //         'produto' => $produto,
+        //         'post' => $this->request->getPost()
+        //     ]
+        // );
     }
 
     private function buscaRegistro404(int $codigo = null)

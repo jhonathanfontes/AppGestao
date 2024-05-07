@@ -150,16 +150,7 @@ $routes->group('api', function ($routes) {
         // Carrega dados da TableDatta
         $routes->group('tabela', function ($routes) {
             $routes->post('obras', 'Obras::getCarregaTabela');
-            $routes->post('profissoes', 'Profissoes::getCarregaTabela');
-            $routes->post('produtos', 'Produtos::getCarregaTabela');
-            $routes->post('categorias', 'Categorias::getCarregaTabela');
-            $routes->post('subcategorias', 'SubCategorias::getCarregaTabela');
-            $routes->post('fabricantes', 'Fabricantes::getCarregaTabela');
-            $routes->post('tamanhos', 'Tamanhos::getCarregaTabela');
-            $routes->group('grade', function ($routes) {
-                $routes->get('produto/(:segment)', 'ProdutoGrade::getCarregaTabela/$1');
-                $routes->get('tamanho', 'ProdutoGrade::addGradeProduto');
-            });
+            $routes->post('produtoorcamento', 'Locais::getCarregaTabelaLocalServico');
         });
 
         // Salvar dados Cadastro
@@ -240,6 +231,24 @@ $routes->group('api', function ($routes) {
             $routes->get('subcategoria/(:segment)', 'SubCategorias::arquivar/$1');
             $routes->get('fabricante/(:segment)', 'Fabricantes::arquivar/$1');
             $routes->get('tamanho/(:segment)', 'Tamanhos::arquivar/$1');
+        });
+
+        // ROTA PARA GENRENCIA OS ORÇAMENTOS
+        $routes->group('orcamento', function ($routes) {
+            $routes->post('novo', 'Vendas::sale');
+            $routes->post('finaliza', 'Vendas::finish');
+
+            $routes->group('exibir', function ($routes) {
+                $routes->post('produto', 'Vendas::getDetalheOrcamento');
+            });
+
+            $routes->group('inclui', function ($routes) {
+                $routes->post('produto', 'Locais::addProdutoOrcamento');
+            });
+
+            $routes->group('remove', function ($routes) {
+                $routes->post('produto', 'Vendas::delProdutoOrcamento');
+            });
         });
     });
 

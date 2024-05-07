@@ -169,7 +169,6 @@ function getEditLocal(Paramentro) {
         "type": "GET",
         "dataType": "json",
         success: function (dado) {
-            console.log(dado);
             document.getElementById('modalTitleLocal').innerHTML = 'ATUALIZANDO A PROFISSÃO ' + dado.cad_local;
             $('#cod_local').val(dado.cod_local);
             $('#cod_obra').val(dado.cod_obra);
@@ -247,4 +246,145 @@ function salvarLocal() {
             $(element).removeClass('is-invalid');
         }
     });
+}
+
+function getCarregaLocal(Paramentro) {
+
+    $.ajax({
+        "url": base_url + "api/projeto/exibir/local/" + Paramentro,
+        "type": "GET",
+        "dataType": "json",
+        success: function (dado) {
+            var htmlLocalSelecionado = '<div class="alert alert-success alert-dismissible">ORÇAMENTO DO LOCAL: ' + dado.cad_local + '. </div>'
+            document.getElementById('setLocalSeleiconado').innerHTML = htmlLocalSelecionado;
+            $('#cod_local').val(dado.cod_local);
+            $('#cod_obra').val(dado.cod_obra);
+            document.getElementById("searchProduto").disabled = false;
+            document.getElementById("quantidade").disabled = false;
+
+            carregaProdutoOrcamento(dado.cod_obra, dado.cod_local);
+        }
+    });
+}
+
+// INICIANDO A INCLUSÃO DOS PRODUTOS/SERVIÇO
+
+$('#searchProduto').autocomplete({
+    minLength: 2,
+    autoFocus: true,
+    delay: 300,
+    maxShowItems: 10,
+    source: function (request, cb) {
+        $.ajax({
+            url: base_url + 'api/cadastro/exibir/busca/produto/' + request.term.replace(" ", "_"),
+            method: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                var result;
+                result = [{
+                    label: 'PRODUTO NÃO ENCONTRADO COMO ' + request.term,
+                    value: ''
+                }];
+                if (res.length) {
+                    result = $.map(res, function (obj) {
+                        // console.log(obj);
+                        return {
+                            label: obj.cad_produto + '  /  ' + obj.tam_abreviacao,
+                            value: obj.cad_produto + '  /  ' + obj.tam_abreviacao,
+                            data: obj
+                        }
+                    })
+                }
+                cb(result);
+            }
+        })
+    },
+    select: function (event, selectedData) {
+        if (selectedData && selectedData.item && selectedData.item.data) {
+            var data = selectedData.item.data;
+            $('#produto_id').val(data.cod_produto);
+            $('#cod_produto').val(data.cod_produto);
+            $('#est_produto').val(data.estoque);
+            $('#val_avista').val(formatMoneyBR(data.cad_valor1));
+            $('#valor_avista').val(formatMoneyBR(data.cad_valor1));
+            $('#quantidade').val('1');
+            document.getElementById("submitAdicionar").disabled = false;
+        }
+    }
+});
+
+function addProdutoOrcamento() {
+    $("#formAddProduto").submit(function (e) {
+        e.preventDefault();
+    });
+
+    console.log(1);
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formAddProduto').attr('action'),
+                type: "POST",
+                data: $('#formAddProduto').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("submitAdicionar").disabled = true;
+                },
+                success: function (response) {
+                    respostaSwalFire(response, false)
+                    carregaProdutoOrcamento(response.data.cod_obra, response.data.cod_local)
+                },
+                error: function () {
+                    document.getElementById("submitAdicionar").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formAddProduto').validate({
+        rules: {
+            cod_local: {
+                required: true,
+            },
+        },
+        messages: {
+            cod_local: {
+                required: "A descricção deve ser informada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+function carregaProdutoOrcamento(cod_obra, cod_local) {
+    const table = $("#tableProdutoOrcamento").DataTable({
+        paging: false,
+        searching: false,
+        ordering: false,
+        info: false,
+        processing: true,
+        ajax: {
+            type: "POST",
+            url: base_url + "api/projeto/tabela/produtoorcamento",
+            data: { cod_obra, cod_local },
+            dataType: "json",
+            async: true
+        },
+        columnDefs: [
+            { className: "dt-body-center", targets: [0, 1, 2] }
+        ],
+        order: [[0, 'asc']]
+    });
+
+    // Destruir a tabela anterior antes de inicializar uma nova
+    table.destroy();
 }

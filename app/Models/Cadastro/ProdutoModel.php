@@ -123,16 +123,14 @@ class ProdutoModel extends Model
 	{
 		$atributos = [
 			'cad_produto.*',
-			'cad_subcategoria.sub_descricao',
-			'cad_subcategoria.categoria_id',
 			'cad_categoria.cat_descricao',
-			'cad_fabricante.fab_descricao'
+			'cad_tamanho.tam_abreviacao',
+			'cad_tamanho.tam_descricao'
 		];
 
 		$result = $this->select($atributos)
-			->join('cad_subcategoria', 'cad_subcategoria.id_subcategoria = cad_produto.subcategoria_id', 'LEFT')
-			->join('cad_categoria', 'cad_categoria.id_categoria = cad_subcategoria.categoria_id', 'LEFT')
-			->join('cad_fabricante', 'cad_fabricante.id_fabricante = cad_produto.fabricante_id', 'LEFT');
+			->join('cad_categoria', 'cad_categoria.id = cad_produto.categoria_id', 'LEFT')
+			->join('cad_tamanho', 'cad_tamanho.id = cad_produto.tamanho_id', 'LEFT');
 
 		return $result;
 	}
