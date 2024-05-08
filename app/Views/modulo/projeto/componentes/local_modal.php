@@ -9,9 +9,9 @@
             </div>
             <div class="card-body">
                 <?= form_open(base_url('/api/projeto/salvar/local'), ['method' => 'post', 'id' => 'formLocal']) ?>
-                <div class="hidden">
-                    <input type="hidden" name="cod_local" id="cod_local" />
-                    <input type="hidden" name="cod_obra" id="cod_obra" />
+                <div hidden>
+                    <input  name="cod_local" id="id_local" />
+                    <input  name="cod_obra" id="cod_local_obra" />
                 </div>
                 <div class="row">
                     <div class="form-group col-7">

@@ -90,7 +90,7 @@ class ObraModel extends Model
 		$db = \Config\Database::connect();
 		$builder = $db->table($this->table);
 		$builder->select($atributos);
-		$builder->join('cad_endereco', 'cad_endereco.id = ger_obra.endereco_id');
+		$builder->join('cad_endereco', 'cad_endereco.id = ger_obra.endereco_id', 'left');
 		$builder->where('ger_obra.id', $cod_obra);
 		$result = $builder->get();
 		return $result->getRow();

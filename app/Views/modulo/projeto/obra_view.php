@@ -111,7 +111,7 @@
                         </address>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row no-print">
                     <div class="col-12">
                         <h5>
                             <samp id="setLocalSeleiconado">
@@ -167,13 +167,16 @@
                         <!-- /.row -->
                         <!-- Table row -->
                         <div class="row mt-2">
+                            <div id="loadingSpinner" style="display: none;">
+                                <img src="<?= site_url('dist/img/giphy.gif'); ?>" alt="Carregando...">
+                            </div>
                             <div class="col-12 table-responsive">
                                 <table id="tableProdutoOrcamento" class="table table-sm table-striped"
                                     style="text-align: center;">
                                     <thead>
-                                        <tr>
+                                        <tr style="text-align: center;">
                                             <th>CODIGO</th>
-                                            <th style="text-align: justify;">DESCRIÇÃO / TAMANHO</th>
+                                            <th>DESCRIÇÃO / TAMANHO</th>
                                             <th>QUANTIDADE</th>
                                             <th>VALOR</th>
                                             <th>TOTAL</th>
@@ -183,6 +186,9 @@
                                     </thead>
                                     <tbody>
                                     </tbody>
+                                    <tfooter>
+
+                                    </tfooter>
                                 </table>
                             </div>
                         </div>

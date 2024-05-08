@@ -170,8 +170,8 @@ function getEditLocal(Paramentro) {
         "dataType": "json",
         success: function (dado) {
             document.getElementById('modalTitleLocal').innerHTML = 'ATUALIZANDO A PROFISSÃO ' + dado.cad_local;
-            $('#cod_local').val(dado.cod_local);
-            $('#cod_obra').val(dado.cod_obra);
+            $('#id_local').val(dado.cod_local);
+            $('#cod_local_obra').val(dado.cod_obra);
             $('#cad_local').val(dado.cad_local);
             $('#cad_datainicio').val(dado.cad_datainicio);
         }
@@ -189,10 +189,11 @@ function setNewLocal(cod_obra = null) {
         toastr.error('ERRO: Não foi possível localizar a obra');
     }
 
-    document.getElementById("cod_obra").value = cod_obra;
-    var cod_local = document.getElementById('cod_local').value;
+    document.getElementById("cod_local_obra").value = cod_obra;
+
+    var cod_local = document.getElementById('id_local').value;
     if (cod_local != '') {
-        document.getElementById("cod_local").value = '';
+        document.getElementById("id_local").value = '';
         document.getElementById("cad_local").value = '';
         document.getElementById("cad_datainicio").value = '';
     }
@@ -287,7 +288,6 @@ $('#searchProduto').autocomplete({
                 }];
                 if (res.length) {
                     result = $.map(res, function (obj) {
-                        // console.log(obj);
                         return {
                             label: obj.cad_produto + '  /  ' + obj.tam_abreviacao,
                             value: obj.cad_produto + '  /  ' + obj.tam_abreviacao,
@@ -317,8 +317,6 @@ function addProdutoOrcamento() {
     $("#formAddProduto").submit(function (e) {
         e.preventDefault();
     });
-
-    console.log(1);
     $.validator.setDefaults({
         submitHandler: function () {
             $.ajax({
@@ -330,8 +328,9 @@ function addProdutoOrcamento() {
                     document.getElementById("submitAdicionar").disabled = true;
                 },
                 success: function (response) {
-                    respostaSwalFire(response, false)
-                    carregaProdutoOrcamento(response.data.cod_obra, response.data.cod_local)
+                    respostaSwalFire(response, false);
+                    carregaProdutoOrcamento(response.data.cod_obra, response.data.cod_local);
+                    document.getElementById("formAddProduto").reset();
                 },
                 error: function () {
                     document.getElementById("submitAdicionar").disabled = false;
@@ -380,7 +379,9 @@ function carregaProdutoOrcamento(cod_obra, cod_local) {
             async: true
         },
         columnDefs: [
-            { className: "dt-body-center", targets: [0, 1, 2] }
+            { targets: [0, 2], className: 'text-center' },
+            { targets: [1], className: 'text-justify' },
+            { targets: [5, 6], className: 'no-print' }
         ],
         order: [[0, 'asc']]
     });
