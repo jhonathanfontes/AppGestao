@@ -616,6 +616,7 @@ function salvarGradeProduto() {
 }
 
 function editarGradeProduto(idDetalhe) {
+    
     var nameGradeProduto = $('#nameGradeProduto');
     var idDetalheInput = document.getElementById("id_detalhe");
     var codtipoInput = document.getElementById("cod_tipo");

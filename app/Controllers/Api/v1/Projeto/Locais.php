@@ -129,7 +129,7 @@ class Locais extends ApiController
             );
 
             return $this->response->setJSON($response);
-            
+
         } catch (\Throwable $th) {
             return $this->response->setJSON(
                 [
@@ -410,6 +410,14 @@ class Locais extends ApiController
         //         'post' => $this->request->getPost()
         //     ]
         // );
+    }
+
+    public function addGradeProduto($cod_produto = null)
+    {
+        $return = $this->localServicoModel->getProdutoDetalhe()
+            ->where('ger_localservico.id', $cod_produto)
+            ->first();
+        return $this->response->setJSON($return);
     }
 
     private function buscaRegistro404(int $codigo = null)

@@ -5,29 +5,29 @@ namespace App\Models\Financeiro;
 use CodeIgniter\Database\BaseBuilder;
 use CodeIgniter\Model;
 
-class ContaReceberModel extends Model
+class ContaModel extends Model
 {
-    protected $table      = 'fin_receber';
-    protected $primaryKey = 'id_receber';
-    protected $returnType = \App\Entities\Financeiro\ContaReceber::class;
+    protected $table = 'fin_conta';
+    protected $primaryKey = 'id';
+    protected $returnType = \App\Entities\Financeiro\Conta::class;
     protected $useSoftDeletes = false;
     protected $allowedFields = [
+        'fin_tipoconta',
         'pessoa_id',
         'orcamento_id',
         'subgrupo_id',
         'forma_id',
-        'pagamento_id',
-        'rec_referencia',
-        'rec_parcela',
-        'rec_parcela_total',
-        'rec_vencimento',
-        'rec_observacao',
-        'rec_valor',
-        'rec_recebido',
-        'rec_cancelado',
-        'rec_saldo',
-        'rec_quitado',
-        'rec_documento',
+        'fin_referencia',
+        'fin_parcela',
+        'fin_parcela_total',
+        'fin_vencimento',
+        'fin_observacao',
+        'fin_valor',
+        'fin_recebido',
+        'fin_cancelado',
+        'fin_saldo',
+        'fin_quitado',
+        'fin_documento',
         'situacao',
         'serial',
         'agrupar_id',
@@ -35,12 +35,14 @@ class ContaReceberModel extends Model
         'can_data',
         'can_motivo',
         'can_user_id',
-        'fleg'
+        'created_user_id',
+        'updated_user_id',
+        'deleted_user_id'
     ];
     protected $useTimestamps = false;
-    protected $validationRules    = [];
+    protected $validationRules = [];
     protected $validationMessages = [];
-    protected $skipValidation     = true;
+    protected $skipValidation = true;
 
     protected $beforeInsert = ['insertAuditoria'];
     protected $beforeUpdate = ['updateAuditoria'];
@@ -48,21 +50,21 @@ class ContaReceberModel extends Model
     protected function insertAuditoria(array $data)
     {
         $data['data']['created_user_id'] = getUsuarioID();
-        $data['data']['created_at']      = getDatetimeAtual();
+        $data['data']['created_at'] = getDatetimeAtual();
         return $data;
     }
 
     protected function updateAuditoria(array $data)
     {
         $data['data']['updated_user_id'] = getUsuarioID();
-        $data['data']['updated_at']      = getDatetimeAtual();
+        $data['data']['updated_at'] = getDatetimeAtual();
         return $data;
     }
 
     public function arquivarRegistro(int $codigo = null)
     {
         if ($codigo != null) {
-            $data['situacao'] = 3;
+            $data['situacao'] = 9;
             return $this->update($codigo, $data);
         }
         return false;
@@ -72,11 +74,11 @@ class ContaReceberModel extends Model
     {
         if ($cod_orcamento != null) {
 
-            $data['situacao']        = 0;
-            $data['deleted_status']  = 'A';
-            $data['can_data']        = getDatetimeAtual();
-            $data['can_motivo']      = 'CANCELAMENTO AUTOMATICO - VENDA RETORNADA PARA ORCAMENTO!';
-            $data['can_user_id']     = getUsuarioID();
+            $data['situacao'] = 0;
+            $data['deleted_status'] = 'A';
+            $data['can_data'] = getDatetimeAtual();
+            $data['can_motivo'] = 'CANCELAMENTO AUTOMATICO - VENDA RETORNADA PARA ORCAMENTO!';
+            $data['can_user_id'] = getUsuarioID();
 
             return $this->where('orcamento_id', $cod_orcamento)
                 ->where('serial', $serial)
@@ -102,7 +104,7 @@ class ContaReceberModel extends Model
     {
         if ($cod_orcamento != null) {
 
-            $data['situacao']        = 2;
+            $data['situacao'] = 2;
 
             return $this->where('orcamento_id', $cod_orcamento)
                 ->where('serial', $serial)
@@ -118,32 +120,30 @@ class ContaReceberModel extends Model
         if ($codigo != null) {
             $data['situacao'] = 0;
             $data['deleted_user_id'] = getUsuarioID();
-            $data['deleted_at']      = getDatetimeAtual();
+            $data['deleted_at'] = getDatetimeAtual();
             return $this->update($codigo, $data);
         }
         return false;
     }
 
-    public function getContaReceber($codigo = null)
+    public function getConta()
     {
-        $db      = \Config\Database::connect();
-
         $attributes = [
-            'id_receber as cod_receber',
+            'fin_conta.id as cod_conta',
             'pessoa_id as cod_pessoa',
             'cad_pessoa.pes_nome as des_cliente',
             'subgrupo_id as cod_subgrupo',
             'cad_subgrupo.sub_descricao as des_subgrupo',
-            'rec_referencia as referencia',
-            'rec_parcela as parcela',
-            'rec_parcela_total as parcela_total',
-            'rec_vencimento as vencimento',
-            'rec_observacao as observacao',
-            'rec_valor as valor',
-            'rec_recebido as recebido',
-            'rec_cancelado as cancelado',
-            'rec_saldo as saldo',
-            'rec_quitado as quitado',
+            'fin_referencia as referencia',
+            'fin_parcela as parcela',
+            'fin_parcela_total as parcela_total',
+            'fin_vencimento as vencimento',
+            'fin_observacao as observacao',
+            'fin_valor as valor',
+            'fin_recebido as recebido',
+            'fin_cancelado as cancelado',
+            'fin_saldo as saldo',
+            'fin_quitado as quitado',
             'situacao',
             'serial',
             'agrupar_id as cod_agrupar',
@@ -152,15 +152,11 @@ class ContaReceberModel extends Model
             'can_user_id'
         ];
 
-        $builder = $db->table($this->table);
-        $builder->select($attributes);
-        $builder->join('cad_pessoa', 'cad_pessoa.id_pessoa = fin_receber.pessoa_id');
-        $builder->join('cad_subgrupo', 'cad_subgrupo.id_subgrupo = fin_receber.subgrupo_id');
-        $builder->whereIn('fin_receber.situacao', ['1', '2']);
-        $builder->where('fin_receber.id_receber', $codigo);
-        $result = $builder->get();
+        $result = $this->select($attributes)
+            ->join('cad_pessoa', 'cad_pessoa.id = fin_conta.pessoa_id')
+            ->join('cad_subgrupo', 'cad_subgrupo.id = fin_conta.subgrupo_id');
 
-        return $result->getRow();
+        return $result;
     }
 
     public function getContaReceberCliente($codPessoa = null)
@@ -238,10 +234,9 @@ class ContaReceberModel extends Model
             ->orderBy('fin_receber.rec_vencimento', 'ASC')
             ->findAll();
     }
-
     public function getContasReceber()
     {
-        $db      = \Config\Database::connect();
+        $db = \Config\Database::connect();
 
         $attributes = [
             'id_receber as cod_receber',
@@ -278,7 +273,6 @@ class ContaReceberModel extends Model
 
         return $result->getResult();
     }
-
     public function getContasReceberByCliente()
     {
         $db = \Config\Database::connect();
@@ -309,7 +303,7 @@ class ContaReceberModel extends Model
 
     public function resumoReceberCaixa()
     {
-        $db      = \Config\Database::connect();
+        $db = \Config\Database::connect();
 
         $attributes = [
             'fin_receber.id_receber AS id_receber',
@@ -347,7 +341,7 @@ class ContaReceberModel extends Model
 
     public function agruparPorVencimento()
     {
-        $db      = \Config\Database::connect();
+        $db = \Config\Database::connect();
 
         $attributes = [
             'pessoa_id',
@@ -369,7 +363,7 @@ class ContaReceberModel extends Model
             ->where('fin_receber.rec_quitado', 'N');
 
         // With closure
-        $this->where('advance_amount <', static fn (BaseBuilder $builder) => $builder->select('MAX(advance_amount)', false)->from('orders')->where('id >', 2));
+        $this->where('advance_amount <', static fn(BaseBuilder $builder) => $builder->select('MAX(advance_amount)', false)->from('orders')->where('id >', 2));
         // Produces: WHERE "advance_amount" < (SELECT MAX(advance_amount) FROM "orders" WHERE "id" > 2)
 
         // With builder directly

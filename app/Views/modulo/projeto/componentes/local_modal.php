@@ -35,3 +35,51 @@
         <!-- /.modal-dialog -->
     </div>
 </div>
+
+<!-- /.modal editarProduto -->
+<div class="modal fade" id="modalProdutoLocalServico" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h4 class="modal-title"> <span id="modalTitleGradeProduto"></span></h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?= form_open(base_url('/api/projeto/orcamento/inclui/produto'), ['method' => 'post', 'id' => 'formUpdateGradeProduto']) ?>
+
+            <div class="card-body">
+                <input name="cod_local" id="cod_local" hidden="hidden">
+                <input name="cod_localservico" id="cod_localservico" hidden="hidden">
+    
+                <div class="row">
+                    <div class="form-group col-3">
+                        <label for="">QUANTIDADE</label>
+                        <input name="qnt_produto" id="qnt_produto" class="form-control" onblur="atualizaGradeProduto();">
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="">VALOR UNITARIO</label>
+                        <input name="valor_unidade" id="valor_unidade" class="form-control" disabled="disabled">
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="">VALOR COM DESCONTO</label>
+                        <input name="valor_desc" id="valor_desc" class="valorbr form-control" onblur="atualizaGradeProduto();">
+                    </div>
+                    <div class="form-group col-3">
+                        <label for="">TOTAL</label>
+                        <input name="valor_total" id="valor_total" class="form-control" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">CANCELAR</button>
+                <button type="submit" id="submitGradeProduto" class="btn btn-primary" onclick="salvarGradeProduto()">APLICAR</button>
+            </div>
+            <?= form_close(); ?>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-EditarProduto -->
+</div>

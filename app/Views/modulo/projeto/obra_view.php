@@ -167,9 +167,7 @@
                         <!-- /.row -->
                         <!-- Table row -->
                         <div class="row mt-2">
-                            <div id="loadingSpinner" style="display: none;">
-                                <img src="<?= site_url('dist/img/giphy.gif'); ?>" alt="Carregando...">
-                            </div>
+                           
                             <div class="col-12 table-responsive">
                                 <table id="tableProdutoOrcamento" class="table table-sm table-striped"
                                     style="text-align: center;">

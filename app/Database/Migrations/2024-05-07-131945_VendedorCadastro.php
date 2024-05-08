@@ -5,7 +5,7 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class GrupoFinanceiro extends Migration
+class VendedorCadastro extends Migration
 {
     public function up()
     {
@@ -16,16 +16,14 @@ class GrupoFinanceiro extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'gru_descricao' => [
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-            ],
-            'gru_tipo' => [
-                'type' => 'VARCHAR',
-                'constraint' => '1',
-            ],
-            'gru_classificacao' => [
+            'pessoa_id' => [
                 'type' => 'INT',
+                'unsigned' => true,
+                'null' => true,
+            ],
+            'usuario_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
                 'null' => true,
             ],
             'status' => [
@@ -66,16 +64,18 @@ class GrupoFinanceiro extends Migration
                 'null' => true,
             ],
         ]);
-        $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('empresa_id', 'con_empresa', 'id', 'CASCADE', 'CASCADE', 'fk_empresa_grupo');
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_grupo');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_grupo');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_grupo');
 
-        $this->forge->createTable('cad_grupo', false, ['ENGINE' => 'InnoDB']);
+        $this->forge->addPrimaryKey('id');
+        $this->forge->addForeignKey('pessoa_id', 'cad_pessoa', 'id', 'CASCADE', 'CASCADE', 'fk_pessoa_vendedor');
+        $this->forge->addForeignKey('usuario_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_usuario_vendedor');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_vendedor');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_vendedor');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_vendedor');
+
+        $this->forge->createTable('cad_vendedor', false, ['ENGINE' => 'InnoDB']);
     }
     public function down()
     {
-        $this->forge->dropTable('cad_grupo');
+        $this->forge->dropTable('cad_vendedor');
     }
 }

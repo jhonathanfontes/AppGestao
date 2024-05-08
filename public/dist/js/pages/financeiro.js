@@ -121,11 +121,11 @@ function salvarContaReceber() {
                 data: $('#formContaReceber').serialize(),
                 dataType: "json",
                 beforeSend: function() {
-                    document.getElementById("submitContaReceber").disabled = true;
+                    // document.getElementById("submitContaReceber").disabled = true;
                 },
                 success: function(response) {
                     console.log(response);
-                    respostaSwalFire(response)
+                    respostaSwalFire(response, false)
                 },
                 error: function() {
                     document.getElementById("submitContaReceber").disabled = false;

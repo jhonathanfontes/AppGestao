@@ -4,7 +4,7 @@ namespace App\Entities\Financeiro;
 
 use CodeIgniter\Entity\Entity;
 
-class ContaReceber extends Entity
+class Conta extends Entity
 {
     protected $datamap = [];
     protected $dates   = ['created_at', 'updated_at', 'deleted_at'];

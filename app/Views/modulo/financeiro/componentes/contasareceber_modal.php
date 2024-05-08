@@ -11,7 +11,8 @@
       <?= form_open(base_url('/api/financeiro/salvar/contareceber'), ['method' => 'post', 'id' => 'formContaReceber']) ?>
       <div class="card-body">
         <div class="hidden">
-          <input name="cod_receber" id="cod_receber" hidden>
+          <input name="cod_conta" id="cod_receber" hidden>
+          <input name="tipoconta" value="1" hidden>
         </div>
         <div class="row">
           <div class="form-group col-6">

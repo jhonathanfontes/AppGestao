@@ -187,8 +187,8 @@ $routes->group('api', function ($routes) {
                 $routes->get('subcategorias/(:segment)', 'SubCategorias::getCagetoriaFiltro/$1');
             });
 
-            $routes->group('grade', function ($routes) {
-                $routes->get('produto/tamanho/(:segment)', 'ProdutoGrade::addGradeProduto/$1');
+            $routes->group('detalhe', function ($routes) {
+                $routes->get('produto/(:segment)', 'Locais::addGradeProduto/$1');
             });
 
             // AUTO COMPLETE E AJAX BUSCAR DE DADOS search
@@ -359,11 +359,11 @@ $routes->group('api', function ($routes) {
 
         // Carrega dados da TableData
         $routes->group('tabela', function ($routes) {
-            $routes->post('contaspagar', 'ContaPagar::getCarregaTabelaByFornecedor');
-            $routes->post('contasreceber', 'ContaReceber::getCarregaTabelaByCliente');
+            $routes->post('contaspagar', 'Contas::getCarregaTabelaPagar');
+            $routes->post('contasreceber', 'Contas::getCarregaTabelaReceber');
 
-            $routes->get('contaspagar', 'ContaPagar::getCarregaTabelaByFornecedor');
-            $routes->get('contasreceber', 'ContaReceber::getCarregaTabelaByCliente');
+            $routes->get('contaspagar', 'Contas::getCarregaTabelaPagar');
+            $routes->get('contasreceber', 'Contas::getCarregaTabelaReceber');
 
             $routes->post('grupos', 'Grupo::getCarregaTabela');
             $routes->post('subgrupos', 'Subgrupo::getCarregaTabela');
@@ -381,8 +381,8 @@ $routes->group('api', function ($routes) {
 
         // Salvar dados Cadastro
         $routes->group('salvar', function ($routes) {
-            $routes->post('contapagar', 'ContaPagar::save');
-            $routes->post('contareceber', 'ContaReceber::save');
+            $routes->post('contapagar', 'Contas::save');
+            $routes->post('contareceber', 'Contas::save');
             $routes->post('grupo', 'Grupo::save');
             $routes->post('subgrupo', 'Subgrupo::save');
         });
@@ -390,32 +390,34 @@ $routes->group('api', function ($routes) {
         //Pagamentos 
 
         $routes->group('contaspagar', function ($routes) {
-            $routes->get('/', 'ContaPagar::findAll');
+            $routes->get('/', 'Contas::show');
             $routes->post('/', 'ContaPagar::findAllWhere');
 
             $routes->post('payment', 'ContaPagar::savePayment');
         });
 
         $routes->group('contasreceber', function ($routes) {
-            $routes->get('/', 'ContaReceber::findAll');
+            $routes->get('/', 'Contas::show');
             $routes->post('/', 'ContaReceber::findAllWhere');
 
             $routes->post('payment', 'ContaReceber::savePayment');
         });
 
-        // Exibir dados Cadastro
+        // Exibir dados Financeiro
         $routes->group('exibir', function ($routes) {
 
             $routes->get('grupos', 'Grupo::findAll');
 
             $routes->group('contaspagar', function ($routes) {
-                $routes->get('/', 'ContaPagar::findAll');
-                $routes->post('/', 'ContaPagar::findAllWhere');
+                $routes->get('/(:segment)', 'Contas::show/$1');
+                $routes->post('/(:segment)', 'Contas::show/$1');
+                // $routes->post('/', 'ContaPagar::findAllWhere');
             });
 
             $routes->group('contasreceber', function ($routes) {
-                $routes->get('/', 'ContaReceber::findAll');
-                $routes->post('/', 'ContaReceber::findAllWhere');
+                $routes->get('/(:segment)', 'Contas::show/$1');
+                $routes->post('/(:segment)', 'Contas::show/$1');
+                // $routes->post('/', 'ContaReceber::findAllWhere');
 
                 $routes->post('payment', 'ContaReceber::savePayment');
             });

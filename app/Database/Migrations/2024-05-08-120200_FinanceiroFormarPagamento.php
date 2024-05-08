@@ -5,7 +5,7 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class GrupoFinanceiro extends Migration
+class FinanceiroFormarPagamento extends Migration
 {
     public function up()
     {
@@ -16,27 +16,42 @@ class GrupoFinanceiro extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'gru_descricao' => [
+            'for_descricao' => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',
             ],
-            'gru_tipo' => [
-                'type' => 'VARCHAR',
-                'constraint' => '1',
+            'for_forma' => [
+                'type' => 'INT',
+                'comment' => '1 - Dinheiro, 2 - Transferencia, 3 - Cartão Debito, 4 - Cartão Credito, 5 - Boleto, 6 - Credito Financeiro, 99 - Outros',
             ],
-            'gru_classificacao' => [
+            'for_prazo' => [
                 'type' => 'INT',
                 'null' => true,
+            ],
+            'pes_padrao' => [
+                'type' => 'VARCHAR',
+                'constraint' => '1',
+                'default' => 'N',
+            ],
+            'for_taxa' => [
+                'type' => 'VARCHAR',
+                'constraint' => '10',
+                'default' => 0
+            ],
+            'for_parcela' => [
+                'type' => 'VARCHAR',
+                'constraint' => '1',
+                'default' => 'N'
+            ],
+            'for_antecipa' => [
+                'type' => 'VARCHAR',
+                'constraint' => '1',
+                'default' => 'N'
             ],
             'status' => [
                 'type' => 'INT',
                 'default' => 1,
-                'comment' => '1 -Habilitado, 2 - Desativado, 3 - Pendente, 9 - Arquivado',
-            ],
-            'empresa_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => true,
+                'comment' => '1 - Habilitado, 2 - Desativado, 3 - Pendente, 9 - Arquivado',
             ],
             'created_user_id' => [
                 'type' => 'INT',
@@ -67,15 +82,16 @@ class GrupoFinanceiro extends Migration
             ],
         ]);
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('empresa_id', 'con_empresa', 'id', 'CASCADE', 'CASCADE', 'fk_empresa_grupo');
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_grupo');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_grupo');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_grupo');
 
-        $this->forge->createTable('cad_grupo', false, ['ENGINE' => 'InnoDB']);
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_formapag');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_formapag');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_formapag');
+
+        $this->forge->createTable('pdv_formapag', true, ['ENGINE' => 'InnoDB']);
     }
+
     public function down()
     {
-        $this->forge->dropTable('cad_grupo');
+        $this->forge->dropTable('pdv_formapag');
     }
 }
