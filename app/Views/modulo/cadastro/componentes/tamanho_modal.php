@@ -11,6 +11,7 @@
                 <?= form_open(base_url('/api/cadastro/salvar/tamanho'), ['id' => 'formTamanho']) ?>
                 <div class="hidden">
                     <input type="hidden" name="cod_tamanho" id="cod_tamanho" />
+                    <input type="hidden" name="cod_tipo" id="cod_tipo" />
                 </div>
                 <div class="row">
                     <div class="form-group col-5">

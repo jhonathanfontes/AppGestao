@@ -16,6 +16,11 @@ class ProdutoTamanho extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
+            'tam_tipo' => [
+                'type' => 'INT',
+                'default' => 1,
+                'comment' => '1 - Produto, 2 - Serviço',
+            ],
             'tam_abreviacao' => [
                 'type' => 'VARCHAR',
                 'constraint' => '5',

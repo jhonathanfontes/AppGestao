@@ -13,6 +13,7 @@
 
                 <div class="hidden">
                     <input type="hidden" name="cod_categoria" id="cod_categoria" />
+                    <input type="hidden" name="cod_tipo" id="cod_tipo" />
                 </div>
                 <div class="row">
                     <div class="form-group col-12">

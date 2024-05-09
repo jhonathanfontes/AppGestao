@@ -20,7 +20,7 @@
             </button>
 
             <button class="btn btn-app <?= getenv('tema.btn.app2.color'); ?>" data-toggle="modal" data-target="#modalTamanho"
-                onclick="setNewTamanho()">
+                onclick="setNewUnidadeMedida()">
                 <i class="fa fa-ruler"></i> UNIDADE MEDIDA
             </button>
         </div>
@@ -35,7 +35,7 @@
 <!-- /.content -->
 <section class="content">
     <!-- Default box -->
-    <div class="card <?= getenv('tema.modal.header.color'); ?>">
+    <div class="card <?= getenv('tema.card.header.color'); ?>">
         <div class="card-header">
             <h3 class="card-title"><?= isset($card_title) ? $card_title : ''; ?></h3>
             <div class="card-tools">

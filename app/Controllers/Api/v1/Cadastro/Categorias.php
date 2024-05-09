@@ -64,7 +64,7 @@ class Categorias extends ApiController
         if (!$this->request->isAJAX()) {
             return redirect()->back();
         }
-
+        $data['cat_tipo'] = $this->request->getPost('cad_tipo');
         $data['cat_descricao'] = returnNull($this->request->getPost('cad_categoria'), 'S');
         $data['status'] = $this->request->getPost('status');
 

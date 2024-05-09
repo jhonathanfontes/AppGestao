@@ -16,6 +16,11 @@ class Categoria extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
+            'cat_tipo' => [
+                'type' => 'INT',
+                'default' => 1,
+                'comment' => '1 - Produto, 2 - Serviço',
+            ],
             'cat_descricao' => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',

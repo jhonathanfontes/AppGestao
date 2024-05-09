@@ -680,8 +680,20 @@ function getEditCategoria(Paramentro) {
     });
 }
 
-function setNewCategoria() {
+function setNewCategoriaProduto() {
     document.getElementById('modalTitleCategoria').innerHTML = 'CADASTRO DE NOVA CATEGORIA DO PRODUTO';
+    document.getElementById('cod_tipo').value = '1';
+    var cod_categoria = document.getElementById('cod_categoria').value;
+    if (cod_categoria != '') {
+        document.getElementById("cod_categoria").value = '';
+        document.getElementById("cad_categoria").value = '';
+        document.getElementById("categoriaAtivo").checked = true;
+    }
+}
+
+function setNewCategoriaServico() {
+    document.getElementById('modalTitleCategoria').innerHTML = 'CADASTRO DE NOVA CATEGORIA DO PRODUTO';
+    document.getElementById('cod_tipo').value = '2';
     var cod_categoria = document.getElementById('cod_categoria').value;
     if (cod_categoria != '') {
         document.getElementById("cod_categoria").value = '';
@@ -777,6 +789,20 @@ function getEditTamanho(Paramentro) {
 
 function setNewTamanho() {
     document.getElementById('modalTitleTamanho').innerHTML = 'CADASTRO DE NOVO TAMANHO DE PRODUTO';
+    document.getElementById('cod_tipo').value = '1';
+    var cod_tamanho = document.getElementById('cod_tamanho').value;
+    if (cod_tamanho != '') {
+        document.getElementById("cod_tamanho").value = '';
+        document.getElementById("cad_tamanho").value = '';
+        document.getElementById("cad_abreviacao").value = '';
+        document.getElementById("cad_embalagem").value = '1';
+        document.getElementById("tamanhoAtivo").checked = true;
+    }
+}
+
+function setNewUnidadeMedida() {
+    document.getElementById('modalTitleTamanho').innerHTML = 'CADASTRO DE NOVO UNIDADE DE MEDIDA DO SERVIÇO';
+    document.getElementById('cod_tipo').value = '2';
     var cod_tamanho = document.getElementById('cod_tamanho').value;
     if (cod_tamanho != '') {
         document.getElementById("cod_tamanho").value = '';
