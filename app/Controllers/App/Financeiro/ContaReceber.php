@@ -37,9 +37,9 @@ class ContaReceber extends BaseController
 
     public function viewCliente(int $codPessoa = null)
     {
-        $contaReceberSelecionado    = $this->setContaReceberClienteSelecionado($codPessoa);
+        $contaReceberSelecionado    = $this->setContaPessoaSelecionado($codPessoa);
         $pessoaSelecionada          = $this->setPessoaSelecionado($codPessoa);
-        $pagamentoSelecionado       = $this->setRecebimentoClienteSelecionado($codPessoa);
+       // $pagamentoSelecionado       = $this->setRecebimentoClienteSelecionado($codPessoa);
 
         if ($contaReceberSelecionado == null) {
             session()->setFlashdata('MsnError', "A CONTA A RECEBER Nº $codPessoa, NÃO FOI LOCALIZADA!");
@@ -51,7 +51,7 @@ class ContaReceber extends BaseController
             'cliente'    => $pessoaSelecionada,
             'contas'     => $contaReceberSelecionado,
             'caixa'      => $this->setCaixasAbertos(),
-            'pagamentos' =>  $pagamentoSelecionado
+            'pagamentos' => ''
         ];
         return view('modulo/financeiro/contasareceber_viewCliente', $data);
     }

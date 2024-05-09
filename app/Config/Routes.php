@@ -359,19 +359,11 @@ $routes->group('api', function ($routes) {
 
         // Carrega dados da TableData
         $routes->group('tabela', function ($routes) {
-            $routes->post('contaspagar', 'Contas::getCarregaTabelaPagar');
-            $routes->post('contasreceber', 'Contas::getCarregaTabelaReceber');
-
-            $routes->get('contaspagar', 'Contas::getCarregaTabelaPagar');
-            $routes->get('contasreceber', 'Contas::getCarregaTabelaReceber');
+            $routes->post('contaspagar', 'Contas::getCarregaTabelaByFornecedor');
+            $routes->post('contasreceber', 'Contas::getCarregaTabelaByCliente');
 
             $routes->post('grupos', 'Grupo::getCarregaTabela');
             $routes->post('subgrupos', 'Subgrupo::getCarregaTabela');
-
-            $routes->post('subcategorias', 'SubCategorias::getCarregaTabela');
-            $routes->post('fabricantes', 'Fabricantes::getCarregaTabela');
-            $routes->post('tamanhos', 'Tamanhos::getCarregaTabela');
-
 
             $routes->group('pagamentos', function ($routes) {
                 $routes->post('contaspagar', 'ContaPagar::getPagamentosTabela');

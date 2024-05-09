@@ -12,6 +12,7 @@
       <div class="card-body">
         <div class="hidden">
           <input name="cod_pagar" id="cod_pagar" hidden>
+          <input name="tipoconta" value="2" hidden>
         </div>
         <div class="row">
           <div class="form-group col-6">

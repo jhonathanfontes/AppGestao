@@ -131,6 +131,7 @@ class ContaModel extends Model
         $attributes = [
             'fin_conta.id as cod_conta',
             'pessoa_id as cod_pessoa',
+            'orcamento_id as cod_orcamento',
             'cad_pessoa.pes_nome as des_cliente',
             'subgrupo_id as cod_subgrupo',
             'cad_subgrupo.sub_descricao as des_subgrupo',
@@ -158,6 +159,34 @@ class ContaModel extends Model
 
         return $result;
     }
+
+
+    public function getContasByPessoa()
+    {
+        $attributes = [
+            'CAST(SUM(fin_valor) AS DECIMAL(9,2)) AS valor',
+            'CAST(SUM(fin_recebido) AS DECIMAL(9,2)) AS recebido',
+            'CAST(SUM(fin_cancelado) AS DECIMAL(9,2)) AS cancelado',
+            'CAST(SUM(fin_saldo) AS DECIMAL(9,2)) AS saldo',
+            'CAST(SUM(IF(fin_vencimento < STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), fin_saldo, 0)) AS DECIMAL(9,2)) AS val_vencida',
+            'SUM(IF(fin_vencimento < STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), 1, 0)) AS pac_vencida',
+            'CAST(SUM(IF(fin_vencimento > STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), fin_saldo, 0)) AS DECIMAL(9,2)) AS val_pendente',
+            'SUM(IF(fin_vencimento > STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), 1, 0)) AS pac_pendente',
+            'pessoa_id as cod_pessoa',
+            'cad_pessoa.pes_nome as des_cliente',
+        ];
+
+        $result = $this->select($attributes)
+            ->join('cad_pessoa', 'cad_pessoa.id = fin_conta.pessoa_id')
+            ->join('cad_subgrupo', 'cad_subgrupo.id = fin_conta.subgrupo_id')
+            ->whereIn('fin_conta.situacao', ['1', '2'])
+            ->where('fin_conta.fin_quitado', 'N')
+            ->groupBy('fin_conta.pessoa_id');
+
+        return $result;
+    }
+
+    // ALTERAR APARTI DAQUI
 
     public function getContaReceberCliente($codPessoa = null)
     {
@@ -273,33 +302,7 @@ class ContaModel extends Model
 
         return $result->getResult();
     }
-    public function getContasReceberByCliente()
-    {
-        $db = \Config\Database::connect();
 
-        $attributes = [
-            'CAST(SUM(rec_valor) AS DECIMAL(9,2)) AS rec_valor',
-            'CAST(SUM(rec_recebido) AS DECIMAL(9,2)) AS rec_recebido',
-            'CAST(SUM(rec_cancelado) AS DECIMAL(9,2)) AS rec_cancelado',
-            'CAST(SUM(rec_saldo) AS DECIMAL(9,2)) AS rec_saldo',
-            'CAST(SUM(IF(rec_vencimento < STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), rec_saldo, 0)) AS DECIMAL(9,2)) AS val_vencida',
-            'SUM(IF(rec_vencimento < STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), 1, 0)) AS pac_vencida',
-            'CAST(SUM(IF(rec_vencimento > STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), rec_saldo, 0)) AS DECIMAL(9,2)) AS val_pendente',
-            'SUM(IF(rec_vencimento > STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), 1, 0)) AS pac_pendente',
-            'pessoa_id as cod_pessoa',
-            'cad_pessoa.pes_nome as des_cliente',
-        ];
-
-        $builder = $db->table($this->table);
-        $builder->select($attributes);
-        $builder->join('cad_pessoa', 'cad_pessoa.id_pessoa = fin_receber.pessoa_id');
-        $builder->whereIn('fin_receber.situacao', ['1', '2']);
-        $builder->where('fin_receber.rec_quitado', 'N');
-        $builder->groupBy('fin_receber.pessoa_id');
-        $result = $builder->get();
-
-        return $result->getResult();
-    }
 
     public function resumoReceberCaixa()
     {

@@ -56,6 +56,38 @@ class Contas extends ApiController
         }
     }
 
+    public function getCarregaTabelaByCliente()
+    {
+        try {
+            $response['data'] = [];
+            $result = $this->contaModel->getContasByPessoa()
+                ->where('fin_conta.fin_tipoconta', '1')
+                ->findAll();
+
+            //return $this->response->setJSON($result);
+            if ($result) {
+                foreach ($result as $key => $value) {
+
+                    $response['data'][$key] = array(
+                        esc($value->des_cliente),
+                        formatValorBR(esc($value->valor)),
+                        formatValorBR(esc($value->cancelado)),
+                        formatValorBR(esc($value->recebido)),
+                        formatValorBR(esc($value->saldo)),
+                        formatValorBR(esc($value->val_vencida)),
+                        ($value->pac_vencida <> 0) ? '<span class="badge badge-danger">PARCELAS ' . esc($value->pac_vencida) . '</span>' : '',
+                        formatValorBR(esc($value->val_pendente)),
+                        ($value->pac_pendente <> 0) ? '<span class="badge badge-success">PARCELAS ' . esc($value->pac_pendente) . '</span>' : '',
+                        '<a class="btn btn-xs btn-success ml-2 text-right" href="' . base_url('app/financeiro/contareceber/cliente/' . $value->cod_pessoa) . '"><span class="fas fa-tasks"></span> GERENCIAR </a>'
+                    );
+                }
+            }
+            return $this->response->setJSON($response);
+        } catch (\Throwable $th) {
+            return $this->response->setJSON($this->responseTryThrowable($th));
+        }
+    }
+
     public function getCarregaTabelaPagar()
     {
         $response['data'] = [];
@@ -90,8 +122,11 @@ class Contas extends ApiController
     public function getCarregaTabelaByFornecedor()
     {
         try {
-            $response['data'] = array();
-            $result = $this->contaModel->getContasPagarByFornecedor()->findAll();
+            $response['data'] = [];
+            $result = $this->contaModel->getContasByPessoa()
+                ->where('fin_conta.fin_tipoconta', '2')
+                ->findAll();
+
             if ($result) {
                 foreach ($result as $key => $value) {
                     $response['data'][$key] = array(

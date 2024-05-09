@@ -46,6 +46,7 @@
             <table id="tableObras" class="table table-sm table-bordered table-striped">
                 <thead>
                     <tr style="text-align: center;">
+                        <th style="width: 10%;">CODIGO</th>
                         <th>DESCRICÃO</th>
                         <th>DATA PREVISTA</th>
                         <th style="width: 20%;">AÇÕES</th>

@@ -38,6 +38,7 @@ class Obras extends ApiController
                 $ops .= ' <a class="btn btn-xs btn-success" href="obra/view/' . $value->id . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
 
                 $response['data'][$key] = array(
+                    completeComZero(esc($value->id), 8),
                     esc($value->obr_descricao),
                     esc($value->obr_datainicio) ? esc(formatDataBR($value->obr_datainicio)) : '<label class="badge badge-danger">SEM DATA PREVISTA</label>',
                     $ops,

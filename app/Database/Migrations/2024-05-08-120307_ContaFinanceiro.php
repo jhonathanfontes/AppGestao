@@ -147,11 +147,11 @@ class ContaFinanceiro extends Migration
         $this->forge->addPrimaryKey('id');
 
         $this->forge->addForeignKey('pessoa_id', 'cad_pessoa', 'id', 'CASCADE', 'NO ACTION', 'fk_pessoa_conta');
-        $this->forge->addForeignKey('orcamento_id', 'pvd_orcamento', 'id', 'CASCADE', 'NO ACTION', 'fk_orcamento_conta');
+        $this->forge->addForeignKey('orcamento_id', 'pdv_orcamento', 'id', 'CASCADE', 'NO ACTION', 'fk_orcamento_conta');
         $this->forge->addForeignKey('subgrupo_id', 'cad_subgrupo', 'id', 'CASCADE', 'NO ACTION', 'fk_subgrupo_conta');
         $this->forge->addForeignKey('forma_id', 'pdv_formapag', 'id', 'CASCADE', 'NO ACTION', 'fk_formapag_conta');
       
-        $this->forge->addForeignKey('agrupar_id', 'fin_conta', 'id', 'CASCADE', 'NO ACTION', 'fk_fin_conta_conta');
+       // $this->forge->addForeignKey('agrupar_id', 'fin_conta', 'id', 'CASCADE', 'NO ACTION', 'fk_fin_conta_conta');
         
         $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_conta');
         $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_conta');

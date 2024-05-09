@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     // CARREGA DADOS DA TELA DE CONTA A PAGAR
     var contaPagarColumnDefs = [
@@ -71,7 +71,7 @@ function getEditReceber(Paramentro) {
         url: base_url + "api/financeiro/exibir/contareceber/" + Paramentro,
         type: "GET",
         dataType: "json",
-        success: function(dado) {
+        success: function (dado) {
             $modalTitleReceber.text(`ATUALIZANDO A CONTA A RECEBER CODIGO: ${dado.id_receber}`);
             $cadCodigo.val(dado.id_receber);
             $codPessoa.val(dado.pessoa_id).trigger('change');
@@ -109,25 +109,25 @@ function setNewReceber() {
 }
 
 function salvarContaReceber() {
-    $("#formContaReceber").submit(function(e) {
+    $("#formContaReceber").submit(function (e) {
         e.preventDefault();
     });
 
     $.validator.setDefaults({
-        submitHandler: function() {
+        submitHandler: function () {
             $.ajax({
                 url: $('#formContaReceber').attr('action'),
                 type: "POST",
                 data: $('#formContaReceber').serialize(),
                 dataType: "json",
-                beforeSend: function() {
-                    // document.getElementById("submitContaReceber").disabled = true;
+                beforeSend: function () {
+                    document.getElementById("submitContaReceber").disabled = true;
                 },
-                success: function(response) {
+                success: function (response) {
                     console.log(response);
-                    respostaSwalFire(response, false)
+                    respostaSwalFire(response, true)
                 },
-                error: function() {
+                error: function () {
                     document.getElementById("submitContaReceber").disabled = false;
                 }
             });
@@ -176,26 +176,26 @@ function salvarContaReceber() {
             }
         },
         errorElement: 'span',
-        errorPlacement: function(error, element) {
+        errorPlacement: function (error, element) {
             error.addClass('invalid-feedback');
             element.closest('.form-group').append(error);
         },
-        highlight: function(element, errorClass, validClass) {
+        highlight: function (element, errorClass, validClass) {
             $(element).addClass('is-invalid');
         },
-        unhighlight: function(element, errorClass, validClass) {
+        unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass('is-invalid');
         }
     });
 }
 
-$('.custom-control-input').change(function() {
+$('.custom-control-input').change(function () {
     checkInputReceberPagamento();
 });
 
 function checkInputReceberPagamento() {
     event.preventDefault();
-    var searchIDs = $("input:checkbox:checked").map(function() {
+    var searchIDs = $("input:checkbox:checked").map(function () {
         return this.value;
     }).toArray();
 
@@ -216,7 +216,7 @@ function detalheAReceberPagamento() {
         type: "POST",
         data: { cod_receber: codReceber },
         dataType: "json",
-        success: function(response) {
+        success: function (response) {
             let tablePagamentoReceber = document.getElementById('tablePagamentoReceber');
 
             $modalTitlePagamentoReceber.text('RECEBIMENTO DA CONTA A RECEBER');
@@ -244,7 +244,7 @@ function detalheAReceberPagamento() {
             }
 
         },
-        error: function() {
+        error: function () {
             // $('#output').html('Bummer: there was an error!');
         },
     });
@@ -267,26 +267,26 @@ function aReceberSelecionado() {
 
 function salvarPaymentReceber() {
 
-    $("#formPaymentContaReceber").submit(function(e) {
+    $("#formPaymentContaReceber").submit(function (e) {
         e.preventDefault();
     });
 
     $.validator.setDefaults({
-        submitHandler: function() {
+        submitHandler: function () {
             $.ajax({
                 url: $('#formPaymentContaReceber').attr('action'),
                 type: 'POST',
                 data: $('#formPaymentContaReceber').serialize(),
                 dataType: "json",
-                beforeSend: function() {
-                  //  document.getElementById("ReceberSubmit").disabled = true;
+                beforeSend: function () {
+                    //  document.getElementById("ReceberSubmit").disabled = true;
                 },
-                success: function(response) {
+                success: function (response) {
                     console.log(response);
                     // respostaSwalFire(response)
                 },
-                error: function() {
-                  //  document.getElementById("ReceberSubmit").disabled = false;
+                error: function () {
+                    //  document.getElementById("ReceberSubmit").disabled = false;
                 }
             });
         }
@@ -304,14 +304,14 @@ function salvarPaymentReceber() {
             }
         },
         errorElement: 'span',
-        errorPlacement: function(error, element) {
+        errorPlacement: function (error, element) {
             error.addClass('invalid-feedback');
             element.closest('.form-group').append(error);
         },
-        highlight: function(element, errorClass, validClass) {
+        highlight: function (element, errorClass, validClass) {
             $(element).addClass('is-invalid');
         },
-        unhighlight: function(element, errorClass, validClass) {
+        unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass('is-invalid');
         }
     });
@@ -327,7 +327,7 @@ function getEditPagar(Paramentro) {
         url: base_url + "api/financeiro/exibir/contapagar/" + Paramentro,
         type: "GET",
         dataType: "json",
-        success: function(dado) {
+        success: function (dado) {
 
             $modalTitlePagar.text(`ATUALIZANDO A CONTA A PAGAR - CODIGO: ${dado.id_pagar}`);
             $cadPagCodigo.val(dado.id_pagar);
@@ -366,25 +366,25 @@ function setNewPagar() {
 }
 
 function salvarContaPagar() {
-    $("#formContaPagar").submit(function(e) {
+    $("#formContaPagar").submit(function (e) {
         e.preventDefault();
     });
 
     $.validator.setDefaults({
-        submitHandler: function() {
+        submitHandler: function () {
             $.ajax({
                 url: $('#formContaPagar').attr('action'),
                 type: "POST",
                 data: $('#formContaPagar').serialize(),
                 dataType: "json",
-                beforeSend: function() {
+                beforeSend: function () {
                     document.getElementById("submitContaPagar").disabled = true;
                 },
-                success: function(response) {
+                success: function (response) {
                     console.log(response);
                     respostaSwalFire(response)
                 },
-                error: function() {
+                error: function () {
                     document.getElementById("submitContaPagar").disabled = false;
                 }
             });
@@ -433,14 +433,14 @@ function salvarContaPagar() {
             }
         },
         errorElement: 'span',
-        errorPlacement: function(error, element) {
+        errorPlacement: function (error, element) {
             error.addClass('invalid-feedback');
             element.closest('.form-group').append(error);
         },
-        highlight: function(element, errorClass, validClass) {
+        highlight: function (element, errorClass, validClass) {
             $(element).addClass('is-invalid');
         },
-        unhighlight: function(element, errorClass, validClass) {
+        unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass('is-invalid');
         }
     });
@@ -457,7 +457,7 @@ function detalheAPagarPagamento() {
         type: "POST",
         data: { cod_pagar: codPagar },
         dataType: "json",
-        success: function(response) {
+        success: function (response) {
             console.log(response);
 
             $modalTitlePagamentoPagar.text('PAGAMENTO DE CONTA A PAGAR');
@@ -498,7 +498,7 @@ function detalheAPagarPagamento() {
             }
 
         },
-        error: function(error) {
+        error: function (error) {
             console.log(error);
             // $('#output').html('Bummer: there was an error!'); 
         },
@@ -521,7 +521,7 @@ function aPagarSelecionado() {
 }
 
 
-$('#pag_valor').change(function() {
+$('#pag_valor').change(function () {
 
     let valSelecionado = document.getElementById('valSelecionado').value;
     let cadPagValor = document.getElementById('pag_valor').value;
@@ -545,7 +545,7 @@ function getEditSubgrupo(Paramentro) {
         url: base_url + "api/financeiro/exibir/subgrupo/" + Paramentro,
         type: "GET",
         dataType: "json",
-        success: function(dado) {
+        success: function (dado) {
             console.log(dado);
             $modalTitleSubgrupo.text(`ATUALIZANDO A SUBGRUPO ${dado.cad_subgrupo}`);
             $codSubgrupo.val(dado.cod_subgrupo);
@@ -573,24 +573,24 @@ function setNewSubgrupo() {
 }
 
 function SalvaSubGrupos() {
-    $("#formSubgrupo").submit(function(e) {
+    $("#formSubgrupo").submit(function (e) {
         e.preventDefault();
     });
 
     $.validator.setDefaults({
-        submitHandler: function() {
+        submitHandler: function () {
             $.ajax({
                 url: $('#formSubgrupo').attr('action'),
                 type: "POST",
                 data: $('#formSubgrupo').serialize(),
                 dataType: "json",
-                beforeSend: function() {
+                beforeSend: function () {
                     document.getElementById("SalvarSubGrupo").disabled = true;
                 },
-                success: function(response) {
+                success: function (response) {
                     respostaSwalFire(response)
                 },
-                error: function() {
+                error: function () {
                     document.getElementById("SalvarSubGrupo").disabled = false;
                 }
             });
@@ -615,21 +615,21 @@ function SalvaSubGrupos() {
             },
         },
         errorElement: 'span',
-        errorPlacement: function(error, element) {
+        errorPlacement: function (error, element) {
             error.addClass('invalid-feedback');
             element.closest('.form-group').append(error);
         },
-        highlight: function(element, errorClass, validClass) {
+        highlight: function (element, errorClass, validClass) {
             $(element).addClass('is-invalid');
         },
-        unhighlight: function(element, errorClass, validClass) {
+        unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass('is-invalid');
         }
     });
 }
 
 function getGrupoOption() {
-    $.get(base_url + 'api/financeiro/exibir/grupos', {}, function(response) {
+    $.get(base_url + 'api/financeiro/exibir/grupos', {}, function (response) {
         options = '<option value="">SELECIONE UM GRUPO</option>';
         for (var i = 0; i < response.length; i++) {
             options += '<option value="' + response[i].cod_grupo + '">' + response[i].cad_grupo + '</option>';
@@ -645,7 +645,7 @@ function getEditGrupo(Paramentro) {
         "url": base_url + "api/financeiro/exibir/grupo/" + Paramentro,
         "type": "GET",
         "dataType": "json",
-        success: function(dado) {
+        success: function (dado) {
             console.log(dado);
             document.getElementById('modalTitleGrupo').innerHTML = 'ATUALIZANDO O GRUPO ' + dado.cad_grupo;
             $('#cod_grupo').val(dado.cod_grupo);
@@ -676,24 +676,24 @@ function setNewGrupo() {
 }
 
 function SalvaGrupos() {
-    $("#formGrupo").submit(function(e) {
+    $("#formGrupo").submit(function (e) {
         e.preventDefault();
     });
 
     $.validator.setDefaults({
-        submitHandler: function() {
+        submitHandler: function () {
             $.ajax({
                 url: $('#formGrupo').attr('action'),
                 type: "POST",
                 data: $('#formGrupo').serialize(),
                 dataType: "json",
-                beforeSend: function() {
+                beforeSend: function () {
                     document.getElementById("SalvarGrupo").disabled = true;
                 },
-                success: function(response) {
+                success: function (response) {
                     respostaSwalFire(response)
                 },
-                error: function() {
+                error: function () {
                     document.getElementById("SalvarGrupo").disabled = false;
                 }
             });
@@ -724,14 +724,14 @@ function SalvaGrupos() {
             },
         },
         errorElement: 'span',
-        errorPlacement: function(error, element) {
+        errorPlacement: function (error, element) {
             error.addClass('invalid-feedback');
             element.closest('.form-group').append(error);
         },
-        highlight: function(element, errorClass, validClass) {
+        highlight: function (element, errorClass, validClass) {
             $(element).addClass('is-invalid');
         },
-        unhighlight: function(element, errorClass, validClass) {
+        unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass('is-invalid');
         }
     });
@@ -758,7 +758,7 @@ function getCancelar(Paramentro, Codigo) {
 // SUBGRUPOS CLASSIFICAÇÃO RECEITA E DESPESAS
 
 function getContasOption(url, placeholder) {
-    $.get(url, {}, function(response) {
+    $.get(url, {}, function (response) {
         var options = '<option value="">' + placeholder + '</option>';
         for (var i = 0; i < response.length; i++) {
             options += '<option value="' + response[i].cod_subgrupo + '">' + response[i].cad_subgrupo + '</option>';
@@ -803,7 +803,7 @@ function receberCheckbox() {
     $('#valSelecionado').val(formatMoneyBR(saldo));
     $('#pag_valor').val(formatMoneyBR(saldo));
 
-    var searchIDs = $("input:checkbox:checked").map(function() {
+    var searchIDs = $("input:checkbox:checked").map(function () {
         return this.value;
     }).toArray();
 

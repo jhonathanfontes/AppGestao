@@ -8,20 +8,24 @@ trait FinanceiroTrait
     {
         try {
             if ($codigo != null) {
-                $model = new \App\Models\Financeiro\ContaPagarModel();
-                return $model->getContaPagar($codigo);
+                $model = new \App\Models\Financeiro\ContaModel();
+                return $model->getConta()
+                    ->where('fin_conta.id', $codigo)
+                    ->first();
             }
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
     }
 
-    public function setContaPagarFornecedorSelecionado(int $codPessoa = null)
+    public function setContaPessoaSelecionado(int $codPessoa = null)
     {
         try {
             if ($codPessoa != null) {
-                $model = new \App\Models\Financeiro\ContaPagarModel();
-                return $model->getContaPagarFornecedor($codPessoa)->findAll();
+                $model = new \App\Models\Financeiro\ContaModel();
+                return $model->getConta()
+                    ->where('fin_conta.pessoa_id', $codPessoa)
+                    ->findAll();
             }
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -33,7 +37,7 @@ trait FinanceiroTrait
     {
         try {
             if ($codigo != null) {
-                $model = new \App\Models\Financeiro\ContaReceberModel();
+                $model = new \App\Models\Financeiro\ContaModel();
                 return $model->getContaReceber($codigo);
             }
         } catch (\Throwable $th) {
@@ -45,7 +49,7 @@ trait FinanceiroTrait
     {
         try {
             if ($codPessoa != null) {
-                $model = new \App\Models\Financeiro\ContaReceberModel();
+                $model = new \App\Models\Financeiro\ContaModel();
                 return $model->getContaReceberCliente($codPessoa)->findAll();
             }
         } catch (\Throwable $th) {
@@ -70,8 +74,8 @@ trait FinanceiroTrait
         try {
             $model = new \App\Models\Venda\CaixaModel();
             return $model->select('pdv_caixa.*, use_abertura.use_nome as use_abertura, use_fechamento.use_nome as use_fechamento')
-                ->join('cad_usuario as use_abertura', 'use_abertura.id_usuario = pdv_caixa.abertura_user_id', 'LEFT')
-                ->join('cad_usuario as use_fechamento', 'use_fechamento.id_usuario = pdv_caixa.fechamento_user_id', 'LEFT')
+                ->join('cad_usuario as use_abertura', 'use_abertura.id = pdv_caixa.created_user_id', 'LEFT')
+                ->join('cad_usuario as use_fechamento', 'use_fechamento.id = pdv_caixa.fec_user_id', 'LEFT')
                 ->where('situacao', 'A')
                 ->findAll();
         } catch (\Throwable $th) {
@@ -82,7 +86,7 @@ trait FinanceiroTrait
     public function getSubgrupos()
     {
         try {
-            $subgrupoModel  = new \App\Models\Financeiro\SubGrupoModel();
+            $subgrupoModel = new \App\Models\Financeiro\SubGrupoModel();
             return $subgrupoModel->rertunSubgrupoGrupo();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -93,7 +97,7 @@ trait FinanceiroTrait
     {
         try {
 
-            $caixaModel         = new \App\Models\Venda\CaixaModel();
+            $caixaModel = new \App\Models\Venda\CaixaModel();
 
             return $caixaModel->select('pdv_caixa.*, use_abertura.use_nome as use_abertura, use_fechamento.use_nome as use_fechamento')
                 ->join('cad_usuario as use_abertura', 'use_abertura.id_usuario = pdv_caixa.abertura_user_id', 'LEFT')
@@ -107,7 +111,7 @@ trait FinanceiroTrait
     {
         try {
 
-            $caixaModel         = new \App\Models\Venda\CaixaModel();
+            $caixaModel = new \App\Models\Venda\CaixaModel();
             $atributos = [
                 'pdv_caixa.id_caixa as cod_caixa',
                 'pdv_caixa.cai_abertura_saldo as saldo_inicial',
@@ -127,7 +131,7 @@ trait FinanceiroTrait
     {
         try {
 
-            $vendaModel  = new \App\Models\Venda\VendaModel();
+            $vendaModel = new \App\Models\Venda\VendaModel();
 
             $atributos = [
                 'pdv_venda.id_venda AS cod_venda',
@@ -159,7 +163,7 @@ trait FinanceiroTrait
     public function resumoRetirada()
     {
         try {
-            $movimentacaoModel  = new \App\Models\Financeiro\MovimentacaoModel();
+            $movimentacaoModel = new \App\Models\Financeiro\MovimentacaoModel();
             return $movimentacaoModel->getMovimentacaoRetiradas();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -169,7 +173,7 @@ trait FinanceiroTrait
     public function resumoDevolucao()
     {
         try {
-            $devolucaoModel  = new \App\Models\Venda\DevolucaoModel();
+            $devolucaoModel = new \App\Models\Venda\DevolucaoModel();
             return $devolucaoModel->getDevolucoes()
                 ->where('pdv_devolucao.situacao', 2);
         } catch (\Throwable $th) {
@@ -180,7 +184,7 @@ trait FinanceiroTrait
     public function resumoCaixaRecebimentos()
     {
         try {
-            $contaReceberModel  = new \App\Models\Financeiro\ContaReceberModel();
+            $contaReceberModel = new \App\Models\Financeiro\ContaReceberModel();
             return $contaReceberModel->resumoReceberCaixa();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -190,7 +194,7 @@ trait FinanceiroTrait
     public function listarReceberCaixaRecebimento($cod_orcamento = null)
     {
         try {
-            $contaReceberModel  = new \App\Models\Financeiro\ContaReceberModel();
+            $contaReceberModel = new \App\Models\Financeiro\ContaReceberModel();
             return $contaReceberModel->getContaReceberCaixa($cod_orcamento);
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -200,7 +204,7 @@ trait FinanceiroTrait
     public function listarMovimentoCaixaRecebimento($cod_orcamento = null)
     {
         try {
-            $movimentacaoModel  = new \App\Models\Financeiro\MovimentacaoModel();
+            $movimentacaoModel = new \App\Models\Financeiro\MovimentacaoModel();
             return $movimentacaoModel
                 ->whereIn('situacao', ['1', '2'])
                 ->where('orcamento_id', $cod_orcamento)
@@ -213,7 +217,7 @@ trait FinanceiroTrait
     public function resumoCaixaPagamentos()
     {
         try {
-            $contaReceberModel  = new \App\Models\Financeiro\ContaPagarModel();
+            $contaReceberModel = new \App\Models\Financeiro\ContaPagarModel();
             return $contaReceberModel->resumoPagamentoCaixa();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -223,7 +227,7 @@ trait FinanceiroTrait
     public function resumoMovimentoCaixa()
     {
         try {
-            $movimentacaoModel  = new \App\Models\Financeiro\MovimentacaoModel();
+            $movimentacaoModel = new \App\Models\Financeiro\MovimentacaoModel();
             return $movimentacaoModel->getSuplementoSangriaCaixa();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -233,7 +237,7 @@ trait FinanceiroTrait
     public function listarVendasAReceber()
     {
         try {
-            $vendaModel  = new \App\Models\Venda\VendaModel();
+            $vendaModel = new \App\Models\Venda\VendaModel();
             return $vendaModel->getListarVendas();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -243,7 +247,7 @@ trait FinanceiroTrait
     public function listarVendaPDV()
     {
         try {
-            $vendaModel  = new \App\Models\Venda\VendaModel();
+            $vendaModel = new \App\Models\Venda\VendaModel();
             return $vendaModel->getListarVendas();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -253,7 +257,7 @@ trait FinanceiroTrait
     public function listarOrcamentos()
     {
         try {
-            $vendaModel  = new \App\Models\Venda\OrcamentoModel();
+            $vendaModel = new \App\Models\Venda\OrcamentoModel();
             return $vendaModel->listarOrcamentos();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -263,7 +267,7 @@ trait FinanceiroTrait
     public function listarDetalhes()
     {
         try {
-            $detalheModel  = new \App\Models\Estoque\DetalheModel();
+            $detalheModel = new \App\Models\Estoque\DetalheModel();
             return $detalheModel->listarDetalhes();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -273,7 +277,7 @@ trait FinanceiroTrait
     public function listarFormaPagamento()
     {
         try {
-            $vendaModel  = new \App\Models\Configuracao\FormaPagamentoModel();
+            $vendaModel = new \App\Models\Configuracao\FormaPagamentoModel();
             return $vendaModel->select('id_forma, for_descricao');
         } catch (\Throwable $th) {
             return $th->getMessage();

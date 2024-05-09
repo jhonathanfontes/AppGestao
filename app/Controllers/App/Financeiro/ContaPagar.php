@@ -30,13 +30,15 @@ class ContaPagar extends BaseController
 
     public function viewFornecedor(int $codPessoa = null)
     {
-        $contaPagarSelecionado    = $this->setContaPagarFornecedorSelecionado($codPessoa);
+        $contaPagarSelecionado    = $this->setContaPessoaSelecionado($codPessoa);
         $pessoaSelecionada          = $this->setPessoaSelecionado($codPessoa);
 
         if ($contaPagarSelecionado == null) {
             session()->setFlashdata('MsnError', "A CONTA A PAGAR DO FORNECEDOR $pessoaSelecionada->pes_nome, NÃO FOI LOCALIZADA!");
             return $this->response->redirect(site_url('app/financeiro/contapagar'));
         }
+
+        // dd($this->setCaixasAbertos());
 
         $data = [
             'card_title'    => 'CONTA A PAGAR ' . $pessoaSelecionada->pes_nome,

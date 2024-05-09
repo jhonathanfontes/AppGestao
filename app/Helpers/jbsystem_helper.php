@@ -151,6 +151,18 @@ function formatValorBD($valor)
     return $valor;
 }
 
+function completeComZero($codigo, $quantidade = 6)
+{
+    $currentLength = strlen($codigo);
+    $zerosToAdd = $quantidade - $currentLength;
+
+    if ($zerosToAdd <= 0) {
+        return $codigo; // No need to add zeros
+    }
+
+    return str_repeat('0', $zerosToAdd) . $codigo;
+}
+
 function formatDataBR($data)
 {
     return (new \DateTimeImmutable($data))->format('d/m/Y');

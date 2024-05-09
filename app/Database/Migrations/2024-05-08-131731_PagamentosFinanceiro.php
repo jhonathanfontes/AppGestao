@@ -149,15 +149,15 @@ class PagamentosFinanceiro extends Migration
 
         $this->forge->addPrimaryKey('id');
 
-        $this->forge->addForeignKey('caixa_id', 'pdv_caixa', 'id', 'CASCADE', 'NO ACTION', 'fk_pessoa_movimentacao');
-        $this->forge->addForeignKey('orcamento_id', 'pdv_orcamento', 'id', 'CASCADE', 'NO ACTION', 'fk_vendedor_movimentacao');
-        $this->forge->addForeignKey('conta_id', 'fin_conta', 'id', 'CASCADE', 'NO ACTION', 'fk_conta_movimentacao');
-        $this->forge->addForeignKey('forma_id', 'pdv_formapag', 'id', 'CASCADE', 'NO ACTION', 'fk_formapag_movimentacao');
+        $this->forge->addForeignKey('caixa_id', 'pdv_caixa', 'id', 'CASCADE', 'NO ACTION', 'fk_pessoa_finMovimentacao');
+        $this->forge->addForeignKey('orcamento_id', 'pdv_orcamento', 'id', 'CASCADE', 'NO ACTION', 'fk_vendedor_finMovimentacao');
+        $this->forge->addForeignKey('conta_id', 'fin_conta', 'id', 'CASCADE', 'NO ACTION', 'fk_conta_finMovimentacao');
+        $this->forge->addForeignKey('forma_id', 'pdv_formapag', 'id', 'CASCADE', 'NO ACTION', 'fk_formapag_finMovimentacao');
 
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_movimentacao');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_movimentacao');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_movimentacao');
-        $this->forge->addForeignKey('can_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_can_user_movimentacao');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_finMovimentacao');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_finMovimentacao');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_finMovimentacao');
+        $this->forge->addForeignKey('can_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_can_user_finMovimentacao');
 
         $this->forge->createTable('fin_movimentacao', false, ['ENGINE' => 'InnoDB']);
     }
