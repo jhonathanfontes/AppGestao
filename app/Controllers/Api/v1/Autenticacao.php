@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\v1\Configuracao;
+namespace App\Controllers\Api\v1;
 
 use App\Controllers\BaseController;
 use App\Models\Configuracao\UsuarioModel;
@@ -65,18 +65,17 @@ class Autenticacao extends BaseController
             ];
             return json_encode($resposta);
         } else {
+
             $use_email = $this->request->getPost('credencial');
             $use_password = $this->request->getPost('password');
 
             $autenticacao = service('autenticacao');
+
             $login = $autenticacao->login($use_email, $use_password);
 
             if ($login) {
                 
                 $usuario = $autenticacao->usuarioLogado();
-
-                dd($usuario);
-
                 $msg_usuairo = ($usuario->cad_sexo == 'F') ? 'SEJA BEM VINDA SENHORA ' . strtoupper($usuario->cad_apelido) : 'SEJA BEM VINDO SENHOR ' . strtoupper($usuario->cad_apelido);
 
                 $resposta = [

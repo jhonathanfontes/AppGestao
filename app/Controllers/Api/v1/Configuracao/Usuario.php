@@ -51,6 +51,7 @@ class Usuario extends ApiController
 
         return $this->response->setJSON($response);
     }
+    
     public function save()
     {
         if (!$this->request->isAJAX()) {

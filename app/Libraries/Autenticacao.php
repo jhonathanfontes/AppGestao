@@ -6,31 +6,23 @@ class Autenticacao
 {
     private $usuario;
     private $usuarioModel;
-    private $permissaoModel;
+    // private $permissaoModel;
 
     public function __construct()
     {
         $this->usuarioModel = new \App\Models\Configuracao\UsuarioModel();
-        $this->permissaoModel = new \App\Models\Configuracao\PermissaoModel();
+        // $this->permissaoModel = new \App\Models\Configuracao\PermissaoModel();
     }
 
     public function login(string $email, string $password): bool
     {
-        $usuario = $this->usuarioModel->getUsuarioEmail($email);
-
-        if ($usuario === null) {
-            return false;
-        }
-
-        if ($usuario->verificaPassword($password) == false) {
-            return false;
-        }
-
+        $usuario = $this->usuarioModel->getUsuarioCredencial($email, $password);    
+        
         if ($usuario->status <> 1) {
             return false;
         }
 
-        $this->logaUsuario($usuario);
+        $this->logarUsuario($usuario);
 
         return true;
     }
@@ -64,7 +56,7 @@ class Autenticacao
         return $this->usuarioLogado() !== null;
     }
 
-    private function logaUsuario(object $usuario): void
+    private function logarUsuario(object $usuario): void
     {
         $session = session();
 
@@ -72,16 +64,20 @@ class Autenticacao
 
         $_SESSION['__ci_last_regenerate'] = time(); // UTILIZEM essa instrução que o efeito é o mesmo e funciona perfeitamente.
 
-        $session->set('jb_usuarioID', $usuario->id_usuario);
+        $session->set('isLogged', true);
+        $session->set('jb_usuarioID', $usuario->id);
+        $session->set('jb_usuarioEmail', $usuario->use_email);
+        $session->set('jb_usuarioApelido', $usuario->use_apelido);
+        $session->set('jb_usuarioPermissao', $usuario->permissao_id);
     }
 
     private function usuarioLogadoSession()
     {
-        if (session()->has('jb_usuarioID') == false) {
+        if (session()->has('isLogged') == false) {
             return null;
         }
 
-        $usuario = $this->usuarioModel->find(session()->get('jb_usuarioID'));
+        $usuario = $this->usuarioModel->getUsuarioId(session()->get('jb_usuarioID'));
 
         if ($usuario == null || $usuario->status <> 1) {
             return null;
@@ -90,12 +86,12 @@ class Autenticacao
         return $usuario;
     }
 
-    private function isAdmin(): bool
-    {
-        $admin = $this->permissaoModel->getPermissaoAdmin(session()->get('jb_usuarioID'));
-        if ($admin == null) {
-            return false;
-        }
-        return true;
-    }
+    // private function isAdmin(): bool
+    // {
+    //     $admin = $this->permissaoModel->getPermissaoAdmin(session()->get('jb_usuarioID'));
+    //     if ($admin == null) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
 }

@@ -43,23 +43,21 @@ class UsuarioModel extends Model
         return $data;
     }
 
-    public function getUsuario(int $user_id = null)
+    public function getUsuarioCredencial($credencial = null, $password = null)
     {
-        $atributos = [
-            'id',
-            'use_nome',
-            'use_apelido',
-            'use_username',
-            'use_email',
-            'use_telefone',
-            'use_avatar',
-            'use_sexo',
-            'status',
-            'permissao_id',
-        ];
-        return $this->select($atributos)
-            ->where('id', $user_id)
+        $usuario = $this->where('use_email', $credencial)
+            ->orWhere('use_cpf', $credencial)
             ->first();
+            
+            if (is_null($usuario)) {
+                return false;
+            }
+
+            if (!password_verify($password, $usuario->use_password)) {
+                return false;
+            }
+
+            return $usuario;
     }
 
     public function getDadosUsuario(int $user_id = null)
