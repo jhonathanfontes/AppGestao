@@ -63,19 +63,19 @@ class ContaFinanceiro extends Migration
                 'null' => true,
             ],
             'fin_valor' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'null' => true,
             ],
             'fin_recebido' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'null' => true,
             ],
             'fin_cancelado' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'null' => true,
             ],
             'fin_saldo' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'null' => true,
             ],
             'fin_quitado' => [

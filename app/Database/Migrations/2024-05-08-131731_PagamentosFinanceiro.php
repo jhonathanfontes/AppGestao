@@ -71,7 +71,7 @@ class PagamentosFinanceiro extends Migration
                 'null' => true,
             ],
             'mov_valor' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'mov_data' => [

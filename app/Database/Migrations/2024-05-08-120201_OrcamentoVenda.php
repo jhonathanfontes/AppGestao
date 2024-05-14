@@ -53,27 +53,27 @@ class OrcamentoVenda extends Migration
                 'default' => 0
             ],
             'valor1_bruto' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'valor1_desconto' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'valor1_total' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'valor2_bruto' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'valor2_desconto' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'valor2_total' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'situacao' => [

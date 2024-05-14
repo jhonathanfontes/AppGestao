@@ -17,123 +17,123 @@ class FinanceiroCaixa extends Migration
                 'auto_increment' => true,
             ],
             'moeda_01' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'moeda_05' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'moeda_10' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'moeda_25' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'moeda_50' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'moeda_1' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'total_meda' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'cedula_2' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'cedula_5' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'cedula_10' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'cedula_20' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'cedula_50' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'cedula_100' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'total_cedula' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'total' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_moeda_01' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_moeda_05' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_moeda_10' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_moeda_25' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_moeda_50' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_moeda_1' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_total_meda' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_cedula_2' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_cedula_5' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_cedula_10' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_cedula_20' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_cedula_50' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_cedula_100' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_total_cedula' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'f_total' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'fec_user_id' => [

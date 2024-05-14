@@ -49,27 +49,27 @@ class OrcamentoVendaDetalhe extends Migration
                 'default' => 0
             ],
             'val1_un' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'val1_unad' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'val1_total' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'val2_un' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'val2_unad' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'val2_total' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'situacao' => [

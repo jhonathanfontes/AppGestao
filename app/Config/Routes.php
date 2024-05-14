@@ -30,7 +30,7 @@ $routes->group('api', function ($routes) {
         $routes->get('cnpj/(:segment)', 'Valida::cnpj/$1');
     });
 
-    $routes->group('autenticacao', ['namespace' => 'App\Controllers\Api\v1\Configuracao'], function ($routes) {
+    $routes->group('autenticacao', ['namespace' => 'App\Controllers\Api\v1'], function ($routes) {
         $routes->post('login', 'Autenticacao::login');
         $routes->post('forgot/password', 'Autenticacao::esqueciSenha');
         $routes->post('recover/password', 'Autenticacao::RedefinirSenha');

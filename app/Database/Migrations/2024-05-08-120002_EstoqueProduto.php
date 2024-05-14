@@ -34,7 +34,7 @@ class EstoqueProduto extends Migration
                 'null' => true,
             ],
             'est_valor' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'est_qtn' => [
@@ -42,15 +42,15 @@ class EstoqueProduto extends Migration
                 'default' => 0
             ],
             'est_custo' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'est_desconto' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'est_total' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'default' => 0
             ],
             'situacao' => [

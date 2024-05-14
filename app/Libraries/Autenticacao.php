@@ -16,8 +16,12 @@ class Autenticacao
 
     public function login(string $email, string $password): bool
     {
-        $usuario = $this->usuarioModel->getUsuarioCredencial($email, $password);    
-        
+        $usuario = $this->usuarioModel->getUsuarioCredencial($email, $password);
+
+        if (empty($usuario)) {
+            return false;
+        }
+
         if ($usuario->status <> 1) {
             return false;
         }
@@ -37,7 +41,7 @@ class Autenticacao
         if ($this->usuario === null) {
             $this->usuario = $this->usuarioLogadoSession();
         }
-   
+
 
         $usuario = $this->usuarioModel->getUsuarioId(session()->get('jb_usuarioID'));
 

@@ -29,11 +29,11 @@ class LocalServicoProjeto extends Migration
                 'null' => true,
             ],
             'lsv_valor' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'null' => true,
             ], 
             'lsv_total' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'null' => true,
             ],           
             'lsv_observacao' => [

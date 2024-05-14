@@ -23,14 +23,6 @@ class SubGrupoFinanceiro extends Migration
             'grupo_id' => [
                 'type' => 'INT',
             ],
-            'gru_tipo' => [
-                'type' => 'VARCHAR',
-                'constraint' => '1',
-            ],
-            'gru_classificacao' => [
-                'type' => 'INT',
-                'null' => true,
-            ],
             'status' => [
                 'type' => 'INT',
                 'default' => 1,

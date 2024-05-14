@@ -40,15 +40,15 @@ class Produto extends Migration
                 'null' => true,
             ],
             'valor_custo' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'null' => true,
             ],
             'valor_venda1' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'null' => true,
             ],
             'valor_venda2' => [
-                'type' => 'double',
+                'type' => 'double precision',
                 'null' => true,
             ],
             'estoque' => [
