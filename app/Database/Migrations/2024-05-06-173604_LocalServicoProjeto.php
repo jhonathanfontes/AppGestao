@@ -39,6 +39,7 @@ class LocalServicoProjeto extends Migration
             'lsv_observacao' => [
                 'type' => 'VARCHAR',
                 'constraint' => '200',
+                'null' => true,
             ],
             'status' => [
                 'type' => 'INT',

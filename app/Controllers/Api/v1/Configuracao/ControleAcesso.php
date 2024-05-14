@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\Configuracao;
+namespace App\Controllers\Api\v1\Configuracao;
 
 use App\Controllers\Api\ApiController;
 use App\Entities\Configuracao\Permissao;
@@ -20,7 +20,7 @@ class ControleAcesso extends ApiController
     public function __construct()
     {
         $this->permissaoModel = new \App\Models\Configuracao\PermissaoModel();
-        $this->auditoriaModel = new \App\Models\AuditoriaModel();
+        // $this->auditoriaModel = new \App\Models\AuditoriaModel();
     }
 
     public function getCarregaTabela()
@@ -57,9 +57,9 @@ class ControleAcesso extends ApiController
         $entityPermissao = new Permissao($data);
 
         if (!empty($this->request->getPost('cod_grupodeacesso'))) {
-            $data['id_permissao'] = $this->request->getPost('cod_grupodeacesso');
+            $data['id'] = $this->request->getPost('cod_grupodeacesso');
 
-            $result = $this->buscaRegistro404($data['id_permissao']);
+            $result = $this->buscaRegistro404($data['id']);
             $result->fill($data);
 
             if ($result->hasChanged() == false) {
@@ -111,7 +111,7 @@ class ControleAcesso extends ApiController
         $i = 0;
         foreach ($permissoes as $row) {
             $dados[$i] = array(
-                'cod_permisao'      => $row['id_permissao'],
+                'cod_permisao'      => $row['id'],
                 'cad_descricao'     => $row['per_descricao']
             );
             $i++;
@@ -137,7 +137,7 @@ class ControleAcesso extends ApiController
         $permissoe = $permissaoModel->find($cod_permisao);
 
         $dados = array(
-            'cod_permisao'      => $permissoe['id_permissao'],
+            'cod_permisao'      => $permissoe['id'],
             'cad_descricao'     => $permissoe['per_descricao']
         );
 
@@ -158,7 +158,7 @@ class ControleAcesso extends ApiController
         $i = 0;
         foreach ($permissoes as $row) {
             $dados[$i] = array(
-                'cod_permisao'      => $row['id_permissao'],
+                'cod_permisao'      => $row['id'],
                 'cad_descricao'     => $row['per_descricao']
             );
             $i++;
@@ -188,7 +188,7 @@ class ControleAcesso extends ApiController
             $cad_descricao  = $this->request->getPost('cad_descricao');
 
             $dados = array(
-                'id_permissao'      => $cod_permisao,
+                'id'      => $cod_permisao,
                 'per_descricao'     => $cad_descricao
             );
 
@@ -246,7 +246,7 @@ class ControleAcesso extends ApiController
         $i = 0;
         foreach ($permissoes as $row) {
             $dados[$i] = array(
-                'cod_permisao'      => $row['id_permissao'],
+                'cod_permisao'      => $row['id'],
                 'cad_descricao'     => $row['per_descricao']
             );
             $i++;
@@ -314,7 +314,7 @@ class ControleAcesso extends ApiController
 
     public function show($paramentro)
     {
-        $return = $this->permissaoModel->where('id_permissao', $paramentro)
+        $return = $this->permissaoModel->where('id', $paramentro)
             ->first();
         return $this->response->setJSON($return);
     }

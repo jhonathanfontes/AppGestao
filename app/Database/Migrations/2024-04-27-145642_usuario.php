@@ -27,6 +27,7 @@ class Usuario extends Migration
             'use_cpf' => [
                 'type' => 'VARCHAR',
                 'constraint' => '20',
+                'null' => true,
             ],
             'use_password' => [
                 'type' => 'VARCHAR',
@@ -39,6 +40,7 @@ class Usuario extends Migration
             'use_telefone' => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',
+                'null' => true,
             ],
             'use_avatar' => [
                 'type' => 'VARCHAR',

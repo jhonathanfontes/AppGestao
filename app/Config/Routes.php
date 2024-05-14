@@ -37,7 +37,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Cadastro
-    $routes->group('cadastro', ['namespace' => 'App\Controllers\Api\v1\Cadastro'], function ($routes) {
+    $routes->group('cadastro', ['namespace' => 'App\Controllers\Api\v1\Cadastro', 'filter' => 'auth'], function ($routes) {
 
         // Carrega dados da TableDatta
         $routes->group('tabela', function ($routes) {
@@ -145,7 +145,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Cadastro
-    $routes->group('projeto', ['namespace' => 'App\Controllers\Api\v1\Projeto'], function ($routes) {
+    $routes->group('projeto', ['namespace' => 'App\Controllers\Api\v1\Projeto', 'filter' => 'auth'], function ($routes) {
 
         // Carrega dados da TableDatta
         $routes->group('tabela', function ($routes) {
@@ -253,7 +253,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Configuracao
-    $routes->group('configuracao', ['namespace' => 'App\Controllers\Api\v1\Configuracao'], function ($routes) {
+    $routes->group('configuracao', ['namespace' => 'App\Controllers\Api\v1\Configuracao', 'filter' => 'auth'], function ($routes) {
 
         // Carrega dados da TableDatta
         $routes->group('tabela', function ($routes) {
@@ -355,7 +355,7 @@ $routes->group('api', function ($routes) {
     });
 
     // Modulo API Financeiro
-    $routes->group('financeiro', ['namespace' => 'App\Controllers\Api\v1\Financeiro'], function ($routes) {
+    $routes->group('financeiro', ['namespace' => 'App\Controllers\Api\v1\Financeiro', 'filter' => 'auth'], function ($routes) {
 
         // Carrega dados da TableData
         $routes->group('tabela', function ($routes) {

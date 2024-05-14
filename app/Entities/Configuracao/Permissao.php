@@ -8,18 +8,18 @@ class Permissao extends Entity
 
 {
     protected $attributes = [
-        'id_permissao'     => null,
+        'id'     => null,
         'per_descricao'    => null
     ];
 
     protected $datamap = [
-        'cod_permissao'  => 'id_permissao',
+        'cod_permissao'  => 'id',
         'cad_permissao'  => 'per_descricao'
     ];
 
     public function auditoriaInsertAtributos()
     {
-        $attribute['cod_permissao'] = $this->id_permissao;
+        $attribute['cod_permissao'] = $this->id;
 
         $attribute['cad_permissao'] = [
             'new' => $this->per_descricao
@@ -31,7 +31,7 @@ class Permissao extends Entity
     {
         $attribute = [];
 
-        $attribute['cod_permissao'] = $this->id_permissao;
+        $attribute['cod_permissao'] = $this->id;
 
         if ($this->hasChanged('per_descricao')) {
             $attribute['cad_permissao'] = [

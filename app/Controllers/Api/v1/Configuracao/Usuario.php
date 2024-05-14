@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\Configuracao;
+namespace App\Controllers\Api\v1\Configuracao;
 
 use App\Controllers\Api\ApiController;
 use App\Entities\Configuracao\Usuario as EntitiesUsuario;
@@ -21,7 +21,7 @@ class Usuario extends ApiController
 
     public function getCarregaTabela()
     {
-        $response = array();
+        $response['data'] = array();
 
         $result = $this->usuarioModel->findAll();
 
@@ -181,7 +181,7 @@ class Usuario extends ApiController
 
     private function buscaRegistro404(int $codigo = null)
     {
-        if (!$codigo || !$resultado = $this->usuarioModel->getUsuario($codigo)) {
+        if (!$codigo || !$resultado = $this->usuarioModel->getUsuarioId($codigo)) {
             return null;
         }
         return $resultado;

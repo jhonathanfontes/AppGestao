@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\Configuracao;
+namespace App\Controllers\Api\v1\Configuracao;
 
 use App\Controllers\Api\ApiController;
 use App\Models\AuditoriaModel;
