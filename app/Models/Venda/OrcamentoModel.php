@@ -8,58 +8,57 @@ class OrcamentoModel extends Model
 {
 
 	protected $table = 'pdv_orcamento';
-	protected $primaryKey = 'id_orcamento';
+	protected $primaryKey = 'id';
 	protected $returnType = \App\Entities\Venda\Orcamento::class;
 	protected $useSoftDeletes = false;
 	protected $allowedFields = [
+		'orc_tipoorcamento',
+		'orc_tipopagamento',
 		'pessoa_id',
-		'venda_tipo',
-		'orc_tipo',
-		'orc_data',
-		'orc_pdv',
+		'orc_dataorcamento',
 		'vendedor_id',
 		'qtn_produto',
 		'qtn_devolvido',
-		'qtn_restante',
-		'valor_bruto',
-		'valor_desconto',
-		'valor_total',
-		'vpo_bruto',
-		'vpo_desconto',
-		'vpo_total',
-		'serial',
+		'qtn_saldo',
+		'valor1_bruto',
+		'valor1_desconto',
+		'valor1_total',
+		'valor2_bruto',
+		'valor2_desconto',
+		'valor2_total',
 		'situacao',
+		'serial',
 		'created_user_id',
 		'updated_user_id',
 		'deleted_user_id'
 	];
 
-	protected $createdField  = 'created_at';
-	protected $updatedField  = 'updated_at';
-	protected $deletedField  = 'deleted_at';
+	protected $createdField = 'created_at';
+	protected $updatedField = 'updated_at';
+	protected $deletedField = 'deleted_at';
 
 	protected $beforeInsert = ['insertAuditoria'];
 	protected $beforeUpdate = ['updateAuditoria'];
 
 	protected function insertAuditoria(array $data)
 	{
-		$data['data']['situacao'] 		 = 4;
-		$data['data']['orc_data'] 		 = getDatetimeAtual();
+		$data['data']['situacao'] = 4;
+		$data['data']['orc_dataorcamento'] = getDatetimeAtual();
 		$data['data']['created_user_id'] = getUsuarioID();
-		$data['data']['created_at'] 	 = getDatetimeAtual();
+		$data['data']['created_at'] = getDatetimeAtual();
 		return $data;
 	}
 
 	protected function updateAuditoria(array $data)
 	{
 		$data['data']['updated_user_id'] = getUsuarioID();
-		$data['data']['updated_at'] 	 = getDatetimeAtual();
+		$data['data']['updated_at'] = getDatetimeAtual();
 		return $data;
 	}
 
 	public function returnSave(int $codigo = null)
 	{
-		return $this->select('id_orcamento, venda_tipo, serial')->find($codigo);
+		return $this->select('id, orc_tipoorcamento as venda_tipo, serial')->find($codigo);
 	}
 
 	public function arquivarRegistro(int $codigo = null)
@@ -75,11 +74,11 @@ class OrcamentoModel extends Model
 	{
 		if ($cod_orcamento != null && $serial != null) {
 
-			$data['situacao'] 		 = 2;
+			$data['situacao'] = 2;
 			$data['updated_user_id'] = getUsuarioID();
-			$data['updated_at'] 	 = getDatetimeAtual();
+			$data['updated_at'] = getDatetimeAtual();
 
-			return $this->where('id_orcamento', $cod_orcamento)
+			return $this->where('id', $cod_orcamento)
 				->where('serial', $serial)
 				->set($data)
 				->update();
@@ -91,11 +90,11 @@ class OrcamentoModel extends Model
 	{
 		if ($cod_orcamento != null && $serial != null) {
 
-			$data['situacao'] 		 = 4;
+			$data['situacao'] = 4;
 			$data['updated_user_id'] = getUsuarioID();
-			$data['updated_at'] 	 = getDatetimeAtual();
+			$data['updated_at'] = getDatetimeAtual();
 
-			return $this->where('id_orcamento', $cod_orcamento)
+			return $this->where('id', $cod_orcamento)
 				->where('serial', $serial)
 				->set($data)
 				->update();
@@ -107,11 +106,11 @@ class OrcamentoModel extends Model
 	{
 		if ($cod_orcamento != null) {
 
-			$data['situacao'] 		 = 2;
+			$data['situacao'] = 2;
 			$data['updated_user_id'] = getUsuarioID();
-			$data['updated_at'] 	 = getDatetimeAtual();
+			$data['updated_at'] = getDatetimeAtual();
 
-			return $this->where('id_orcamento', $cod_orcamento)
+			return $this->where('id', $cod_orcamento)
 				->set($data)
 				->update();
 		}
@@ -123,7 +122,7 @@ class OrcamentoModel extends Model
 		if ($codigo != null) {
 			$data['status'] = 0;
 			$data['deleted_user_id'] = getUsuarioID();
-			$data['deleted_at'] 	 = getDatetimeAtual();
+			$data['deleted_at'] = getDatetimeAtual();
 			return $this->update($codigo, $data);
 		}
 		return false;
@@ -132,19 +131,19 @@ class OrcamentoModel extends Model
 	public function returnOrcamentos()
 	{
 		$atributos = [
-			'id_orcamento',
-			'venda_tipo',
-			'orc_tipo',
-			'orc_data',
+			'pdv_orcamento.id',
+			'orc_tipoorcamento as venda_tipo',
+			'orc_tipopagamento as orc_tipo',
+			'orc_dataorcamento',
 			'qtn_produto',
 			'qtn_devolvido',
-			'qtn_restante',
-			'valor_bruto',
-			'valor_desconto',
-			'valor_total',
-			'vpo_bruto',
-			'vpo_desconto',
-			'vpo_total',
+			'qtn_saldo',
+			'valor1_bruto',
+			'valor1_desconto',
+			'valor1_total',
+			'valor2_bruto',
+			'valor2_desconto',
+			'valor2_total',
 			'serial',
 			'situacao',
 			'cad_pessoa.pes_nome as pessoa',
@@ -152,8 +151,8 @@ class OrcamentoModel extends Model
 		];
 
 		$return = $this->select($atributos)
-			->join('cad_pessoa', 'cad_pessoa.id_pessoa = pdv_orcamento.pessoa_id')
-			->join('cad_usuario', 'cad_usuario.id_usuario = pdv_orcamento.created_user_id');
+			->join('cad_pessoa', 'cad_pessoa.id = pdv_orcamento.pessoa_id', 'LEFT')
+			->join('cad_usuario', 'cad_usuario.id = pdv_orcamento.created_user_id', 'LEFT');
 
 		return $return;
 	}
@@ -161,22 +160,21 @@ class OrcamentoModel extends Model
 	public function listarOrcamentos()
 	{
 		$atributos = [
-			'pdv_orcamento.id_orcamento AS cod_orcamento',
+			'pdv_orcamento.id AS cod_orcamento',
 			'pdv_orcamento.pessoa_id AS cod_pessoa',
 			'cad_pessoa.pes_nome AS pessoa',
-			'pdv_orcamento.venda_tipo AS venda_tipo',
-			'pdv_orcamento.orc_tipo AS cod_tipo',
-			'pdv_orcamento.orc_data AS orc_data',
-			'pdv_orcamento.orc_pdv AS orc_pdv',
+			'pdv_orcamento.orc_tipoorcamento AS venda_tipo',
+			'pdv_orcamento.orc_tipopagamento AS cod_tipo',
+			'pdv_orcamento.orc_dataorcamento AS orc_data',
 			'pdv_orcamento.qtn_produto AS qtn_produto',
 			'pdv_orcamento.qtn_devolvido AS qtn_devolvido',
-			'pdv_orcamento.qtn_restante AS qtn_restante',
-			'pdv_orcamento.valor_bruto AS valor_bruto',
-			'pdv_orcamento.valor_desconto AS valor_desconto',
-			'pdv_orcamento.valor_total AS valor_total',
-			'pdv_orcamento.vpo_bruto AS praz_bruto',
-			'pdv_orcamento.vpo_desconto AS praz_desconto',
-			'pdv_orcamento.vpo_total AS praz_total',
+			'pdv_orcamento.qtn_saldo AS qtn_saldo',
+			'pdv_orcamento.valor1_bruto',
+			'pdv_orcamento.valor1_desconto',
+			'pdv_orcamento.valor1_total',
+			'pdv_orcamento.valor2_bruto',
+			'pdv_orcamento.valor2_desconto',
+			'pdv_orcamento.valor2_total',
 			'pdv_orcamento.serial AS serial',
 			'pdv_orcamento.situacao AS situacao',
 			'pdv_orcamento.created_user_id AS cod_usuario',
@@ -187,10 +185,10 @@ class OrcamentoModel extends Model
 		];
 
 		$return = $this->select($atributos)
-			->join('cad_pessoa', 'cad_pessoa.id_pessoa = pdv_orcamento.pessoa_id')
-			->join('cad_usuario', 'cad_usuario.id_usuario = pdv_orcamento.created_user_id')
-			->join('cad_vendedor', 'cad_vendedor.id_vendedor = pdv_orcamento.vendedor_id', 'LEFT')
-			->join('cad_usuario as use_vendedor', 'use_vendedor.id_usuario = cad_vendedor.usuario_id', 'LEFT');
+			->join('cad_pessoa', 'cad_pessoa.id = pdv_orcamento.pessoa_id')
+			->join('cad_usuario', 'cad_usuario.id = pdv_orcamento.created_user_id')
+			->join('cad_vendedor', 'cad_vendedor.id = pdv_orcamento.vendedor_id', 'LEFT')
+			->join('cad_usuario as use_vendedor', 'use_vendedor.id = cad_vendedor.usuario_id', 'LEFT');
 
 		return $return;
 	}

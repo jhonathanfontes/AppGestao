@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?= isset(dadosEmpresa()->emp_fantasia) ? setTitle(dadosEmpresa()->emp_fantasia) : setTitle('JB System'); ?></title>
+    <title><?= isset(dadosEmpresa()->emp_fantasia) ? setTitle(dadosEmpresa()->emp_fantasia) : setTitle('JB System'); ?>
+    </title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Google Font: Source Sans Pro -->
@@ -64,8 +65,9 @@
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block"><?= // getUsuarioLogado()->use_apelido
-                            'ADMINISTRADOR'; ?> </a>
+                        <a href="#"
+                            class="d-block"><?= (session()->has('isLogged') == true) ? session()->get('jb_usuarioApelido') : 'SEM USUARIO'; ?>
+                        </a>
                     </div>
                 </div>
                 <!-- Sidebar Menu -->

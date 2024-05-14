@@ -153,6 +153,9 @@ class ContaReceber extends ApiController
 
         if ($cod_receber == '') {
 
+            $usuarioID      = getUsuarioID();
+            $datetimeAtual  = getDatetimeAtual();
+
             if ($this->request->getPost("cad_vencimento") != null) {
                 $des_vencimento = explode("-", $cad_vencimento);
                 $dia = $des_vencimento[2];
@@ -190,6 +193,8 @@ class ContaReceber extends ApiController
                 $data[$x]['rec_saldo']          = $parc_valor;
                 $data[$x]['situacao']           = 2;
                 $data[$x]['serial']             = $serial;
+                $data[$x]['created_user_id']    = $usuarioID;
+                $data[$x]['created_at']         = $datetimeAtual;
             }
         } else {
 

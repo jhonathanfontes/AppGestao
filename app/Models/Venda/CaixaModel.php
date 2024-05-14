@@ -12,16 +12,16 @@ class CaixaModel extends Model
 	protected $returnType = \App\Entities\Venda\Caixa::class;
 	protected $useSoftDeletes = false;
 	protected $allowedFields = [
-		'abertura_user_id',
-		'cai_abertura_data',
-		'cai_abertura_saldo',
+		'created_user_id',
+		'created_at',
+		'total',
 		'moeda_01',
 		'moeda_05',
 		'moeda_10',
 		'moeda_25',
 		'moeda_50',
 		'moeda_1',
-		'total_meda',
+		'total_moeda',
 		'cedula_2',
 		'cedula_5',
 		'cedula_10',
@@ -30,9 +30,9 @@ class CaixaModel extends Model
 		'cedula_100',
 		'total_cedula',
 
-		'cai_fechamento_data',
-		'cai_fechamento_saldo',
-		'fechamento_user_id',
+		'fec_user_id',
+		'fec_at',
+		'f_total',
 		'f_moeda_01',
 		'f_moeda_05',
 		'f_moeda_10',
@@ -56,17 +56,35 @@ class CaixaModel extends Model
 		'reabertura_motivo'
 	];
 
+	
+	protected $beforeInsert = ['insertAuditoria'];
+	protected $beforeUpdate = ['updateAuditoria'];
+
+	protected function insertAuditoria(array $data)
+	{
+		$data['data']['created_user_id'] = getUsuarioID();
+		$data['data']['created_at'] 	 = getDatetimeAtual();
+		return $data;
+	}
+
+	protected function updateAuditoria(array $data)
+	{
+		$data['data']['updated_user_id'] = getUsuarioID();
+		$data['data']['updated_at'] 	 = getDatetimeAtual();
+		return $data;
+	}
+
 	public function getCaixas()
 	{
 		$response = $this->select('pdv_caixa.*, use_abertura.use_nome as use_abertura, use_fechamento.use_nome as use_fechamento')
-			->join('cad_usuario as use_abertura', 'use_abertura.id_usuario = pdv_caixa.abertura_user_id', 'LEFT')
-			->join('cad_usuario as use_fechamento', 'use_fechamento.id_usuario = pdv_caixa.fechamento_user_id', 'LEFT')
+			->join('cad_usuario as use_abertura', 'use_abertura.id = pdv_caixa.created_user_id', 'LEFT')
+			->join('cad_usuario as use_fechamento', 'use_fechamento.id = pdv_caixa.fec_user_id', 'LEFT')
 			->findAll();
 		return $response;
 	}
 
 	public function returnSave(int $codigo = null)
 	{
-		return $this->select('id_caixa, serial')->find($codigo);
+		return $this->select('id, serial')->find($codigo);
 	}
 }

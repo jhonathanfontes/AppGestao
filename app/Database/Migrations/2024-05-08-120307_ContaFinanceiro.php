@@ -86,6 +86,7 @@ class ContaFinanceiro extends Migration
             'fin_documento' => [
                 'type' => 'VARCHAR',
                 'constraint' => '200',
+                'null' => true,
             ],
             'situacao' => [
                 'type' => 'INT',

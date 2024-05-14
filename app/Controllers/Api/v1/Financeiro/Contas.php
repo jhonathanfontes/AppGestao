@@ -64,7 +64,7 @@ class Contas extends ApiController
                 ->where('fin_conta.fin_tipoconta', '1')
                 ->findAll();
 
-            //return $this->response->setJSON($result);
+            // return $this->response->setJSON($result);
             if ($result) {
                 foreach ($result as $key => $value) {
 
@@ -210,6 +210,9 @@ class Contas extends ApiController
 
         if ($cod_conta == '') {
 
+            $usuarioID = getUsuarioID();
+            $datetimeAtual = getDatetimeAtual();
+
             if ($this->request->getPost("cad_vencimento") != null) {
                 $des_vencimento = explode("-", $cad_vencimento);
                 $dia = $des_vencimento[2];
@@ -248,6 +251,8 @@ class Contas extends ApiController
                 $data[$x]['fin_saldo'] = $parc_valor;
                 $data[$x]['situacao'] = 1;
                 $data[$x]['serial'] = $serial;
+                $data[$x]['created_user_id'] = $usuarioID;
+                $data[$x]['created_at'] = $datetimeAtual;
             }
         } else {
 

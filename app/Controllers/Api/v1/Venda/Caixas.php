@@ -28,7 +28,7 @@ class Caixas extends ApiController
     public function __construct()
     {
         $this->caixaModel               = new \App\Models\Venda\CaixaModel();
-        $this->auditoriaModel           = new \App\Models\AuditoriaModel();
+        // $this->auditoriaModel           = new \App\Models\AuditoriaModel();
         $this->movimentoFinanceiroModel = new \App\Models\Financeiro\MovimentacaoModel();
         $this->validation               =  \Config\Services::validation();
     }
@@ -45,12 +45,12 @@ class Caixas extends ApiController
             $ops .= '<a class="btn btn-xs btn-outline-info ml-2" href="pessoas/view/' . $value->serial . '"><span class="fas fa-print"></span> IMPRIMIR </a>';
 
             $response['data'][$key] = array(
-                esc($value->id_caixa),
-                formatDataTimeBR(esc($value->cai_abertura_data)),
-                formatValorBR(esc($value->cai_abertura_saldo)),
+                esc($value->id),
+                formatDataTimeBR(esc($value->created_at)),
+                formatValorBR(esc($value->total)),
                 esc($value->use_abertura),
-                formatDataTimeBR(esc($value->cai_fechamento_data)),
-                formatValorBR(esc($value->cai_fechamento_saldo)),
+                formatDataTimeBR(esc($value->fec_at)),
+                formatValorBR(esc($value->f_total)),
                 esc($value->use_fechamento),
                 $ops,
             );
@@ -71,9 +71,9 @@ class Caixas extends ApiController
         $data['status']             = $this->request->getPost('status');
 
         if (!empty($this->request->getPost('cod_caixa'))) {
-            $data['id_caixa'] = $this->request->getPost('cod_caixa');
+            $data['id'] = $this->request->getPost('cod_caixa');
 
-            $result = $this->buscaRegistro404($data['id_caixa']);
+            $result = $this->buscaRegistro404($data['id']);
             $result->fill($data);
 
             if ($result->hasChanged() == false) {
@@ -129,14 +129,14 @@ class Caixas extends ApiController
 
     public function show($paramentro)
     {
-        $return = $this->caixaModel->where('id_caixa', $paramentro)
+        $return = $this->caixaModel->where('id', $paramentro)
             ->first();
         return $this->response->setJSON($return);
     }
 
     public function arquivar($paramentro = null)
     {
-        $caixa = $this->caixaModel->where('id_caixa', $paramentro)
+        $caixa = $this->caixaModel->where('id', $paramentro)
             ->where('status <>', 0)
             ->where('status <>', 3)
             ->first();
@@ -199,7 +199,7 @@ class Caixas extends ApiController
                 $data['moeda_25']     = (empty($this->request->getPost('moeda_25')) ? 0 : $this->request->getPost('moeda_25'));
                 $data['moeda_50']     = (empty($this->request->getPost('moeda_50')) ? 0 : $this->request->getPost('moeda_50'));
                 $data['moeda_1']      = (empty($this->request->getPost('moeda_1')) ? 0 : $this->request->getPost('moeda_1'));
-                $data['total_meda']   = (empty($this->request->getPost('total_meda')) ? 0 : $this->request->getPost('total_meda'));
+                $data['total_moeda']   = (empty($this->request->getPost('total_moeda')) ? 0 : $this->request->getPost('total_moeda'));
 
                 $data['cedula_2']     = (empty($this->request->getPost('cedula_2')) ? 0 : $this->request->getPost('cedula_2'));
                 $data['cedula_5']     = (empty($this->request->getPost('cedula_5')) ? 0 : $this->request->getPost('cedula_5'));
@@ -209,16 +209,14 @@ class Caixas extends ApiController
                 $data['cedula_100']   = (empty($this->request->getPost('cedula_100')) ? 0 : $this->request->getPost('cedula_100'));
                 $data['total_cedula'] = (empty($this->request->getPost('total_cedula')) ? 0 : $this->request->getPost('total_cedula'));
 
-                $data['situacao']   = 'A';
+                $data['situacao']   = '1';
 
                 $data['cai_logged'] = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 
                 // $data['cai_logged'] = $this->request->getPost('cai_logged');
 
-                $data['cai_abertura_data']    = getDatetimeAtual();
-                $data['cai_abertura_saldo']   = (empty($this->request->getPost('abrir_valor')) ? 0 : $this->request->getPost('abrir_valor'));
-                $data['abertura_user_id']     = getUsuarioID();
-
+                $data['total']   = (empty($this->request->getPost('abrir_valor')) ? 0 : $this->request->getPost('abrir_valor'));
+              
                 // return $this->response->setJSON($data);
 
                 if ($this->caixaModel->save($data)) {
@@ -231,7 +229,7 @@ class Caixas extends ApiController
                         'menssagem' => [
                             'status' => 'success',
                             'heading' => 'REGISTRO SALVO COM SUCESSO!',
-                            'description' => "O CAIXA Nº $return->id_caixa FOI ABERTO!"
+                            'description' => "O CAIXA Nº $return->id FOI ABERTO!"
                         ]
                     ]);
                 }
@@ -262,7 +260,7 @@ class Caixas extends ApiController
 
                 $caixa = $this->caixaModel->where('serial', $caixa_serial)->first();
 
-                if ($caixa->id_caixa != $caixa_codigo) {
+                if ($caixa->id != $caixa_codigo) {
                     return $this->response->setJSON([
                         'status' => true,
                         'menssagem' => [
@@ -273,7 +271,7 @@ class Caixas extends ApiController
                     ]);
                 }
 
-                if ($caixa->situacao != 'A') {
+                if ($caixa->situacao != '1') {
                     return $this->response->setJSON([
                         'status' => true,
                         'menssagem' => [
@@ -286,7 +284,7 @@ class Caixas extends ApiController
 
                 // return $this->response->setJSON($this->request->getPost());
 
-                $data['id_caixa']       = $caixa->id_caixa;
+                $data['id']       = $caixa->id;
 
                 $data['f_moeda_01']     = (empty($this->request->getPost('moeda_01')) ? 0 : $this->request->getPost('moeda_01'));
                 $data['f_moeda_05']     = (empty($this->request->getPost('moeda_05')) ? 0 : $this->request->getPost('moeda_05'));
@@ -294,7 +292,7 @@ class Caixas extends ApiController
                 $data['f_moeda_25']     = (empty($this->request->getPost('moeda_25')) ? 0 : $this->request->getPost('moeda_25'));
                 $data['f_moeda_50']     = (empty($this->request->getPost('moeda_50')) ? 0 : $this->request->getPost('moeda_50'));
                 $data['f_moeda_1']      = (empty($this->request->getPost('moeda_1')) ? 0 : $this->request->getPost('moeda_1'));
-                $data['f_total_meda']   = (empty($this->request->getPost('total_meda')) ? 0 : $this->request->getPost('total_meda'));
+                $data['f_total_moeda']   = (empty($this->request->getPost('total_moeda')) ? 0 : $this->request->getPost('total_moeda'));
 
                 $data['f_cedula_2']     = (empty($this->request->getPost('cedula_2')) ? 0 : $this->request->getPost('cedula_2'));
                 $data['f_cedula_5']     = (empty($this->request->getPost('cedula_5')) ? 0 : $this->request->getPost('cedula_5'));
@@ -304,11 +302,11 @@ class Caixas extends ApiController
                 $data['f_cedula_100']   = (empty($this->request->getPost('cedula_100')) ? 0 : $this->request->getPost('cedula_100'));
                 $data['f_total_cedula'] = (empty($this->request->getPost('total_cedula')) ? 0 : $this->request->getPost('total_cedula'));
 
-                $data['situacao']       = 'F';
+                $data['situacao']       = '2';
 
-                $data['cai_fechamento_data']    = getDatetimeAtual();
-                $data['cai_fechamento_saldo']   = (empty($this->request->getPost('fecha_valor')) ? 0 : $this->request->getPost('fecha_valor'));
-                $data['fechamento_user_id']     = getUsuarioID();
+                $data['fec_at']    = getDatetimeAtual();
+                $data['f_total']   = (empty($this->request->getPost('fecha_valor')) ? 0 : $this->request->getPost('fecha_valor'));
+                $data['fec_user_id']     = getUsuarioID();
 
                 // return $this->response->setJSON($data);
 
@@ -319,7 +317,7 @@ class Caixas extends ApiController
                         'menssagem' => [
                             'status' => 'success',
                             'heading' => 'REGISTRO SALVO COM SUCESSO!',
-                            'description' => "O CAIXA Nº $caixa->id_caixa FOI FECHADO!"
+                            'description' => "O CAIXA Nº $caixa->id FOI FECHADO!"
                         ]
                     ]);
                 }
@@ -411,7 +409,7 @@ class Caixas extends ApiController
                 $user_id        = getUsuarioID();
                 $datatime       = getDatetimeAtual();
 
-                // $pag['caixa_id']        = $caixa->id_caixa;
+                // $pag['caixa_id']        = $caixa->id;
                 // $pag['id_formapac']     = $pag_forma;
                 // $pag['conta_id']        = $pag_conta;
                 // $pag['bandeira_id']     = $pag_bandeira;
@@ -432,7 +430,7 @@ class Caixas extends ApiController
 
                 switch ($pag_forma) {
                     case '1':
-                        $dados['caixa_id']              = $caixa->id_caixa;
+                        $dados['caixa_id']              = $caixa->id;
                         $dados['orcamento_id']          = $cod_orcamento;
                         $dados['forma_id']              = $pag_conta;
                         $dados['mov_caixatipo']         = 3;
@@ -453,7 +451,7 @@ class Caixas extends ApiController
                         break;
                     case '2':
 
-                        $dados['caixa_id']              = $caixa->id_caixa;
+                        $dados['caixa_id']              = $caixa->id;
                         $dados['orcamento_id']          = $cod_orcamento;
                         $dados['forma_id']              = $formaPagamento->id_forma;
                         $dados['mov_caixatipo']         = 3;
@@ -489,7 +487,7 @@ class Caixas extends ApiController
                         $valor_comissao = number_format(($valor * ($parcelamento->fpc_taxa / 100)), 2, '.', '');
                         $valor_banco    = number_format(($valor - $valor_comissao), 2, '.', '');
 
-                        $dados['caixa_id']              = $caixa->id_caixa;
+                        $dados['caixa_id']              = $caixa->id;
                         $dados['orcamento_id']          = $cod_orcamento;
                         $dados['forma_id']              = $pag_conta;
                         $dados['mov_caixatipo']         = 3;
@@ -536,7 +534,7 @@ class Caixas extends ApiController
                             $valor_comissao = number_format(($valor * ($parcelamento->fpc_taxa / 100)), 2, '.', '');
                             $valor_banco    = number_format(($valor - $valor_comissao), 2, '.', '');
 
-                            $dados[$x]['caixa_id']              = $caixa->id_caixa;
+                            $dados[$x]['caixa_id']              = $caixa->id;
                             $dados[$x]['orcamento_id']          = $cod_orcamento;
                             $dados[$x]['forma_id']              = $pag_conta;
                             $dados[$x]['mov_caixatipo']         = 3;
@@ -672,7 +670,7 @@ class Caixas extends ApiController
 
                 $caixa = $this->caixaModel->where('serial', $caixa_serial)->first();
 
-                if ($caixa->id_caixa != $caixa_codigo) {
+                if ($caixa->id != $caixa_codigo) {
                     return $this->response->setJSON([
                         'status' => true,
                         'menssagem' => [
@@ -683,7 +681,7 @@ class Caixas extends ApiController
                     ]);
                 }
 
-                if ($caixa->situacao != 'A') {
+                if ($caixa->situacao != '1') {
                     return $this->response->setJSON([
                         'status' => true,
                         'menssagem' => [
@@ -694,10 +692,10 @@ class Caixas extends ApiController
                     ]);
                 }
 
-                $data['caixa_id']               = $caixa->id_caixa;
+                $data['caixa_id']               = $caixa->id;
                 $data['forma_id']               = $this->request->getPost('sup_forma');
                 $data['mov_caixatipo']          = 1;
-                $data['mov_descricao']          = 'SUPLEMENTO Nº ' . $caixa->id_caixa;
+                $data['mov_descricao']          = 'SUPLEMENTO Nº ' . $caixa->id;
                 $data['mov_formapagamento']     = 1;
                 $data['mov_es']                 = 'E';
                 $data['mov_valor']              = formatValorBD($this->request->getPost('sup_valor'));
@@ -714,7 +712,7 @@ class Caixas extends ApiController
                         'menssagem' => [
                             'status' => 'success',
                             'heading' => 'REGISTRO SALVO COM SUCESSO!',
-                            'description' => "O CAIXA Nº $caixa->id_caixa FOI SUPLEMENTADO!"
+                            'description' => "O CAIXA Nº $caixa->id FOI SUPLEMENTADO!"
                         ]
                     ]);
                 }
@@ -748,7 +746,7 @@ class Caixas extends ApiController
 
                 $caixa = $this->caixaModel->where('serial', $caixa_serial)->first();
 
-                if ($caixa->id_caixa != $caixa_codigo) {
+                if ($caixa->id != $caixa_codigo) {
                     return $this->response->setJSON([
                         'status' => true,
                         'menssagem' => [
@@ -759,7 +757,7 @@ class Caixas extends ApiController
                     ]);
                 }
 
-                if ($caixa->situacao != 'A') {
+                if ($caixa->situacao != '1') {
                     return $this->response->setJSON([
                         'status' => true,
                         'menssagem' => [
@@ -770,10 +768,10 @@ class Caixas extends ApiController
                     ]);
                 }
 
-                $data['caixa_id']               = $caixa->id_caixa;
+                $data['caixa_id']               = $caixa->id;
                 $data['forma_id']               = $this->request->getPost('san_forma');
                 $data['mov_caixatipo']          = 2;
-                $data['mov_descricao']          = (($forma_sagria == 1) ? 'SANGRIA Nº ' : 'DEPOSITO DO CAIXA Nº ') . $caixa->id_caixa;
+                $data['mov_descricao']          = (($forma_sagria == 1) ? 'SANGRIA Nº ' : 'DEPOSITO DO CAIXA Nº ') . $caixa->id;
                 $data['mov_formapagamento']     = 1;
                 $data['mov_es']                 = 'S';
                 $data['mov_valor']              = formatValorBD($this->request->getPost('san_valor'));
@@ -802,7 +800,7 @@ class Caixas extends ApiController
                         'menssagem' => [
                             'status' => 'success',
                             'heading' => 'REGISTRO SALVO COM SUCESSO!',
-                            'description' => "O CAIXA Nº $caixa->id_caixa FOI SUPLEMENTADO!"
+                            'description' => "O CAIXA Nº $caixa->id FOI SUPLEMENTADO!"
                         ]
                     ]);
                 }

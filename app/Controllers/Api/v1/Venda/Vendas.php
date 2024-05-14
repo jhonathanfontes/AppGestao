@@ -34,10 +34,10 @@ class Vendas extends ApiController
         $this->orcamentoModel = new \App\Models\Venda\OrcamentoModel();
         $this->vendaModel = new \App\Models\Venda\VendaModel();
         $this->produtoGradeModel = new \App\Models\Cadastro\ProdutoGradeModel();
-        $this->estoqueModel = new \App\Models\Estoque\DetalheModel();
+        // $this->estoqueModel = new \App\Models\Estoque\DetalheModel();
         $this->vendedorModel = new \App\Models\Configuracao\VendedorModel();
 
-        $this->auditoriaModel = new \App\Models\AuditoriaModel();
+        // $this->auditoriaModel = new \App\Models\AuditoriaModel();
         $this->validation = \Config\Services::validation();
     }
 
@@ -47,9 +47,8 @@ class Vendas extends ApiController
 
         $result = $this->orcamentoModel->returnOrcamentos()
             ->where('situacao', 4)
-            ->where('venda_tipo', 1)
-            ->where('orc_pdv <>', 'S')
-            ->where('orc_data >=', date("Y-m-d", strtotime("- 30 days")))
+            ->where('orc_tipoorcamento', 1)
+            ->where('orc_dataorcamento >=', date("Y-m-d", strtotime("- 30 days")))
             ->findAll();
 
         foreach ($result as $key => $value) {
@@ -58,10 +57,10 @@ class Vendas extends ApiController
             $ops .= '<a href="venda/imprimir/' . $value->serial . '" class="btn btn-xs btn-primary ml-2" target="_blank"><samp class="fas fa-print"></samp> IMPRIMIR</a>';
 
             $response['data'][$key] = array(
-                esc($value->id_orcamento) . '/' . date("Y", strtotime(esc($value->orc_data))),
+                esc($value->id) . '/' . date("Y", strtotime(esc($value->orc_dataorcamento))),
                 abreviaNome(esc($value->pessoa)),
                 esc($value->usuario),
-                formatDataBR(esc($value->orc_data)),
+                formatDataTimeBR(esc($value->orc_dataorcamento)),
                 $ops,
             );
         }
@@ -146,7 +145,7 @@ class Vendas extends ApiController
                     $data['serial'] = $cod_pessoa . getSerial();
                 }
 
-                $data['vendedor_id'] = $this->vendedorModel->getVendedorLogado()->id_vendedor;
+                // $data['vendedor_id'] = $this->vendedorModel->getVendedorLogado()->id_vendedor;
 
                 $entityOrcamento = new Orcamento($data);
 
@@ -156,7 +155,7 @@ class Vendas extends ApiController
 
                 if ($this->orcamentoModel->save($data)) {
 
-                    $this->auditoriaModel->insertAuditoria('venda', 'orcamento', $metedoAuditoria, $dataAuditoria);
+                    // $this->auditoriaModel->insertAuditoria('venda', 'orcamento', $metedoAuditoria, $dataAuditoria);
                     $return = $this->orcamentoModel->returnSave($this->orcamentoModel->getInsertID());
 
                     return $this->response->setJSON([

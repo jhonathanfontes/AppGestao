@@ -40,8 +40,8 @@ class FinanceiroCaixa extends Migration
                 'type' => 'double precision',
                 'default' => 0
             ],
-            'total_meda' => [
-                'type' => 'double precision',
+            'total_moeda' => [
+                'type' => 'double',
                 'default' => 0
             ],
             'cedula_2' => [
@@ -100,8 +100,8 @@ class FinanceiroCaixa extends Migration
                 'type' => 'double precision',
                 'default' => 0
             ],
-            'f_total_meda' => [
-                'type' => 'double precision',
+            'f_total_moeda' => [
+                'type' => 'double',
                 'default' => 0
             ],
             'f_cedula_2' => [

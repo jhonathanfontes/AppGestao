@@ -32,7 +32,6 @@ trait FinanceiroTrait
         }
     }
 
-
     public function setContaReceberSelecionado(int $codigo = null)
     {
         try {
@@ -76,7 +75,7 @@ trait FinanceiroTrait
             return $model->select('pdv_caixa.*, use_abertura.use_nome as use_abertura, use_fechamento.use_nome as use_fechamento')
                 ->join('cad_usuario as use_abertura', 'use_abertura.id = pdv_caixa.created_user_id', 'LEFT')
                 ->join('cad_usuario as use_fechamento', 'use_fechamento.id = pdv_caixa.fec_user_id', 'LEFT')
-                ->where('situacao', 'A')
+                ->where('situacao', '1')
                 ->findAll();
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -100,8 +99,8 @@ trait FinanceiroTrait
             $caixaModel = new \App\Models\Venda\CaixaModel();
 
             return $caixaModel->select('pdv_caixa.*, use_abertura.use_nome as use_abertura, use_fechamento.use_nome as use_fechamento')
-                ->join('cad_usuario as use_abertura', 'use_abertura.id_usuario = pdv_caixa.abertura_user_id', 'LEFT')
-                ->join('cad_usuario as use_fechamento', 'use_fechamento.id_usuario = pdv_caixa.fechamento_user_id', 'LEFT');
+                ->join('cad_usuario as use_abertura', 'use_abertura.id = pdv_caixa.created_user_id', 'LEFT')
+                ->join('cad_usuario as use_fechamento', 'use_fechamento.id = pdv_caixa.fec_user_id', 'LEFT');
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
@@ -113,13 +112,13 @@ trait FinanceiroTrait
 
             $caixaModel = new \App\Models\Venda\CaixaModel();
             $atributos = [
-                'pdv_caixa.id_caixa as cod_caixa',
-                'pdv_caixa.cai_abertura_saldo as saldo_inicial',
-                '(select coalesce(sum(fm.mov_valor),0) from fin_movimentacao fm where fm.caixa_id = pdv_caixa.id_caixa and fm.situacao = 2 and fm.mov_caixatipo = 1) as suplemento',
-                '(select coalesce(sum(fm.mov_valor),0) from fin_movimentacao fm where fm.caixa_id = pdv_caixa.id_caixa and fm.situacao = 2 and fm.mov_formapagamento = 1 and fm.orcamento_id is not null) as vendas',
-                '(select coalesce(sum(fm.mov_valor),0) from fin_movimentacao fm where fm.caixa_id = pdv_caixa.id_caixa and fm.situacao = 2 and fm.mov_caixatipo = 2) as sagria',
-                '(select coalesce(sum(fm.mov_valor),0) from fin_movimentacao fm where fm.caixa_id = pdv_caixa.id_caixa and fm.situacao = 2 and fm.mov_formapagamento = 1 and (fm.pagar_id is not null or fm.folha_id is not null)) as pagamentos',
-                '(select coalesce(sum(fm.mov_valor),0) from fin_movimentacao fm where fm.caixa_id = pdv_caixa.id_caixa and fm.situacao = 2 and fm.mov_formapagamento = 1 and fm.receber_id is not null) as recebimentos'
+                'pdv_caixa.id as cod_caixa',
+                'pdv_caixa.total as saldo_inicial',
+                '(SELECT COALESCE(SUM(fm.mov_valor),0) FROM fin_movimentacao fm WHERE fm.caixa_id = pdv_caixa.id AND fm.situacao = 2 AND fm.mov_caixatipo = 1) AS suplemento',
+                '(SELECT COALESCE(SUM(fm.mov_valor),0) FROM fin_movimentacao fm WHERE fm.caixa_id = pdv_caixa.id AND fm.situacao = 2 AND fm.mov_formapagamento = 1 and fm.orcamento_id is not null) AS vendas',
+                '(SELECT COALESCE(SUM(fm.mov_valor),0) FROM fin_movimentacao fm WHERE fm.caixa_id = pdv_caixa.id AND fm.situacao = 2 AND fm.mov_caixatipo = 2) AS sagria',
+                '(SELECT COALESCE(SUM(fm.mov_valor),0) FROM fin_movimentacao fm WHERE fm.caixa_id = pdv_caixa.id AND fm.situacao = 2 AND fm.mov_formapagamento = 1 AND fm.mov_es = 2 and fm.conta_id is not null) AS pagamentos',
+                '(SELECT COALESCE(SUM(fm.mov_valor),0) FROM fin_movimentacao fm WHERE fm.caixa_id = pdv_caixa.id AND fm.situacao = 2 AND fm.mov_formapagamento = 1 AND fm.mov_es = 1 and fm.conta_id  is not null) AS recebimentos'
             ];
             return $caixaModel->select($atributos);
         } catch (\Throwable $th) {
@@ -134,7 +133,7 @@ trait FinanceiroTrait
             $vendaModel = new \App\Models\Venda\VendaModel();
 
             $atributos = [
-                'pdv_venda.id_venda AS cod_venda',
+                'pdv_venda.id AS cod_venda',
                 'pdv_venda.orcamento_id AS cod_orcamento',
                 'pdv_venda.caixa_id AS cod_caixa',
                 'cad_pessoa.pes_nome AS pessoa',
@@ -153,7 +152,7 @@ trait FinanceiroTrait
             return $vendaModel->select($atributos)
                 ->join('pdv_orcamento', 'pdv_orcamento.id_orcamento = pdv_venda.orcamento_id', 'LEFT')
                 ->join('cad_pessoa', 'cad_pessoa.id_pessoa = pdv_orcamento.pessoa_id', 'LEFT')
-                ->join('pdv_caixa', 'pdv_caixa.id_caixa = pdv_venda.caixa_id', 'LEFT')
+                ->join('pdv_caixa', 'pdv_caixa.id = pdv_venda.caixa_id', 'LEFT')
                 ->where('pdv_venda.situacao', 2);
         } catch (\Throwable $th) {
             return $th->getMessage();
@@ -184,8 +183,8 @@ trait FinanceiroTrait
     public function resumoCaixaRecebimentos()
     {
         try {
-            $contaReceberModel = new \App\Models\Financeiro\ContaReceberModel();
-            return $contaReceberModel->resumoReceberCaixa();
+            $contaModel = new \App\Models\Financeiro\ContaModel();
+            return $contaModel->resumoReceberCaixa();
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
@@ -194,8 +193,8 @@ trait FinanceiroTrait
     public function listarReceberCaixaRecebimento($cod_orcamento = null)
     {
         try {
-            $contaReceberModel = new \App\Models\Financeiro\ContaReceberModel();
-            return $contaReceberModel->getContaReceberCaixa($cod_orcamento);
+            $contaModel = new \App\Models\Financeiro\ContaModel();
+            return $contaModel->getContaReceberCaixa($cod_orcamento);
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
@@ -258,7 +257,7 @@ trait FinanceiroTrait
     {
         try {
             $vendaModel = new \App\Models\Venda\OrcamentoModel();
-            return $vendaModel->listarOrcamentos();
+            return $vendaModel->returnOrcamentos();
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
@@ -278,7 +277,7 @@ trait FinanceiroTrait
     {
         try {
             $vendaModel = new \App\Models\Configuracao\FormaPagamentoModel();
-            return $vendaModel->select('id_forma, for_descricao');
+            return $vendaModel->select('id, for_descricao');
         } catch (\Throwable $th) {
             return $th->getMessage();
         }

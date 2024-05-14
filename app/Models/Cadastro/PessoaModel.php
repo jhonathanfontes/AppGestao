@@ -45,6 +45,9 @@ class PessoaModel extends Model
 	protected $validationMessages = [];
 	protected $skipValidation     = true;
 
+	protected $beforeInsert = ['insertAuditoria'];
+	protected $beforeUpdate = ['updateAuditoria'];
+
 	protected function insertAuditoria(array $data)
 	{
 		$data['data']['created_user_id'] = getUsuarioID();

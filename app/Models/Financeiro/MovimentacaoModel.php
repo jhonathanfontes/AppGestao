@@ -52,14 +52,14 @@ class MovimentacaoModel extends Model
 	protected function insertAuditoria(array $data)
 	{
 		$data['data']['created_user_id'] = getUsuarioID();
-		$data['data']['created_at']      = getDatetimeAtual();
+		$data['data']['created_at'] = getDatetimeAtual();
 		return $data;
 	}
 
 	protected function updateAuditoria(array $data)
 	{
 		$data['data']['updated_user_id'] = getUsuarioID();
-		$data['data']['updated_at']      = getDatetimeAtual();
+		$data['data']['updated_at'] = getDatetimeAtual();
 		return $data;
 	}
 
@@ -76,11 +76,11 @@ class MovimentacaoModel extends Model
 	{
 		if ($cod_orcamento != null) {
 
-			$data['situacao']        = 0;
-			$data['deleted_status']  = 'A';
-			$data['can_data']        = getDatetimeAtual();
-			$data['can_motivo']      = 'CANCELAMENTO AUTOMATICO - VENDA RETORNADA PARA ORCAMENTO!';
-			$data['can_usuario_id']  = getUsuarioID();
+			$data['situacao'] = 0;
+			$data['deleted_status'] = 'A';
+			$data['can_data'] = getDatetimeAtual();
+			$data['can_motivo'] = 'CANCELAMENTO AUTOMATICO - VENDA RETORNADA PARA ORCAMENTO!';
+			$data['can_usuario_id'] = getUsuarioID();
 
 			return $this->where('orcamento_id', $cod_orcamento)
 				->where('serial', $serial)
@@ -95,7 +95,7 @@ class MovimentacaoModel extends Model
 	{
 		if ($cod_orcamento != null) {
 
-			$data['situacao']        = 2;
+			$data['situacao'] = 2;
 
 			return $this->where('orcamento_id', $cod_orcamento)
 				->where('serial', $serial)
@@ -109,10 +109,10 @@ class MovimentacaoModel extends Model
 	public function cancelarRegistro(int $codigo = null)
 	{
 		if ($codigo != null) {
-			$data['situacao'] 		= 0;
-			$data['can_motivo'] 	= 'PAGAMENTO DELETADO';
+			$data['situacao'] = 0;
+			$data['can_motivo'] = 'PAGAMENTO DELETADO';
 			$data['can_usuario_id'] = getUsuarioID();
-			$data['can_data']      	= getDatetimeAtual();
+			$data['can_data'] = getDatetimeAtual();
 			return $this->update($codigo, $data);
 		}
 		return false;
@@ -177,8 +177,9 @@ class MovimentacaoModel extends Model
 	public function getSuplementoSangriaCaixa()
 	{
 		$atributos = [
-			'fin_movimentacao.codigo AS codigo',
+			'fin_movimentacao.id AS codigo',
 			'fin_movimentacao.caixa_id AS cod_caixa',
+			'fin_movimentacao.mov_data AS data',
 			'fin_movimentacao.mov_caixatipo AS caixa_tipo',
 			'fin_movimentacao.mov_descricao AS descricao',
 			'if(fin_movimentacao.mov_caixatipo = 1,fin_movimentacao.mov_valor,NULL) AS supl_valor',

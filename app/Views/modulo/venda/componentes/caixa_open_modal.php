@@ -2,13 +2,13 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-pink">
-                <h4 class="modal-title">FECHAMENTO DO CAIXA <?= isset($caixa) ? 'Nº ' . $caixa->id_caixa : ''; ?></h4>
+                <h4 class="modal-title">FECHAMENTO DO CAIXA <?= isset($caixa) ? 'Nº ' . $caixa->id : ''; ?></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <?= form_open(base_url('/api/caixa/processar/fechamento'), ['method' => 'post', 'id' => 'formFechamentoCaixa']) ?>
-            <input name="caixa_codigo" value="<?= isset($caixa) ? $caixa->id_caixa : ''; ?>" hidden="hidden">
+            <input name="caixa_codigo" value="<?= isset($caixa) ? $caixa->id : ''; ?>" hidden="hidden">
             <input name="caixa_serial" value="<?= isset($caixa) ? $caixa->serial : ''; ?>" hidden="hidden">
             <div class="modal-body">
                 <div class="form-group col-12">
@@ -72,8 +72,8 @@
                     <div class="row">
                         <div class="form-group col-3">
                             <label for="">TOTAL MOEDAS</label>
-                            <input name="total_meda" id="total_moeda1" class="form-control" placeholder="R$ 0,00" hidden>
-                            <input name="total_meda" id="total_moeda2" class="form-control" placeholder="R$ 0,00" disabled>
+                            <input name="total_moeda" id="total_moeda1" class="form-control" placeholder="R$ 0,00" hidden>
+                            <input name="total_moeda" id="total_moeda2" class="form-control" placeholder="R$ 0,00" disabled>
                         </div>
                         <div class="form-group col-3">
                             <label for="">TOTAL CEDULAS</label>
@@ -104,12 +104,12 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h4 class="modal-title">SUPLEMENTAR O CAIXA <?= isset($caixa) ? 'Nº ' . $caixa->id_caixa : ''; ?></h4>
+                <h4 class="modal-title">SUPLEMENTAR O CAIXA <?= isset($caixa) ? 'Nº ' . $caixa->id : ''; ?></h4>
             </div>
             <div class="modal-body">
                 <?= form_open(base_url('/api/caixa/incluir/suplemento'), ['method' => 'post', 'id' => 'formIncluirSuplemento']) ?>
                 <div class="form-group col-12">
-                    <input name="caixa_codigo" id="caixa_codigo" value="<?= isset($caixa) ? $caixa->id_caixa : ''; ?>" hidden="hidden">
+                    <input name="caixa_codigo" id="caixa_codigo" value="<?= isset($caixa) ? $caixa->id : ''; ?>" hidden="hidden">
                     <input name="caixa_serial" value="<?= isset($caixa) ? $caixa->serial : ''; ?>" hidden="hidden">
                     <hr>
                     <div class="row">
@@ -118,7 +118,7 @@
                             <select name="sup_forma" class="form-control" required="required">
                                 <?php if (!empty($formaPagmento)) : ?>
                                     <?php foreach ($formaPagmento as $row) : ?>
-                                        <option value="<?= $row->id_forma ?>"><?= $row->for_descricao ?></option>
+                                        <option value="<?= $row->id ?>"><?= $row->for_descricao ?></option>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </select>
@@ -148,13 +148,13 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-danger">
-                <h4 class="modal-title">SANGRIA DO CAIXA <?= isset($caixa) ? 'Nº ' . $caixa->id_caixa : ''; ?></h4>
+                <h4 class="modal-title">SANGRIA DO CAIXA <?= isset($caixa) ? 'Nº ' . $caixa->id : ''; ?></h4>
             </div>
             <div class="modal-body">
                 <?= form_open(base_url('/api/caixa/incluir/sangria'), ['method' => 'post', 'id' => 'formIncluirSangria']) ?>
                 <form action="<?php echo base_url(); ?>caixa/incluir/" method="post">
                     <div class="form-group col-12">
-                        <input name="caixa_codigo" id="caixa_codigo" value="<?= isset($caixa) ? $caixa->id_caixa : ''; ?>" hidden="hidden">
+                        <input name="caixa_codigo" id="caixa_codigo" value="<?= isset($caixa) ? $caixa->id : ''; ?>" hidden="hidden">
                         <input name="caixa_serial" value="<?= isset($caixa) ? $caixa->serial : ''; ?>" hidden="hidden">
                         <hr>
                         <div class="row">
@@ -187,7 +187,7 @@
                                 <select name="san_forma" class="form-control" required="required">
                                     <?php if (!empty($formaPagmento)) : ?>
                                         <?php foreach ($formaPagmento as $row) : ?>
-                                            <option value="<?= $row->id_forma ?>"><?= $row->for_descricao ?></option>
+                                            <option value="<?= $row->id ?>"><?= $row->for_descricao ?></option>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
                                 </select>

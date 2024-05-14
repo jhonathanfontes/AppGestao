@@ -57,10 +57,10 @@ class PagamentosFinanceiro extends Migration
                 'comment' => '1 - Dinheiro, 2 - Transferencia, 3 - Cartao Debito, 4 - Cartao Credito, 5 - Boleto, 6 - Credito Financeiro',
             ],
             'mov_es' => [
-                'type' => 'VARCHAR',
+                'type' => 'INT',
                 'constraint' => '1',
                 'null' => true,
-                'comment' => 'E - Entrada no caixa, S - Saida do Caixa',
+                'comment' => '1 - Entrada no caixa, 2 - Saida do Caixa',
             ],
             'mov_parcela' => [
                 'type' => 'INT',

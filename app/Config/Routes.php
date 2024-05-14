@@ -15,11 +15,11 @@ $routes->group('autenticacao', ['namespace' => 'App\Controllers\App'], function 
     // Redirecionamento  para o Login
     $routes->addRedirect('/', 'autenticacao/login');
 
-    $routes->get('login', 'Autenticacao::index');
+    $routes->get('login', 'Autenticacao::index', ['filter' => 'autenticado']);
     $routes->get('logout', 'Autenticacao::logout');
 
-    $routes->get('forgot/password', 'Autenticacao::EsqueciSenha');
-    $routes->get('recover/password', 'Autenticacao::RedefinirSenha');
+    $routes->get('forgot/password', 'Autenticacao::EsqueciSenha', ['filter' => 'autenticado']);
+    $routes->get('recover/password', 'Autenticacao::RedefinirSenha', ['filter' => 'autenticado']);
 });
 
 // Rota Api
@@ -589,7 +589,7 @@ $routes->group('api', function ($routes) {
 
 // Rota app
 // $routes->group('app', ['filter' => 'login'], function ($routes) {
-$routes->group('app', function ($routes) {
+$routes->group('app', ['filter' => 'auth'], function ($routes) {
 
     // Redirecionamento  para o Dashboard
     $routes->addRedirect('/', 'app/dashboard');

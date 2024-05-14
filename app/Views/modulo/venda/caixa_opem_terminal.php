@@ -8,16 +8,19 @@
 <section class="content">
 	<!-- Default box -->
 
-	<?php if (isset($caixa->id_caixa) && $caixa->situacao === 'A') : ?>
+	<?php if (isset($caixa->id) && $caixa->situacao === '1'): ?>
 
 		<div class="card card-pink">
 			<div class="card-header">
 				<h2 class="card-title">CAIXA Nª
-					<?= (isset($caixa->id_caixa)) ? esc($caixa->id_caixa) : 'CAIXA NÃO LOCALIZADO'; ?></h2>
+					<?= (isset($caixa->id)) ? esc($caixa->id) : 'CAIXA NÃO LOCALIZADO'; ?>
+				</h2>
 				<div class="card-tools">
-					<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+					<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+						title="Collapse">
 						<i class="fas fa-minus"></i></button>
-					<button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+					<button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+						title="Remove">
 						<i class="fas fa-times"></i></button>
 				</div>
 			</div>
@@ -44,8 +47,8 @@
 <!-- /.content -->
 <section class="content">
 	<!-- Card Body - Formulario -->
-	<?php if (!empty($a_receber)) : ?>
-		<?php if (isset($caixa->id_caixa) && $caixa->situacao === 'A') : ?>
+	<?php if (!empty($a_receber)): ?>
+		<?php if (isset($caixa->id) && $caixa->situacao === 'A'): ?>
 			<div class="card card-pink">
 				<div class="card-header">
 					<h3 class="card-title">VENDAS A RECEBER</h3>
@@ -63,7 +66,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php foreach ($a_receber as $venda) : ?>
+								<?php foreach ($a_receber as $venda): ?>
 									<tr>
 										<td style="text-align: center;"><?= $venda->cod_venda ?></td>
 										<td style="text-align: center;"><?= $venda->pessoa ?></td>
@@ -72,7 +75,8 @@
 										<td width="150" style="text-align: center;">
 											<!-- <button class="btn btn-xs btn-danger mr-2" data-toggle="modal" data-target="#modalReceberVenda" onclick="getReceberVenda('<?= $venda->serial ?>')">
 												<samp class="far fa-edit"></samp> RECEBER </button> -->
-											<a href="<?= base_url('app/caixa/receber/' . $venda->serial); ?>" class="btn btn-primary btn-xs">
+											<a href="<?= base_url('app/caixa/receber/' . $venda->serial); ?>"
+												class="btn btn-primary btn-xs">
 												<samp class="far fa-edit"></samp> RECEBER </a>
 										</td>
 									</tr>
@@ -88,22 +92,28 @@
 	<div class="card card-pink">
 		<div class="card-body">
 			<div class="row">
-				<div class="col-4">
+				<div class="col-3">
 					<address>
-						Codigo Caixa :
-						<strong><?= (isset($caixa->id_caixa)) ? esc($caixa->id_caixa) : 'CAIXA NÃO LOCALIZADO'; ?></strong><br>
+						CAIXA :
+						<strong><?= (isset($caixa->id)) ? esc($caixa->id) : 'CAIXA NÃO LOCALIZADO'; ?></strong><br>
 					</address>
 				</div>
-				<div class="col-4">
+				<div class="col-3">
 					<address>
-						Aberto por: <strong>
+						ABERTO POR: <strong>
 							<?= (isset($caixa->use_abertura)) ? esc($caixa->use_abertura) : 'CAIXA NÃO LOCALIZADO'; ?></strong>
 					</address>
 				</div>
-				<div class="col-4">
+				<div class="col-3">
 					<address>
-						Aberto em : <strong>
-							<?= (isset($caixa->cai_abertura_data)) ? formatDataTimeBR($caixa->cai_abertura_data) : 'CAIXA NÃO LOCALIZADO'; ?></strong>
+						ABERTO EM : <strong>
+							<?= (isset($caixa->created_at)) ? formatDataTimeBR($caixa->created_at) : 'CAIXA NÃO LOCALIZADO'; ?></strong>
+					</address>
+				</div>
+				<div class="col-3">
+					<address>
+						TERMINAL :
+						<strong><?= (isset($hostname)) ? esc($hostname) : 'CAIXA NÃO LOCALIZADO'; ?></strong><br>
 					</address>
 				</div>
 			</div>
@@ -124,20 +134,26 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php if (!empty($res_movimento)) : ?>
+						<?php if (!empty($res_movimento)): ?>
 							<tr>
 								<td style="text-align: center;">
-									<?= 'R$ ' . number_format($res_movimento->saldo_inicial, 2, ',', '.') ?></td>
+									<?= 'R$ ' . number_format($res_movimento->saldo_inicial, 2, ',', '.') ?>
+								</td>
 								<td style="text-align: center;">
-									<?= 'R$ ' . number_format($res_movimento->suplemento, 2, ',', '.') ?></td>
+									<?= 'R$ ' . number_format($res_movimento->suplemento, 2, ',', '.') ?>
+								</td>
 								<td style="text-align: center;">
-									<?= 'R$ ' . number_format($res_movimento->vendas, 2, ',', '.') ?></td>
+									<?= 'R$ ' . number_format($res_movimento->vendas, 2, ',', '.') ?>
+								</td>
 								<td style="text-align: center;">
-									<?= 'R$ ' . number_format($res_movimento->recebimentos, 2, ',', '.') ?></td>
+									<?= 'R$ ' . number_format($res_movimento->recebimentos, 2, ',', '.') ?>
+								</td>
 								<td style="text-align: center;">
-									<?= 'R$ ' . number_format($res_movimento->sagria, 2, ',', '.') ?></td>
+									<?= 'R$ ' . number_format($res_movimento->sagria, 2, ',', '.') ?>
+								</td>
 								<td style="text-align: center;">
-									<?= 'R$ ' . number_format($res_movimento->pagamentos, 2, ',', '.') ?></td>
+									<?= 'R$ ' . number_format($res_movimento->pagamentos, 2, ',', '.') ?>
+								</td>
 								<td style="text-align: center;">
 									<?= 'R$ ' . number_format(($res_movimento->saldo_inicial + $res_movimento->suplemento + $res_movimento->vendas + $res_movimento->recebimentos) - ($res_movimento->sagria + $res_movimento->pagamentos), 2, ',', '.') ?>
 								</td>
@@ -147,7 +163,7 @@
 				</table>
 			</div>
 		</div>
-		<?php if (!empty($movimentacoes)) : ?>
+		<?php if (!empty($movimentacoes)): ?>
 			<!-- Card Body - Tabela -->
 			<div class="card-body">
 				<label>LANÇAMENTOS</label>
@@ -155,17 +171,17 @@
 					<table class="table table-sm table-bordered table-striped" style="font-size: 14px;">
 						<thead>
 							<tr style="text-align: center;">
-								<th style="width: 20%;">LANÇAMENTO</th>
+								<th style="width: 20%;">DATA</th>
 								<th>ENTRADAS</th>
 								<th>SAIDAS</th>
 								<th>DOCUMENTO</th>
-								<?php if (isset($caixa->id_caixa) && $caixa->situacao === 'A') : ?>
+								<?php if (isset($caixa->id) && $caixa->situacao === '1'): ?>
 									<th class="no-print">ACÕES</th>
 								<?php endif; ?>
 							</tr>
 						</thead>
 						<tbody>
-							<?php foreach ($movimentacoes as $row) : ?>
+							<?php foreach ($movimentacoes as $row): ?>
 								<?php
 								if ($row->caixa_tipo = 1) {
 									$sum_movimento['suplemento'] = $sum_movimento['suplemento'] + $row->supl_valor;
@@ -175,17 +191,20 @@
 								}
 								?>
 								<tr>
-									<td style="text-align: justify; font-size: 13px;"><?= $row->descricao ?></td>
+									<td style="text-align: justify; font-size: 13px;"><?= formatDataTimeBR($row->data) ?></td>
 									<td style="text-align: center;">
 										<?= ($row->supl_valor != null) ? 'R$ ' . number_format($row->supl_valor, 2, ',', '.') : ''; ?>
 									</td>
 									<td style="text-align: center;">
 										<?= ($row->sang_valor != null) ? 'R$ ' . number_format($row->sang_valor, 2, ',', '.') : ''; ?>
 									</td>
-									<td style="text-align: justify; font-size: 13px;"><?= $row->documento ?></td>
-									<?php if (isset($caixa->id_caixa) && $caixa->situacao === 'A') : ?>
+									<td style="text-align: justify; font-size: 13px;">
+										<?= esc($row->documento) . ' : ' . esc($row->descricao) ?>
+									</td>
+									<?php if (isset($caixa->id) && $caixa->situacao === '1'): ?>
 										<td style="text-align: center;" class="no-print">
-											<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#cancelarMovimento" onclick="cancelar('<?= $row->codigo ?>')">
+											<button class="btn btn-xs btn-danger" data-toggle="modal"
+												data-target="#cancelarMovimento" onclick="cancelar('<?= $row->codigo ?>')">
 												<samp class="far fa-edit"></samp> Cancelar </button>
 										</td>
 									<?php endif; ?>
@@ -194,11 +213,13 @@
 							<tr>
 								<th>TOTAL</th>
 								<th style="text-align: center;">
-									<?= 'R$ ' . number_format($sum_movimento['suplemento'], 2, ',', '.'); ?></th>
+									<?= 'R$ ' . number_format($sum_movimento['suplemento'], 2, ',', '.'); ?>
+								</th>
 								<th style="text-align: center;">
-									<?= 'R$ ' . number_format($sum_movimento['sangria'], 2, ',', '.'); ?></th>
+									<?= 'R$ ' . number_format($sum_movimento['sangria'], 2, ',', '.'); ?>
+								</th>
 								<th></th>
-								<?php if (isset($caixa->id_caixa) && $caixa->situacao === 'A') : ?>
+								<?php if (isset($caixa->id) && $caixa->situacao === '1'): ?>
 									<th class="no-print"></th>
 								<?php endif; ?>
 							</tr>
@@ -208,7 +229,7 @@
 			</div>
 		<?php endif; ?>
 		<!-- Card Body - Tabela -->
-		<?php if (!empty($res_venda) or !empty($res_devolucao) or !empty($res_retirada)) : ?>
+		<?php if (!empty($res_venda) or !empty($res_devolucao) or !empty($res_retirada)): ?>
 			<div class="card-body">
 				<label style="color: blue">VENDAS / DEVOLUÇÃO </label>
 				<div class="table-responsive">
@@ -227,75 +248,84 @@
 						</thead>
 						<tbody>
 
-							<?php foreach ($res_venda as $row) : ?>
+							<?php foreach ($res_venda as $row): ?>
 								<?php
-								$sum_vendas['dinheiro']           = $sum_vendas['dinheiro'] + $row->dinheiro;
-								$sum_vendas['transferencia']      = $sum_vendas['transferencia'] + $row->transferencia;
-								$sum_vendas['debito']             = $sum_vendas['debito'] + $row->debito;
-								$sum_vendas['credito']            = $sum_vendas['credito'] + $row->credito;
-								$sum_vendas['boleto']             = $sum_vendas['boleto'] + $row->boleto;
-								$sum_vendas['creditofinanceiro']  = $sum_vendas['creditofinanceiro'] + $row->creditofinanceiro;
+								$sum_vendas['dinheiro'] = $sum_vendas['dinheiro'] + $row->dinheiro;
+								$sum_vendas['transferencia'] = $sum_vendas['transferencia'] + $row->transferencia;
+								$sum_vendas['debito'] = $sum_vendas['debito'] + $row->debito;
+								$sum_vendas['credito'] = $sum_vendas['credito'] + $row->credito;
+								$sum_vendas['boleto'] = $sum_vendas['boleto'] + $row->boleto;
+								$sum_vendas['creditofinanceiro'] = $sum_vendas['creditofinanceiro'] + $row->creditofinanceiro;
 								?>
 								<tr>
 									<td style="text-align: justify; font-size: 12px;"> VENDA <?= $row->cod_venda ?> -
-										<?= abreviaNome(esc($row->pessoa)); ?></td>
+										<?= abreviaNome(esc($row->pessoa)); ?>
+									</td>
 									<td style="text-align: center;"><?= 'R$ ' . number_format($row->dinheiro, 2, ',', '.') ?>
 									</td>
 									<td style="text-align: center;">
-										<?= 'R$ ' . number_format($row->transferencia, 2, ',', '.') ?></td>
+										<?= 'R$ ' . number_format($row->transferencia, 2, ',', '.') ?>
+									</td>
 									<td style="text-align: center;"><?= 'R$ ' . number_format($row->debito, 2, ',', '.') ?></td>
 									<td style="text-align: center;"><?= 'R$ ' . number_format($row->credito, 2, ',', '.') ?>
 									</td>
 									<td style="text-align: center;"><?= 'R$ ' . number_format($row->boleto, 2, ',', '.') ?></td>
 									<td style="text-align: center;">
-										<?= 'R$ ' . number_format($row->creditofinanceiro, 2, ',', '.') ?></td>
+										<?= 'R$ ' . number_format($row->creditofinanceiro, 2, ',', '.') ?>
+									</td>
 									<td style="text-align: center;">
 										<?= 'R$ ' . number_format(($row->dinheiro + $row->transferencia + $row->debito + $row->credito + $row->boleto + $row->creditofinanceiro), 2, ',', '.') ?>
 									</td>
 								</tr>
 							<?php endforeach; ?>
 
-							<?php foreach ($res_devolucao as $row) : ?>
+							<?php foreach ($res_devolucao as $row): ?>
 								<?php
-								$sum_vendas['creditofinanceiro']  = $sum_vendas['creditofinanceiro'] + ($row->total * -1);
+								$sum_vendas['creditofinanceiro'] = $sum_vendas['creditofinanceiro'] + ($row->total * -1);
 								?>
 								<tr style="color: red;">
 									<td style="text-align: justify; font-size: 12px;"> DEVOLUÇÃO VENDA <?= $row->cod_venda ?> -
-										<?= abreviaNome(esc($row->cad_pessoa)); ?></td>
+										<?= abreviaNome(esc($row->cad_pessoa)); ?>
+									</td>
 									<td style="text-align: center;">-</td>
 									<td style="text-align: center;">-</td>
 									<td style="text-align: center;">-</td>
 									<td style="text-align: center;">-</td>
 									<td style="text-align: center;">-</td>
 									<td style="text-align: center;">
-										<?= 'R$ ' . number_format(($row->total * -1), 2, ',', '.') ?></td>
+										<?= 'R$ ' . number_format(($row->total * -1), 2, ',', '.') ?>
+									</td>
 									<td style="text-align: center;">
-										<?= 'R$ ' . number_format(($row->total * -1), 2, ',', '.') ?></td>
+										<?= 'R$ ' . number_format(($row->total * -1), 2, ',', '.') ?>
+									</td>
 								</tr>
 							<?php endforeach; ?>
 
-							<?php foreach ($res_retirada as $row) : ?>
+							<?php foreach ($res_retirada as $row): ?>
 								<?php
-								$sum_vendas['dinheiro']           = $sum_vendas['dinheiro'] + $row->dinheiro;
-								$sum_vendas['transferencia']      = $sum_vendas['transferencia'] + $row->transferencia;
-								$sum_vendas['debito']             = $sum_vendas['debito'] + $row->debito;
-								$sum_vendas['credito']            = $sum_vendas['credito'] + $row->credito;
-								$sum_vendas['boleto']             = $sum_vendas['boleto'] + $row->boleto;
-								$sum_vendas['creditofinanceiro']  = $sum_vendas['creditofinanceiro'] + $row->creditofinanceiro;
+								$sum_vendas['dinheiro'] = $sum_vendas['dinheiro'] + $row->dinheiro;
+								$sum_vendas['transferencia'] = $sum_vendas['transferencia'] + $row->transferencia;
+								$sum_vendas['debito'] = $sum_vendas['debito'] + $row->debito;
+								$sum_vendas['credito'] = $sum_vendas['credito'] + $row->credito;
+								$sum_vendas['boleto'] = $sum_vendas['boleto'] + $row->boleto;
+								$sum_vendas['creditofinanceiro'] = $sum_vendas['creditofinanceiro'] + $row->creditofinanceiro;
 								?>
 								<tr>
 									<td style="text-align: justify; font-size: 13px;"> RETIRADA <?= $row->cod_retirada ?> -
-										<?= abreviaNome(esc($row->pessoa)); ?></td>
+										<?= abreviaNome(esc($row->pessoa)); ?>
+									</td>
 									<td style="text-align: center;"><?= 'R$ ' . number_format($row->dinheiro, 2, ',', '.') ?>
 									</td>
 									<td style="text-align: center;">
-										<?= 'R$ ' . number_format($row->transferencia, 2, ',', '.') ?></td>
+										<?= 'R$ ' . number_format($row->transferencia, 2, ',', '.') ?>
+									</td>
 									<td style="text-align: center;"><?= 'R$ ' . number_format($row->debito, 2, ',', '.') ?></td>
 									<td style="text-align: center;"><?= 'R$ ' . number_format($row->credito, 2, ',', '.') ?>
 									</td>
 									<td style="text-align: center;"><?= 'R$ ' . number_format($row->boleto, 2, ',', '.') ?></td>
 									<td style="text-align: center;">
-										<?= 'R$ ' . number_format($row->creditofinanceiro, 2, ',', '.') ?></td>
+										<?= 'R$ ' . number_format($row->creditofinanceiro, 2, ',', '.') ?>
+									</td>
 									<td style="text-align: center;">
 										<?= 'R$ ' . number_format(($row->dinheiro + $row->transferencia + $row->debito + $row->credito + $row->boleto + $row->creditofinanceiro), 2, ',', '.') ?>
 									</td>
@@ -320,7 +350,7 @@
 			</div>
 		<?php endif; ?>
 		<!-- Card Body - Recebimento -->
-		<?php if (!empty($res_rebecer)) : ?>
+		<?php if (!empty($res_rebecer)): ?>
 			<div class="card-body">
 				<label style="color: blue">RECEBIMENTO</label>
 				<div class="table-responsive">
@@ -337,17 +367,18 @@
 							</tr>
 						</thead>
 						</tbody>
-						<?php foreach ($res_rebecer as $row) : ?>
+						<?php foreach ($res_rebecer as $row): ?>
 							<?php
-							$sum_rebecer['dinheiro']           = $sum_rebecer['dinheiro'] + $row->dinheiro;
-							$sum_rebecer['transferencia']      = $sum_rebecer['transferencia'] + $row->transferencia;
-							$sum_rebecer['debito']             = $sum_rebecer['debito'] + $row->debito;
-							$sum_rebecer['credito']            = $sum_rebecer['credito'] + $row->credito;
-							$sum_rebecer['creditofinanceiro']  = $sum_rebecer['creditofinanceiro'] + $row->creditofinanceiro;
+							$sum_rebecer['dinheiro'] = $sum_rebecer['dinheiro'] + $row->dinheiro;
+							$sum_rebecer['transferencia'] = $sum_rebecer['transferencia'] + $row->transferencia;
+							$sum_rebecer['debito'] = $sum_rebecer['debito'] + $row->debito;
+							$sum_rebecer['credito'] = $sum_rebecer['credito'] + $row->credito;
+							$sum_rebecer['creditofinanceiro'] = $sum_rebecer['creditofinanceiro'] + $row->creditofinanceiro;
 							?>
 							<tr style="text-align: center;">
 								<td style="text-align: justify; font-size: 12px;"> RECEBIMENTO <?= $row->id_receber ?> -
-									<?= abreviaNome(esc($row->cliente)); ?></td>
+									<?= abreviaNome(esc($row->cliente)); ?>
+								</td>
 								<td><?= 'R$ ' . number_format($row->dinheiro, 2, ',', '.') ?></td>
 								<td><?= 'R$ ' . number_format($row->transferencia, 2, ',', '.') ?></td>
 								<td><?= 'R$ ' . number_format($row->debito, 2, ',', '.') ?></td>
@@ -375,7 +406,7 @@
 			</div>
 		<?php endif; ?>
 		<!-- Card Body - Tabela -->
-		<?php if (!empty($res_pagar) or !empty($res_folha)) : ?>
+		<?php if (!empty($res_pagar) or !empty($res_folha)): ?>
 			<div class="card-body">
 				<label style="color: red">PAGAMENTOS</label>
 				<div class="table-responsive">
@@ -389,28 +420,31 @@
 							</tr>
 						</thead>
 						<tbody>
-							<?php if (!empty($res_pagar)) : ?>
-								<?php foreach ($res_pagar as $row) : ?>
+							<?php if (!empty($res_pagar)): ?>
+								<?php foreach ($res_pagar as $row): ?>
 									<?php
-									$sum_pagar['dinheiro']      = $sum_pagar['dinheiro'] + $row->dinheiro;
+									$sum_pagar['dinheiro'] = $sum_pagar['dinheiro'] + $row->dinheiro;
 									$sum_pagar['transferencia'] = $sum_pagar['transferencia'] + $row->transferencia;
 									?>
 									<tr>
 										<td style="text-align: justify; font-size: 12px;"> DESPESA <?= $row->cod_pagar ?> -
-											<?= abreviaNome(esc($row->cliente)); ?></td>
+											<?= abreviaNome(esc($row->cliente)); ?>
+										</td>
 										<td style="text-align: center;"><?= 'R$ ' . number_format($row->dinheiro, 2, ',', '.') ?>
 										</td>
 										<td style="text-align: center;">
-											<?= 'R$ ' . number_format($row->transferencia, 2, ',', '.') ?></td>
+											<?= 'R$ ' . number_format($row->transferencia, 2, ',', '.') ?>
+										</td>
 										<td style="text-align: center;">
-											<?= 'R$ ' . number_format(($row->dinheiro + $row->transferencia), 2, ',', '.') ?></td>
+											<?= 'R$ ' . number_format(($row->dinheiro + $row->transferencia), 2, ',', '.') ?>
+										</td>
 									</tr>
 								<?php endforeach; ?>
 							<?php endif; ?>
-							<?php if (!empty($res_folha)) : ?>
-								<?php foreach ($res_folha as $row) : ?>
+							<?php if (!empty($res_folha)): ?>
+								<?php foreach ($res_folha as $row): ?>
 									<?php
-									$sum_pagar['dinheiro']      = $sum_pagar['dinheiro'] + $row->dinheiro;
+									$sum_pagar['dinheiro'] = $sum_pagar['dinheiro'] + $row->dinheiro;
 									$sum_pagar['transferencia'] = $sum_pagar['transferencia'] + $row->transferencia;
 									?>
 									<tr>
@@ -419,9 +453,11 @@
 										<td style="text-align: center;"><?= 'R$ ' . number_format($row->dinheiro, 2, ',', '.') ?>
 										</td>
 										<td style="text-align: center;">
-											<?= 'R$ ' . number_format($row->transferencia, 2, ',', '.') ?></td>
+											<?= 'R$ ' . number_format($row->transferencia, 2, ',', '.') ?>
+										</td>
 										<td style="text-align: center;">
-											<?= 'R$ ' . number_format(($row->dinheiro + $row->transferencia), 2, ',', '.') ?></td>
+											<?= 'R$ ' . number_format(($row->dinheiro + $row->transferencia), 2, ',', '.') ?>
+										</td>
 									</tr>
 								<?php endforeach; ?>
 							<?php endif; ?>
@@ -446,6 +482,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('modal_content') ?>
-<?php require_once('componentes/caixa_open_modal.php');
+<?php require_once ('componentes/caixa_open_modal.php');
 ?>
 <?= $this->endSection() ?>
