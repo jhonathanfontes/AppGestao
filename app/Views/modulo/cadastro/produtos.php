@@ -19,7 +19,7 @@
                 <i class="fa fa-tshirt"></i> PRODUTO
             </button>
             <button class="btn btn-app <?= getenv('tema.btn.app2.color'); ?>" data-toggle="modal" data-target="#modalCategoria"
-                onclick="setNewCategoria()">
+                onclick="setNewCategoria(1)">
                 <i class="fa fa-tag"></i> CATEGORIA
             </button>
             <!-- <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalSubCategoria" onclick="setNewSubCategoria()">
@@ -29,7 +29,7 @@
                 <i class="fa fa-briefcase"></i> FABRICANTE
             </button> -->
             <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalTamanho"
-                onclick="setNewTamanho()">
+                onclick="setNewTamanho(1)">
                 <i class="fa fa-ruler"></i> TAMANHO
             </button>
         </div>
@@ -96,8 +96,8 @@
 <?= $this->section('script') ?>
 <script>
     $(document).ready(function () {
-        getProdutoCategoriaOption();
-        getProdutoTamanhoOption();
+        getProdutoCategoriaOption(1);
+        getProdutoTamanhoOption(1);
     });
 </script>
 <?= $this->endSection() ?>

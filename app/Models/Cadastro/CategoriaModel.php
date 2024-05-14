@@ -12,6 +12,7 @@ class CategoriaModel extends Model
 	protected $useSoftDeletes = true;
 	protected $allowedFields = [
 		'cat_descricao',
+		'cat_tipo',
 		'status',
 		'created_user_id',
 		'updated_user_id',

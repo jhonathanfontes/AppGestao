@@ -49,27 +49,10 @@ $(document).ready(function () {
         [1, 'desc'],
         [0, 'asc']
     ];
-    initializeDataTable("#tableCategorias", base_url + "api/cadastro/tabela/categorias", categoriasColumnDefs, categoriasOrder);
 
-    // CARREGA DADOS DA TELA DOS SUBCATEGORIA
-    var subCategoriasColumnDefs = [
-        { className: "dt-body-center", targets: [2, 3] }
-    ];
-    var subCategoriasOrder = [
-        [2, 'desc'],
-        [0, 'asc']
-    ];
-    initializeDataTable("#tableSubCategorias", base_url + "api/cadastro/tabela/subcategorias", subCategoriasColumnDefs, subCategoriasOrder);
+    initializeDataTable("#tableCategorias1", base_url + "api/cadastro/tabela/1/categorias", categoriasColumnDefs, categoriasOrder);
 
-    // CARREGA DADOS DA TELA DOS FABRICANTES
-    var fabricantesColumnDefs = [
-        { className: "dt-body-center", targets: [1, 2] }
-    ];
-    var fabricantesOrder = [
-        [1, 'desc'],
-        [0, 'asc']
-    ];
-    initializeDataTable("#tableFabricantes", base_url + "api/cadastro/tabela/fabricantes", fabricantesColumnDefs, fabricantesOrder);
+    initializeDataTable("#tableCategorias2", base_url + "api/cadastro/tabela/2/categorias", categoriasColumnDefs, categoriasOrder);
 
     // CARREGA DADOS DA TELA DOS TAMANHOS
     var tamanhosColumnDefs = [
@@ -79,7 +62,8 @@ $(document).ready(function () {
         [3, 'desc'],
         [1, 'asc']
     ];
-    initializeDataTable("#tableTamanhos", base_url + "api/cadastro/tabela/tamanhos", tamanhosColumnDefs, tamanhosOrder);
+    initializeDataTable("#tableTamanhos1", base_url + "api/cadastro/tabela/1/tamanhos", tamanhosColumnDefs, tamanhosOrder);
+    initializeDataTable("#tableTamanhos2", base_url + "api/cadastro/tabela/2/tamanhos", tamanhosColumnDefs, tamanhosOrder);
 });
 
 $(document).ready(function () {
@@ -487,7 +471,7 @@ function salvarProfissao() {
 // GERENCIA OS PRODUTOS
 
 function getEditProduto(Paramentro) {
-    getProdutoCategoriaOption();
+    getProdutoCategoriaOption(1);
     $.ajax({
         "url": base_url + "api/cadastro/exibir/produto/" + Paramentro,
         "type": "GET",
@@ -619,7 +603,7 @@ function SalvaProdutos() {
 }
 
 function setNewServico() {
-    getProdutoCategoriaOption();
+    getProdutoCategoriaOption(2);
     document.getElementById('modalTitleProduto').innerHTML = 'CADASTRO DE NOVO SERVIÇO ';
     document.getElementById("cad_tipo").value = 2;
     document.getElementById("cad_codbarras").disabled = true;
@@ -639,8 +623,8 @@ function setNewServico() {
     }
 }
 
-function getProdutoCategoriaOption() {
-    $.get(base_url + 'api/cadastro/exibir/categorias', {
+function getProdutoCategoriaOption(cot_tipo = 0) {
+    $.get(base_url + 'api/cadastro/exibir/' + cot_tipo + '/categorias', {
     }, function (response) {
         options = '<option value="">SELECIONE UMA CATEGORIA</option>';
         for (var i = 0; i < response.length; i++) {
@@ -650,8 +634,8 @@ function getProdutoCategoriaOption() {
     });
 }
 
-function getProdutoTamanhoOption() {
-    $.get(base_url + 'api/cadastro/exibir/tamanhos', {
+function getProdutoTamanhoOption(cot_tipo = 0) {
+    $.get(base_url + 'api/cadastro/exibir/' + cot_tipo + '/tamanhos', {
     }, function (response) {
         options = '<option value="">SELECIONE UM TAMANHO</option>';
         for (var i = 0; i < response.length; i++) {
@@ -680,20 +664,12 @@ function getEditCategoria(Paramentro) {
     });
 }
 
-function setNewCategoriaProduto() {
-    document.getElementById('modalTitleCategoria').innerHTML = 'CADASTRO DE NOVA CATEGORIA DO PRODUTO';
-    document.getElementById('cod_tipo').value = '1';
-    var cod_categoria = document.getElementById('cod_categoria').value;
-    if (cod_categoria != '') {
-        document.getElementById("cod_categoria").value = '';
-        document.getElementById("cad_categoria").value = '';
-        document.getElementById("categoriaAtivo").checked = true;
-    }
-}
+function setNewCategoria(cod_tipo) {
+    const modalTitleCategoria = document.getElementById('modalTitleCategoria');
+    const categoria = (cod_tipo === 1) ? 'PRODUTO' : 'SERVIÇO';
+    modalTitleCategoria.innerHTML = `CADASTRO DE NOVA CATEGORIA DO ${categoria}`;
 
-function setNewCategoriaServico() {
-    document.getElementById('modalTitleCategoria').innerHTML = 'CADASTRO DE NOVA CATEGORIA DO PRODUTO';
-    document.getElementById('cod_tipo').value = '2';
+    document.getElementById('cod_tipo').value = cod_tipo;
     var cod_categoria = document.getElementById('cod_categoria').value;
     if (cod_categoria != '') {
         document.getElementById("cod_categoria").value = '';
@@ -787,23 +763,15 @@ function getEditTamanho(Paramentro) {
     });
 }
 
-function setNewTamanho() {
-    document.getElementById('modalTitleTamanho').innerHTML = 'CADASTRO DE NOVO TAMANHO DE PRODUTO';
-    document.getElementById('cod_tipo').value = '1';
+function setNewTamanho(cod_tipo) {
     var cod_tamanho = document.getElementById('cod_tamanho').value;
-    if (cod_tamanho != '') {
-        document.getElementById("cod_tamanho").value = '';
-        document.getElementById("cad_tamanho").value = '';
-        document.getElementById("cad_abreviacao").value = '';
-        document.getElementById("cad_embalagem").value = '1';
-        document.getElementById("tamanhoAtivo").checked = true;
-    }
-}
 
-function setNewUnidadeMedida() {
-    document.getElementById('modalTitleTamanho').innerHTML = 'CADASTRO DE NOVO UNIDADE DE MEDIDA DO SERVIÇO';
-    document.getElementById('cod_tipo').value = '2';
-    var cod_tamanho = document.getElementById('cod_tamanho').value;
+    const modalTitleCategoria = document.getElementById('modalTitleTamanho');
+    const categoria = (cod_tipo === 1) ? 'NOVO TAMANHO' : 'NOVA UNIDADE DE MEDIDA';
+    modalTitleCategoria.innerHTML = `CADASTRO DE  ${categoria}`;
+
+    document.getElementById('tam_tipo').value = cod_tipo;
+
     if (cod_tamanho != '') {
         document.getElementById("cod_tamanho").value = '';
         document.getElementById("cad_tamanho").value = '';

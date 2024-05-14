@@ -16,11 +16,12 @@ class Tamanhos extends BaseController
         $this->validation = \Config\Services::validation();
     }
 
-    public function getCarregaTabela()
+    public function getCarregaTabela($cod_tipo = 0)
     {
         $response['data'] = array();
 
         $result = $this->tamanhoModel
+            ->where('tam_tipo', $cod_tipo)
             ->whereIn('status', ['1', '2'])
             ->withDeleted()
             ->findAll();
@@ -66,7 +67,7 @@ class Tamanhos extends BaseController
         if (!$this->request->isAJAX()) {
             return redirect()->back();
         }
-        $data['tam_tipo'] = $this->request->getPost('cad_tipo');
+        $data['tam_tipo'] = $this->request->getPost('cod_tipo');
         $data['tam_descricao'] = returnNull($this->request->getPost('cad_tamanho'), 'S');
         $data['tam_abreviacao'] = returnNull($this->request->getPost('cad_abreviacao'), 'S');
         $data['tam_quantidade'] = returnNull($this->request->getPost('cad_embalagem'), 'S');
@@ -117,9 +118,10 @@ class Tamanhos extends BaseController
         }
     }
 
-    public function findAll()
+    public function findAll($cod_tipo = 0)
     {
         $return = $this->tamanhoModel
+            ->where('tam_tipo', $cod_tipo)
             ->whereIn('status', ['1'])
             ->findAll();
 

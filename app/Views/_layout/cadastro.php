@@ -101,6 +101,28 @@
                     </ul>
                 </li>
             </ul>
+            <ul class="nav nav-treeview">
+                <li class="nav-item <?= (url_is('app/cadastro/auxiliar/servicos*')) ? 'menu-open' : ''; ?>">
+                    <a href="#" class="nav-link <?= (url_is('app/cadastro/auxiliar/servicos*')) ? 'active' : ''; ?>">
+                        <i class="fab fa-buysellads text-primary"> </i>
+                        <p> &nbsp; AUXILIAR SERVIÇOS</p> <i class="right fas fa-angle-left"></i>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url('app/cadastro/auxiliar/servicos/categorias'); ?>" class="nav-link <?= (url_is('app/cadastro/auxiliar/servicos/categorias')) ? 'active' : ''; ?>">
+                                <i class="far <?= (url_is('app/cadastro/auxiliar/servicos/categorias')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
+                                <p>CATEGORIAS</p>
+                            </a>
+                        </li>                      
+                        <li class="nav-item">
+                            <a href="<?= base_url('app/cadastro/auxiliar/servicos/unidade'); ?>" class="nav-link <?= (url_is('app/cadastro/auxiliar/servicos/unidade')) ? 'active' : ''; ?>">
+                                <i class="far <?= (url_is('app/cadastro/auxiliar/servicos/unidade')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
+                                <p>UNIDADE MEDIDA</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </li>
         <div class="user-panel d-flex">
         </div>

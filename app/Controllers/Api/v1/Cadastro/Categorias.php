@@ -20,17 +20,22 @@ class Categorias extends ApiController
         $this->validation = \Config\Services::validation();
     }
 
-    public function getCarregaTabela()
+    public function getCarregaTabela($cod_tipo = 0)
     {
         $response['data'] = array();
 
-        $result = $this->categoriaModel->whereIn('status', ['1', '2'])->withDeleted()->findAll();
+        $result = $this->categoriaModel
+            ->where('cat_tipo', $cod_tipo)
+            ->whereIn('status', ['1', '2'])
+            ->withDeleted()
+            ->findAll();
+            
         try {
 
             if (empty($result)):
                 return $this->response->setJSON($response);
             endif;
-            
+
             foreach ($result as $key => $value) {
 
                 $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalCategoria" onclick="getEditCategoria(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
@@ -64,7 +69,8 @@ class Categorias extends ApiController
         if (!$this->request->isAJAX()) {
             return redirect()->back();
         }
-        $data['cat_tipo'] = $this->request->getPost('cad_tipo');
+
+        $data['cat_tipo'] = $this->request->getPost('cod_tipo');
         $data['cat_descricao'] = returnNull($this->request->getPost('cad_categoria'), 'S');
         $data['status'] = $this->request->getPost('status');
 
@@ -130,12 +136,15 @@ class Categorias extends ApiController
         }
     }
 
-    public function findAll()
+    public function findAll($cod_tipo = 0)
     {
+
         $return = $this->categoriaModel
             ->where('status', 1)
+            ->where('cat_tipo', $cod_tipo)
             ->orderBy('cat_descricao', 'asc')
             ->findAll();
+
         return $this->response->setJSON($return);
     }
 

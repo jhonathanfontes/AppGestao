@@ -31,6 +31,11 @@ class OrcamentoVenda extends Migration
                 'unsigned' => true,
                 'null' => true,
             ],
+            'obra_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
+                'null' => true,
+            ],
             'vendedor_id' => [
                 'type' => 'INT',
                 'unsigned' => true,
@@ -79,7 +84,7 @@ class OrcamentoVenda extends Migration
             'situacao' => [
                 'type' => 'INT',
                 'default' => 1,
-                'comment' => '0 - Excluida, 1 - Em Aberto, 2 - Finalizada, 3 - Cancelada, 4 - Pendente',
+                'comment' => '0 - Excluida, 1 - Em Aberto, 2 - Finalizada, 3 - Cancelada, 4 - Pendente, 5 - Obra Pendente',
             ],
             'serial' => [
                 'type' => 'VARCHAR',
@@ -132,6 +137,7 @@ class OrcamentoVenda extends Migration
         $this->forge->addPrimaryKey('id');
 
         $this->forge->addForeignKey('pessoa_id', 'cad_pessoa', 'id', 'CASCADE', 'NO ACTION', 'fk_pessoa_orcamento');
+        $this->forge->addForeignKey('obra_id', 'ger_obra', 'id', 'CASCADE', 'NO ACTION', 'fk_obra_orcamento');
         $this->forge->addForeignKey('vendedor_id', 'cad_vendedor', 'id', 'CASCADE', 'NO ACTION', 'fk_vendedor_orcamento');
 
         $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_orcamento');

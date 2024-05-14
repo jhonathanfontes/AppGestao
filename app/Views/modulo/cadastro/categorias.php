@@ -7,7 +7,8 @@
     <!-- Default box -->
     <div class="card card-pink">
         <div class="card-body">
-            <button class="btn btn-app <?= getenv('tema.btn.app1.color'); ?>" data-toggle="modal" data-target="#modalCategoria" onclick="setNewCategoria()">
+            <button class="btn btn-app <?= getenv('tema.btn.app1.color'); ?>" data-toggle="modal"
+                data-target="#modalCategoria" onclick="setNewCategoria(<?= ($cad_tipo) ?? $cad_tipo ?>)">
                 <i class="fas fa-tag"></i>
                 CATEGORIA
             </button>
@@ -26,14 +27,17 @@
         <div class="card-header">
             <h3 class="card-title"><?= isset($card_title) ? $card_title : ''; ?></h3>
             <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                    title="Collapse">
                     <i class="fas fa-minus"></i></button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                    title="Remove">
                     <i class="fas fa-times"></i></button>
             </div>
         </div>
         <div class="card-body">
-            <table id="tableCategorias" class="table table-sm table-bordered table-striped">
+            <table id="tableCategorias<?= ($cad_tipo) ?? $cad_tipo ?>"
+                class="table table-sm table-bordered table-striped">
                 <thead>
                     <tr style="text-align: center;">
                         <th>DESCRIÇÃO</th>
@@ -51,5 +55,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('modal_content') ?>
-<?php require_once('componentes/categoria_modal.php'); ?>
+<?php require_once ('componentes/categoria_modal.php'); ?>
 <?= $this->endSection() ?>

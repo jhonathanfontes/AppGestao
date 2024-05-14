@@ -16,6 +16,12 @@
                     <input type="hidden" name="cod_endereco" id="cod_endereco" />
                 </div>
                 <div class="row">
+                <div class="form-group col-12">
+                        <label for="">CLIENTE</label>
+                        <select name="cod_pessoa" id="cod_pessoa" class="form-control select2bs4" style="width: 100%;">
+
+                        </select>
+                    </div>
                     <div class="form-group col-7">
                         <label for="">DESCRIÇÃO</label>
                         <input name="cad_obra" id="cad_obra" type="text" class="form-control" placeholder="">

@@ -44,10 +44,8 @@ $routes->group('api', function ($routes) {
             $routes->post('pessoas', 'Pessoas::getCarregaTabela');
             $routes->post('profissoes', 'Profissoes::getCarregaTabela');
             $routes->post('produtos', 'Produtos::getCarregaTabela');
-            $routes->post('categorias', 'Categorias::getCarregaTabela');
-            $routes->post('subcategorias', 'SubCategorias::getCarregaTabela');
-            $routes->post('fabricantes', 'Fabricantes::getCarregaTabela');
-            $routes->post('tamanhos', 'Tamanhos::getCarregaTabela');
+            $routes->post('(:segment)/categorias', 'Categorias::getCarregaTabela/$1');
+            $routes->post('(:segment)/tamanhos', 'Tamanhos::getCarregaTabela/$1');
             $routes->group('grade', function ($routes) {
                 $routes->get('produto/(:segment)', 'ProdutoGrade::getCarregaTabela/$1');
                 $routes->get('tamanho', 'ProdutoGrade::addGradeProduto');
@@ -60,8 +58,6 @@ $routes->group('api', function ($routes) {
             $routes->post('profissao', 'Profissoes::save');
             $routes->post('produto', 'Produtos::save');
             $routes->post('categoria', 'Categorias::save');
-            $routes->post('subcategoria', 'SubCategorias::save');
-            $routes->post('fabricante', 'Fabricantes::save');
             $routes->post('tamanho', 'Tamanhos::save');
 
             $routes->group('grade', function ($routes) {
@@ -80,17 +76,14 @@ $routes->group('api', function ($routes) {
 
             $routes->get('profissoes', 'Profissoes::findAll');
             $routes->get('produtos', 'Produtos::findAll');
+            $routes->get('(:segment)/categorias', 'Categorias::findAll/$1');
             $routes->get('categorias', 'Categorias::findAll');
-            $routes->get('subcategorias', 'SubCategorias::findAll');
-            $routes->get('fabricantes', 'Fabricantes::findAll');
-            $routes->get('tamanhos', 'Tamanhos::findAll');
+            $routes->get('(:segment)/tamanhos', 'Tamanhos::findAll/$1');
 
             $routes->get('pessoa/(:segment)', 'Pessoas::show/$1');
             $routes->get('profissao/(:segment)', 'Profissoes::show/$1');
             $routes->get('produto/(:segment)', 'Produtos::show/$1');
             $routes->get('categoria/(:segment)', 'Categorias::show/$1');
-            $routes->get('subcategoria/(:segment)', 'SubCategorias::show/$1');
-            $routes->get('fabricante/(:segment)', 'Fabricantes::show/$1');
             $routes->get('tamanho/(:segment)', 'Tamanhos::show/$1');
 
             $routes->group('categoria', function ($routes) {
@@ -643,17 +636,20 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
             // Carrega dados da TableDatta
             $routes->group('produtos', function ($routes) {
                 // Rota Cadastro/Categoria
-                $routes->get('categorias', 'Categorias::index');
-                // Rota Cadastro/SubCategoria
-                $routes->get('subcategorias', 'SubCategorias::index');
-                // Rota Cadastro/Fabricante
-                $routes->get('fabricantes', 'Fabricantes::index');
+                $routes->get('categorias', 'Categorias::produto');
                 // Rota Cadastro/Tamanho
-                $routes->get('tamanhos', 'Tamanhos::index');
+                $routes->get('tamanhos', 'Tamanhos::produto');
+            });
+
+              // Carrega dados da TableDatta
+              $routes->group('servicos', function ($routes) {
+                // Rota Cadastro/Categoria
+                $routes->get('categorias', 'Categorias::servico');
+                // Rota Cadastro/Tamanho
+                $routes->get('unidade', 'Tamanhos::servico');
             });
 
             $routes->group('servicos', function ($routes) {
-
                 // Rota Cadastro/Tamanho
                 $routes->get('unidade', 'Tamanhos::index');
             });
@@ -778,21 +774,21 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
         // Redirecionamento  para o modulo Venda
         $routes->addRedirect('/', 'app/modulo/venda');
 
-        $routes->get('cancelamento', 'Pdv::Cancelamento');
-        $routes->get('devolucao', 'Pdv::Devolucao');
+        $routes->get('cancelamento', 'Orcamento::Cancelamento');
+        $routes->get('devolucao', 'Orcamento::Devolucao');
 
         // Carrega dados da ORÇAMENTO
         $routes->group('orcamento', function ($routes) {
-            $routes->get('/', 'Pdv::Orcamento');
-            $routes->get('selling/(:segment)', 'Pdv::Orcamento_Selling/$1');
-            $routes->get('selling', 'Pdv::Orcamento_Selling');
+            $routes->get('/', 'Orcamento::Orcamento');
+            $routes->get('selling/(:segment)', 'Orcamento::Orcamento_Selling/$1');
+            $routes->get('selling', 'Orcamento::Orcamento_Selling');
         });
 
         // Carrega dados da PDV
         $routes->group('pdv', function ($routes) {
-            $routes->get('/', 'Pdv::Pdv');
-            $routes->get('selling/(:segment)', 'Pdv::Pdv_Selling/$1');
-            $routes->get('selling', 'Pdv::Pdv_Selling');
+            $routes->get('/', 'Orcamento::Pdv');
+            $routes->get('selling/(:segment)', 'Orcamento::Pdv_Selling/$1');
+            $routes->get('selling', 'Orcamento::Pdv_Selling');
         });
     });
 
@@ -810,9 +806,9 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
 
         // Carrega dados da PDV
         $routes->group('pdv', function ($routes) {
-            $routes->get('/', 'Pdv::Pdv');
-            $routes->get('selling/(:segment)', 'Pdv::Pdv_Selling/$1');
-            $routes->get('selling', 'Pdv::Pdv_Selling');
+            $routes->get('/', 'Orcamento::Pdv');
+            $routes->get('selling/(:segment)', 'Orcamento::Pdv_Selling/$1');
+            $routes->get('selling', 'Orcamento::Pdv_Selling');
         });
     });
 

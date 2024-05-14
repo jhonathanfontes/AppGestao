@@ -91,7 +91,11 @@ class Produtos extends BaseController
         $data['categoria_id'] = $this->request->getPost('pro_categoria');
         $data['tamanho_id'] = $this->request->getPost('pro_tamanho');
         $data['pro_codigobarra'] = ($this->request->getPost('cad_codbarras') != null) ? returnNull($this->request->getPost('cad_codbarras'), 'S') : getCodigoBarra($this->request->getPost('pro_categoria'), $this->request->getPost('pro_tamanho'));
-        $data['valor_custo'] = formatValorBD($this->request->getPost('cad_custo'));
+
+        if ($this->request->getPost('cad_tipo') == 1) {
+            $data['valor_custo'] = formatValorBD($this->request->getPost('cad_custo'));
+        }
+
         $data['valor_venda1'] = formatValorBD($this->request->getPost('cad_valor1'));
         $data['valor_venda2'] = formatValorBD($this->request->getPost('cad_valor2'));
         $data['status'] = $this->request->getPost('status');

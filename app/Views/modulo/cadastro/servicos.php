@@ -18,9 +18,12 @@
                 onclick="setNewServico()">
                 <i class="fa fa-tshirt"></i> SERVIÇO
             </button>
-
+            <button class="btn btn-app <?= getenv('tema.btn.app2.color'); ?>" data-toggle="modal" data-target="#modalCategoria"
+                onclick="setNewCategoria(2)">
+                <i class="fa fa-tag"></i> CATEGORIA
+            </button>
             <button class="btn btn-app <?= getenv('tema.btn.app2.color'); ?>" data-toggle="modal" data-target="#modalTamanho"
-                onclick="setNewUnidadeMedida()">
+                onclick="setNewTamanho(2)">
                 <i class="fa fa-ruler"></i> UNIDADE MEDIDA
             </button>
         </div>
@@ -83,8 +86,8 @@
 <?= $this->section('script') ?>
 <script>
      $(document).ready(function () {
-        getProdutoCategoriaOption();
-        getProdutoTamanhoOption();
+        getProdutoCategoriaOption(2);
+        getProdutoTamanhoOption(2);
     });
 </script>
 <?= $this->endSection() ?>

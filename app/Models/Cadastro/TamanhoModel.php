@@ -11,6 +11,7 @@ class TamanhoModel extends Model
     protected $returnType = \App\Entities\Cadastro\Tamanho::class;
     protected $useSoftDeletes = false;
     protected $allowedFields = [
+        'tam_tipo',
         'tam_abreviacao',
         'tam_descricao',
         'tam_quantidade',

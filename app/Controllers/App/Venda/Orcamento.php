@@ -6,7 +6,7 @@ use App\Controllers\BaseController;
 use App\Traits\CadastroTrait;
 use App\Traits\FinanceiroTrait;
 
-class Pdv extends BaseController
+class Orcamento extends BaseController
 {
     use CadastroTrait;
     use FinanceiroTrait;
@@ -28,18 +28,16 @@ class Pdv extends BaseController
             ->where('serial', $serial)
             ->first();
 
-        dd($orcamento);
-
         if ($orcamento === null) {
             session()->setFlashdata('MsnAtencao', 'ORÇMENTO NÃO FOI LOCALIZADO!');
             return redirect()->to(base_url('app/modulo/venda'));
         }
 
-        $detalhes = $this->listarDetalhes()
-            ->where('est_detalhe.situacao >=', 1)
-            ->where('est_detalhe.situacao <=', 2)
-            ->where('est_detalhe.orcamento_id', $orcamento->cod_orcamento)
-            ->findAll();
+        // $detalhes = $this->listarDetalhes()
+        //     ->where('est_detalhe.situacao >=', 1)
+        //     ->where('est_detalhe.situacao <=', 2)
+        //     ->where('est_detalhe.orcamento_id', $orcamento->cod_orcamento)
+        //     ->findAll();
 
         try {
 
@@ -48,14 +46,15 @@ class Pdv extends BaseController
             }
 
             $data = [
-                'card_title' => 'ORÇAMENTO Nº ' . $orcamento->cod_orcamento . '/' . date("Y", strtotime($orcamento->orc_dataorcamento)),
+                'card_title' => 'ORÇAMENTO Nº ' . $orcamento->id . '/' . date("Y", strtotime($orcamento->orc_dataorcamento)),
                 'clientes' => $this->setPessoasClientes(),
-                'vendedores' => $this->getVendedores(),
+                // 'vendedores' => $this->getVendedores(),
                 'orcamento' => $orcamento,
-                'detalhes' => $detalhes
+                // 'detalhes' => $detalhes
             ];
 
             return view('modulo/venda/orcamento_selling', $data);
+
         } catch (\Throwable $th) {
             return $this->response->setJSON(
                 [

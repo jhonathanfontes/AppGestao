@@ -7,7 +7,7 @@
     <!-- Default box -->
     <div class="card card-pink">
         <div class="card-body">
-            <button class="btn btn-app <?= getenv('tema.btn.app1.color'); ?>" data-toggle="modal" data-target="#modalTamanho" onclick="setNewTamanho()">
+            <button class="btn btn-app <?= getenv('tema.btn.app1.color'); ?>" data-toggle="modal" data-target="#modalTamanho" onclick="setNewTamanho(<?= ($cad_tipo) ?? $cad_tipo ?>)">
                 <i class="fas fa-ruler"></i>
                 TAMANHO
             </button>
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="card-body">
-            <table id="tableTamanhos" class="table table-sm table-bordered table-striped">
+            <table id="tableTamanhos<?= ($cad_tipo) ?? $cad_tipo ?>" class="table table-sm table-bordered table-striped">
                 <thead>
                     <tr style="text-align: center;">
                         <th>DESCRIÇÃO</th>

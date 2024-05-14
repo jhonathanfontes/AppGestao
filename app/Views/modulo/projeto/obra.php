@@ -70,7 +70,7 @@
 <?= $this->section('script') ?>
 <script>
     $(document).ready(function () {
-        // getProfissaoOption();
+        getClientesOption();
     });
 </script>
 <?= $this->endSection() ?>
