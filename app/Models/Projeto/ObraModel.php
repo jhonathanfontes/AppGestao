@@ -13,6 +13,7 @@ class ObraModel extends Model
 	protected $allowedFields = [
 		'obr_descricao',
 		'obr_datainicio',
+		'pessoa_id',
 		'endereco_id',
 		'status',
 		'created_user_id',

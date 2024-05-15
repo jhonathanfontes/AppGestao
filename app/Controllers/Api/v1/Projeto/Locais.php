@@ -8,7 +8,7 @@ use App\Entities\Projeto\Local;
 class Locais extends ApiController
 {
     private $localModel;
-    private $localServicoModel;
+    private $detalheProdutoModel;
 
     private $produtoModel;
 
@@ -18,7 +18,7 @@ class Locais extends ApiController
     public function __construct()
     {
         $this->localModel = new \App\Models\Projeto\LocalModel();
-        $this->localServicoModel = new \App\Models\Projeto\LocalServicoModel();
+        $this->detalheProdutoModel = new \App\Models\Estoque\DetalheModel();
         $this->produtoModel = new \App\Models\Cadastro\ProdutoModel;
         // $this->auditoriaModel = new \App\Models\AuditoriaModel();
         $this->validation = \Config\Services::validation();
@@ -70,10 +70,10 @@ class Locais extends ApiController
 
         $cod_local = $this->request->getPost('cod_local');
 
-        $result = $this->localServicoModel
+        $result = $this->detalheProdutoModel
             ->getProdutoDetalhe()
             ->where('local_id', $cod_local)
-            ->whereIn('ger_localservico.status', ['1', '2', '3'])
+            ->whereIn('situacao', ['1', '2', '4'])
             ->withDeleted()
             ->findAll();
 
@@ -143,7 +143,6 @@ class Locais extends ApiController
             );
         }
     }
-
 
     // public function getCarregaTabelaLocalServico()
     // {
@@ -348,33 +347,34 @@ class Locais extends ApiController
 
             $quantidade = $this->request->getPost('quantidade');
             $produto = $this->produtoModel->where('id', $this->request->getPost('cod_produto'))->first();
+            $orcamentoObra = $this->localModel->getOrcamentoObraLocal()
+                ->where('ger_local.id', $this->request->getPost('cod_local'))
+                ->first();
 
+            $data['orcamento_id'] = $orcamentoObra->cod_orcamento;
             $data['local_id'] = $this->request->getPost('cod_local');
             $data['produto_id'] = $produto->id;
-            // $data['tamanho_id'] = $produto->tamanho_id;
-            // $data['mvd_tipo'] = 'S';
-            $data['lsv_quantidade'] = $quantidade;
-            $data['lsv_valor'] = bcadd($produto->cad_valor1, '0', 2);
-            // $data['mvd_val_unad'] = bcadd($produto->cad_valor1, '0', 2);
-            $data['lsv_total'] = bcadd(($produto->cad_valor1 * $quantidade), '0', 2);
-            // $data['mvd_total_unad'] = bcadd(($produto->cad_valor1 * $quantidade), '0', 2);
+            $data['del_tipo'] = 'S';
+            $data['qtn_produto'] = $quantidade;
+            $data['qtn_saldo'] = $quantidade;
+            $data['val1_un'] = bcadd($produto->cad_valor1, '0', 2);
+            $data['val1_unad'] = bcadd($produto->cad_valor1, '0', 2);
+            $data['val1_total'] = bcadd(($produto->cad_valor1 * $quantidade), '0', 2);
 
-            // $data['lsv_observacao'] = $this->request->getPost('cad_observacao');
+            $data['val2_un'] = bcadd($produto->cad_valor2, '0', 2);
+            $data['val2_unad'] = bcadd($produto->cad_valor2, '0', 2);
+            $data['val2_total'] = bcadd(($produto->cad_valor2 * $quantidade), '0', 2);
 
-            // $data['mpd_val_un'] = bcadd($produto->cad_valor2, '0', 2);
-            // $data['mpd_val_unad'] = bcadd($produto->cad_valor2, '0', 2);
-            // $data['mpd_total'] = bcadd(($produto->cad_valor2 * $quantidade), '0', 2);
-            // $data['mpd_total_unad'] = bcadd(($produto->cad_valor2 * $quantidade), '0', 2);
+            $data['situacao'] = '4';
+            $data['serial'] = $orcamentoObra->serial;
 
-
-            // $data['fleg_atualiza'] = null;
 
             // return $this->response->setJSON($data);
 
 
-            if ($this->localServicoModel->save($data)) {
+            if ($this->detalheProdutoModel->save($data)) {
 
-                $cod_detalhe = (!empty($this->request->getPost('cod_detalhe'))) ? $this->request->getPost('cod_detalhe') : $this->localServicoModel->getInsertID();
+                $cod_detalhe = (!empty($this->request->getPost('cod_detalhe'))) ? $this->request->getPost('cod_detalhe') : $this->detalheProdutoModel->getInsertID();
 
                 return $this->response->setJSON([
                     'status' => true,
@@ -414,12 +414,11 @@ class Locais extends ApiController
 
     public function addGradeProduto($cod_produto = null)
     {
-        $return = $this->localServicoModel->getProdutoDetalhe()
+        $return = $this->detalheProdutoModel->getProdutoDetalhe()
             ->where('ger_localservico.id', $cod_produto)
             ->first();
         return $this->response->setJSON($return);
     }
-
     private function buscaRegistro404(int $codigo = null)
     {
         if (!$codigo || !$resultado = $this->localModel->withDeleted(true)->find($codigo)) {

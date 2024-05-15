@@ -5,7 +5,7 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class OrcamentoVendaDetalhe extends Migration
+class EstoqueDetalhe extends Migration
 {
     public function up()
     {
@@ -22,6 +22,11 @@ class OrcamentoVendaDetalhe extends Migration
                 'null' => true,
             ],
             'orcamento_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
+                'null' => true,
+            ],
+            'local_id' => [
                 'type' => 'INT',
                 'unsigned' => true,
                 'null' => true,
@@ -82,11 +87,6 @@ class OrcamentoVendaDetalhe extends Migration
                 'constraint' => '200',
                 'comment' => 'CODIGO GERADO AUTOMATICAMENTO POR TRANSAÇÃO',
             ],
-            'agrupar_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => true,
-            ],
             'created_user_id' => [
                 'type' => 'INT',
                 'unsigned' => true,
@@ -134,6 +134,7 @@ class OrcamentoVendaDetalhe extends Migration
 
         $this->forge->addForeignKey('estoque_id', 'ger_estoque', 'id', 'CASCADE', 'NO ACTION', 'fk_estoque_movimentacao');
         $this->forge->addForeignKey('orcamento_id', 'pdv_orcamento', 'id', 'CASCADE', 'NO ACTION', 'fk_orcamento_movimentacao');
+        $this->forge->addForeignKey('local_id', 'ger_local', 'id', 'CASCADE', 'NO ACTION', 'fk_local_movimentacao');
         $this->forge->addForeignKey('produto_id', 'cad_produto', 'id', 'CASCADE', 'NO ACTION', 'fk_produto_movimentacao');
 
         $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_movimentacao');

@@ -4,16 +4,19 @@ namespace App\Models\Projeto;
 
 use CodeIgniter\Model;
 
-class LocalModel extends Model
+class LocalServicoModel extends Model
 {
-	protected $table = 'ger_local';
+	protected $table = 'ger_localservico';
 	protected $primaryKey = 'id';
-	protected $returnType = \App\Entities\Projeto\Local::class;
+	protected $returnType = \App\Entities\Projeto\LocalServico::class;
 	protected $useSoftDeletes = true;
 	protected $allowedFields = [
-		'loc_descricao',
-		'loc_datainicio',
-		'obra_id',
+		'local_id',
+		'produto_id',
+		'lsv_quantidade',
+		'lsv_valor',
+		'lsv_total',
+		'lsv_observacao',
 		'status',
 		'created_user_id',
 		'updated_user_id',
@@ -22,8 +25,6 @@ class LocalModel extends Model
 	protected $createdField = 'created_at';
 	protected $updatedField = 'updated_at';
 	protected $deletedField = 'deleted_at';
-
-	protected $validationMessages = [];
 
 	protected $beforeInsert = ['insertAuditoria'];
 	protected $beforeUpdate = ['updateAuditoria'];
@@ -40,11 +41,6 @@ class LocalModel extends Model
 		$data['data']['updated_user_id'] = getUsuarioID();
 		$data['data']['updated_at'] = getDatetimeAtual();
 		return $data;
-	}
-
-	public function returnSave(int $codigo = null)
-	{
-		return $this->select('id, loc_descricao')->find($codigo);
 	}
 
 	public function arquivarRegistro(int $codigo = null)
@@ -66,37 +62,26 @@ class LocalModel extends Model
 		}
 		return false;
 	}
-
-	public function getLocalObra($cod_obra = null)
+	public function getProdutoDetalhe()
 	{
 		$atributos = [
-			'id',
-			'obra_id',
-			'loc_descricao',
-			'loc_datainicio',
-			'status'
+			'ger_localservico.id',
+			'ger_localservico.local_id',
+			'ger_localservico.produto_id',
+			'ger_localservico.lsv_quantidade',
+			'ger_localservico.lsv_valor',
+			'ger_localservico.lsv_total',
+			'ger_localservico.lsv_observacao',
+			'ger_localservico.status',
+			'cad_produto.pro_descricao',
+			'cad_tamanho.tam_abreviacao',
+			'cad_tamanho.tam_descricao'
 		];
 
-		$db = \Config\Database::connect();
-		$builder = $db->table($this->table);
-		$builder->select($atributos);
-		$builder->where('status', '1');
-		$builder->where('obra_id', $cod_obra);
-		$result = $builder->get();
-		return $result->getResult();
-	}
+		$result = $this->select($atributos)
+			->join('cad_produto', 'cad_produto.id = ger_localservico.produto_id', 'LEFT')
+			->join('cad_tamanho', 'cad_tamanho.id = cad_produto.tamanho_id', 'LEFT');
 
-	public function getOrcamentoObraLocal(){
-
-		$atributos = [
-			'pdv_orcamento.id as cod_orcamento',
-			'pdv_orcamento.serial',
-			'ger_local.id',
-			'ger_local.obra_id',
-		];
-
-		return $this->select($atributos)
-			->join('ger_obra', 'ger_obra.id = ger_local.obra_id', 'LEFT')
-			->join('pdv_orcamento', 'pdv_orcamento.obra_id = ger_obra.id', 'LEFT');
+		return $result;
 	}
 }

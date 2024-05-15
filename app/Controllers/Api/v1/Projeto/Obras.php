@@ -4,6 +4,9 @@ namespace App\Controllers\Api\v1\Projeto;
 
 use App\Controllers\Api\ApiController;
 use App\Entities\Projeto\Obra;
+use App\Entities\Venda\Venda;
+use CodeIgniter\Model;
+use Config\App;
 
 class Obras extends ApiController
 {
@@ -93,8 +96,9 @@ class Obras extends ApiController
             }
         }
 
+        $cod_pessoa = returnNull($this->request->getPost("cod_pessoa"));
 
-
+        $data['pessoa_id'] = $cod_pessoa;
         $data['obr_descricao'] = returnNull($this->request->getPost('cad_obra'), 'S');
         $data['obr_datainicio'] = returnNull(esc($this->request->getPost('cad_datainicio')));
 
@@ -130,8 +134,20 @@ class Obras extends ApiController
             if ($this->obraModel->save($data)) {
 
                 // $this->auditoriaModel->insertAuditoria('cadastro', 'obra', $metedoAuditoria, $dataAuditoria);
-
                 $cod_obra = (!empty($this->request->getPost('cod_obra'))) ? $this->request->getPost('cod_obra') : $this->obraModel->getInsertID();
+
+                if (empty($this->request->getPost('cod_orcamento'))) {
+
+                $orcamentoModel = new \App\Models\Venda\OrcamentoModel();
+
+                $obra['pessoa_id'] = $cod_pessoa;
+                $obra['obra_id'] = $cod_obra;
+                $obra['situacao'] = '5';
+                $obra['serial'] = $cod_pessoa . getSerial();
+
+                $orcamentoModel->save($obra);
+
+                }
 
                 $return = $this->obraModel->returnSave($cod_obra);
 

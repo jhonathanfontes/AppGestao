@@ -15,6 +15,7 @@ class OrcamentoModel extends Model
 		'orc_tipoorcamento',
 		'orc_tipopagamento',
 		'pessoa_id',
+		'obra_id',
 		'orc_dataorcamento',
 		'vendedor_id',
 		'qtn_produto',

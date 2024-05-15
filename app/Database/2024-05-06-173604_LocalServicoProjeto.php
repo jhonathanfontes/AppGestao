@@ -5,7 +5,7 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class Obra extends Migration
+class LocalServicoProjeto extends Migration
 {
     public function up()
     {
@@ -16,33 +16,35 @@ class Obra extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'pessoa_id' => [
+            'local_id' => [
                 'type' => 'INT',
                 'unsigned' => true,
+            ],
+            'produto_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
+            ],
+            'lsv_quantidade' => [
+                'type' => 'INT',
                 'null' => true,
             ],
-            'obr_descricao' => [
+            'lsv_valor' => [
+                'type' => 'double precision',
+                'null' => true,
+            ], 
+            'lsv_total' => [
+                'type' => 'double precision',
+                'null' => true,
+            ],           
+            'lsv_observacao' => [
                 'type' => 'VARCHAR',
-                'constraint' => '100',
-            ],
-            'obr_datainicio' => [
-                'type' => 'DATE',
-                'null' => true,
-            ],
-            'endereco_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
+                'constraint' => '200',
                 'null' => true,
             ],
             'status' => [
                 'type' => 'INT',
-                'default' => 1,
+                'default' => 3,
                 'comment' => '1 -Habilitado, 2 - Desativado, 3 - Pendente, 9 - Arquivado',
-            ],
-            'empresa_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => true,
             ],
             'created_user_id' => [
                 'type' => 'INT',
@@ -74,19 +76,17 @@ class Obra extends Migration
         ]);
         
         $this->forge->addPrimaryKey('id');
-
-        $this->forge->addForeignKey('pessoa_id', 'cad_pessoa', 'id', 'CASCADE', 'NO ACTION', 'fk_pessoa_obra');
-        $this->forge->addForeignKey('endereco_id', 'cad_endereco', 'id', 'CASCADE', 'NO ACTION', 'fk_endereco_obra');
-        $this->forge->addForeignKey('empresa_id', 'con_empresa', 'id', 'CASCADE', 'NO ACTION', 'fk_empresa_obra');
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_obra');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_obra');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_obra');
       
-        $this->forge->createTable('ger_obra', false, ['ENGINE' => 'InnoDB']);
+        $this->forge->addForeignKey('local_id', 'ger_local', 'id', 'CASCADE', 'NO ACTION', 'fk_local_localservico');
+        $this->forge->addForeignKey('produto_id', 'cad_produto', 'id', 'CASCADE', 'NO ACTION', 'fk_produto_localservico');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_localservico');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_localservico');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_localservico');
+        $this->forge->createTable('ger_localservico', false, ['ENGINE' => 'InnoDB']);
     }
 
     public function down()
     {
-        $this->forge->dropTable('ger_obra');
+        $this->forge->dropTable('ger_localservico');
     }
 }

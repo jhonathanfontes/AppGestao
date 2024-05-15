@@ -63,11 +63,6 @@ class EstoqueProduto extends Migration
                 'constraint' => '200',
                 'comment' => 'CODIGO GERADO AUTOMATICAMENTO POR TRANSAÇÃO',
             ],
-            'agrupar_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => true,
-            ],
             'created_user_id' => [
                 'type' => 'INT',
                 'unsigned' => true,
