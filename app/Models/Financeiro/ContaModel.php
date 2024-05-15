@@ -130,6 +130,7 @@ class ContaModel extends Model
     {
         $attributes = [
             'fin_conta.id as cod_conta',
+            'fin_tipoconta',
             'pessoa_id as cod_pessoa',
             'orcamento_id as cod_orcamento',
             'cad_pessoa.pes_nome as des_cliente',
@@ -172,6 +173,7 @@ class ContaModel extends Model
             'SUM(IF(fin_vencimento < STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), 1, 0)) AS pac_vencida',
             'CAST(SUM(IF(fin_vencimento > STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), fin_saldo, 0)) AS DECIMAL(9,2)) AS val_pendente',
             'SUM(IF(fin_vencimento > STR_TO_DATE(CURRENT_DATE, "%Y-%m-%d"), 1, 0)) AS pac_pendente',
+            'fin_tipoconta',
             'pessoa_id as cod_pessoa',
             'cad_pessoa.pes_nome as des_cliente',
         ];
@@ -181,6 +183,7 @@ class ContaModel extends Model
             ->join('cad_subgrupo', 'cad_subgrupo.id = fin_conta.subgrupo_id')
             ->whereIn('fin_conta.situacao', ['1', '2'])
             ->where('fin_conta.fin_quitado', 'N')
+            ->groupBy('fin_conta.fin_tipoconta')
             ->groupBy('fin_conta.pessoa_id');
 
         return $result;

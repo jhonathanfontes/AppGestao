@@ -414,13 +414,13 @@ function convertTipoGrupo($forma)
 {
     switch ($forma) {
         case 'R':
-            $return = 'RECEITAS';
+            $return = '<label class="badge badge-success">RECEITAS</label>';
             break;
         case 'D':
-            $return = 'DESPESAS';
+            $return = '<label class="badge badge-danger">DESPESAS</label>';
             break;
         default:
-            $return = 'NÃO CLASSIFICADO';
+            $return = '<label class="badge badge-dark">NÃO CLASSIFICADO</label>';
             break;
     }
     return $return;

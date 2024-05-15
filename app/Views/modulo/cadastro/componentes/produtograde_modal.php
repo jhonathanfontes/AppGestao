@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalProdutoGrade">
+<div class="modal fade" id="modalProdutoGrade" data-backdrop="static">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-pink">

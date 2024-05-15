@@ -18,12 +18,13 @@ trait FinanceiroTrait
         }
     }
 
-    public function setContaPessoaSelecionado(int $codPessoa = null)
+    public function setContaPessoaSelecionado(int $codPessoa = null, int $codTipo = null)
     {
         try {
             if ($codPessoa != null) {
                 $model = new \App\Models\Financeiro\ContaModel();
                 return $model->getConta()
+                    ->where('fin_conta.fin_tipoconta', $codTipo)
                     ->where('fin_conta.pessoa_id', $codPessoa)
                     ->findAll();
             }

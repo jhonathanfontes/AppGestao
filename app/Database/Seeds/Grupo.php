@@ -68,7 +68,6 @@ class Grupo extends Seeder
         ];
 
         $this->db->table('cad_grupo')->insertBatch($data);
-        $this->db->query('ALTER SEQUENCE cad_grupo_id_seq RESTART WITH 12');
-
+        
     }
 }

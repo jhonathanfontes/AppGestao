@@ -30,7 +30,7 @@ class ContaPagar extends BaseController
 
     public function viewFornecedor(int $codPessoa = null)
     {
-        $contaPagarSelecionado    = $this->setContaPessoaSelecionado($codPessoa);
+        $contaPagarSelecionado    = $this->setContaPessoaSelecionado($codPessoa, 2);
         $pessoaSelecionada          = $this->setPessoaSelecionado($codPessoa);
 
         if ($contaPagarSelecionado == null) {

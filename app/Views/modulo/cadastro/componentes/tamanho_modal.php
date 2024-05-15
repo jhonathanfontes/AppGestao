@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalTamanho">
+<div class="modal fade" id="modalTamanho" data-backdrop="static">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header <?= getenv('tema.modal.header.color'); ?>">

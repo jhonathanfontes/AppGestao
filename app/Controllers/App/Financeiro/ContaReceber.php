@@ -37,7 +37,7 @@ class ContaReceber extends BaseController
 
     public function viewCliente(int $codPessoa = null)
     {
-        $contaReceberSelecionado    = $this->setContaPessoaSelecionado($codPessoa);
+        $contaReceberSelecionado    = $this->setContaPessoaSelecionado($codPessoa, 1);
         $pessoaSelecionada          = $this->setPessoaSelecionado($codPessoa);
        // $pagamentoSelecionado       = $this->setRecebimentoClienteSelecionado($codPessoa);
 

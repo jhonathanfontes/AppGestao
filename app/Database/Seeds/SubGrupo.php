@@ -276,6 +276,6 @@ class SubGrupo extends Seeder
         ];
 
         $this->db->table('cad_subgrupo')->insertBatch($data);
-        $this->db->query('ALTER SEQUENCE cad_subgrupo_id_seq RESTART WITH 48');
+        // $this->db->query('ALTER SEQUENCE cad_subgrupo_id_seq RESTART WITH 48');
     }
 }
