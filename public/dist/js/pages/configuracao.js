@@ -158,6 +158,7 @@ function getEditBanco(Paramentro) {
         success: function (dado) {
 
             document.getElementById('modalTitleBanco').innerHTML = 'ATUALIZANDO O BANCO ' + dado.cad_banco;
+            console.log(dado);
             $('#cod_banco').val(dado.cod_banco);
             $('#cad_codigo').val(dado.cad_codigo);
             $('#cad_banco').val(dado.cad_banco);
@@ -231,86 +232,17 @@ function salvarBanco() {
     });
 }
 
-function getEditMaquinaCartao(Paramentro) {
-    $.ajax({
-        "url": base_url + "api/configuracao/exibir/maquinacartao/" + Paramentro,
-        "type": "GET",
-        "dataType": "json",
-        success: function (dado) {
-            document.getElementById('modalTitleMaquinaCartao').innerHTML = 'ATUALIZANDO A MAQUINA DE CARTÃO ' + dado.cad_maquinacartao;
-            $('#cod_maquinacartao').val(dado.cod_maquinacartao);
-            $('#cad_maquinacartao').val(dado.cad_maquinacartao);
-            if (dado.status == '1') {
-                document.getElementById("maquinacartaoAtivo").checked = true;
-            }
-            if (dado.status == '2') {
-                document.getElementById("maquinacartaoInativo").checked = true;
-            }
+function getBancoOption() {
+    $.get(base_url + 'api/configuracao/exibir/bancos', {
+    }, function (response) {
+        options = '<option value="">SELECIONE UM BANCO</option>';
+        for (var i = 0; i < response.length; i++) {
+            options += '<option value="' + response[i].cod_banco + '">' + response[i].cad_banco + ' - ' + response[i].cad_codigo + '</option>';
         }
+        $('#cad_banco').html(options);
     });
 }
 
-function setNewMaquinaCartao() {
-    document.getElementById('modalTitleMaquinaCartao').innerHTML = 'CADASTRO DE NOVA MAQUINA DE CARTÃO';
-    var cod_maquinacartao = document.getElementById('cod_maquinacartao').value;
-    if (cod_maquinacartao != '') {
-        document.getElementById("cod_maquinacartao").value = '';
-        document.getElementById("cad_maquinacartao").value = '';
-        document.getElementById("maquinacartaoAtivo").checked = true;
-    }
-}
-
-function salvarMaquinaCartao() {
-    $("#formMaquinaCartao").submit(function (e) {
-        e.preventDefault();
-    });
-
-    $.validator.setDefaults({
-        submitHandler: function () {
-            var form = $('#formMaquinaCartao');
-            var url = form.attr('action');
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: $('#formMaquinaCartao').serialize(),
-                dataType: "json",
-                beforeSend: function () {
-                    document.getElementById("SalvarMaquinaCartao").disabled = true;
-                },
-                success: function (response) {
-                    respostaSwalFire(response)
-                },
-                error: function () {
-                    document.getElementById("SalvarMaquinaCartao").disabled = false;
-                }
-            });
-        }
-    });
-
-    $('#formMaquinaCartao').validate({
-        rules: {
-            cad_maquinacartao: {
-                required: true,
-            },
-        },
-        messages: {
-            cad_maquinacartao: {
-                required: "O nome da maquininha deve ser informada!",
-            },
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        }
-    });
-}
 
 function getEditContaBancaria(Paramentro) {
     $.ajax({

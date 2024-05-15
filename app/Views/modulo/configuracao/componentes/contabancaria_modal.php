@@ -18,11 +18,6 @@
                             <label for="">BANCO</label>
                             <select name="cad_banco" id="cad_banco" class="form-control select2bs4" style="width: 100%;" required>
                                 <option value="">SELECIONE UM BANCO</option>
-                                <?php if (!empty($bancos)) : ?>
-                                    <?php foreach ($bancos as $row) : ?>
-                                        <option value="<?= $row->id_banco ?>"><?= $row->ban_codigo . ' - ' . $row->ban_descricao ?></option>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
                             </select>
                         </div>
                         <div class="form-group col-2">
@@ -49,13 +44,9 @@
                             <label for="">EMPRESA</label>
                             <select name="cad_empresa" id="cad_empresa" class="form-control select2bs4" style="width: 100%;">
                                 <option value="">SELECIONE UM EMPRESA</option>
-                                <?php if (!empty($empresas)) : ?>
-                                    <?php foreach ($empresas as $row) : ?>
-                                        <option value="<?= $row->id_empresa ?>"><?= $row->cad_razao ?></option>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
                             </select>
                         </div>
+
                         <div class="form-group col-3">
                             <label for="">PAGAMENTO</label>
                             <select name="cad_pagamento" id="cad_pagamento" class="form-control select2bs4" style="width: 100%;">

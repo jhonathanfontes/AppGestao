@@ -1,7 +1,7 @@
-<div class="modal fade" id="modalBanco">
+<div class="modal fade" id="modalBanco" data-backdrop="static">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header bg-pink">
+      <div class="modal-header <?= getenv('tema.modal.header.color'); ?>">
         <h4 class="modal-title"><span id="modalTitleBanco"></span></h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>

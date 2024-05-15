@@ -93,6 +93,7 @@ function getEditObra(Paramentro) {
         "type": "GET",
         "dataType": "json",
         success: function (dado) {
+            console.log(dado);
             document.getElementById('modalTitleObra').innerHTML = 'ATUALIZANDO A PROFISSÃO ' + dado.cad_obra;
             $('#cod_obra').val(dado.cod_obra);
             $('#cad_obra').val(dado.cad_obra);
@@ -171,9 +172,19 @@ function getEditLocal(Paramentro) {
         success: function (dado) {
             document.getElementById('modalTitleLocal').innerHTML = 'ATUALIZANDO A PROFISSÃO ' + dado.cad_local;
             $('#id_local').val(dado.cod_local);
+            $('#cod_pessoa').val('').trigger('change');
             $('#cod_local_obra').val(dado.cod_obra);
             $('#cad_local').val(dado.cad_local);
             $('#cad_datainicio').val(dado.cad_datainicio);
+
+            $('#cad_cep').val(dado.cad_cep);
+            $('#cad_endereco').val(dado.cad_endereco);
+            $('#cad_numero').val(dado.cad_numero);
+            $('#cad_bairo').val(dado.cad_bairo);
+            $('#cad_cidade').val(dado.cad_cidade);
+            $('#cad_uf').val(dado.cad_uf);
+            $('#cad_complemento').val(dado.cad_complemento);
+
         }
     });
 }

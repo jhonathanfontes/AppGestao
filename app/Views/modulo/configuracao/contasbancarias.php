@@ -61,3 +61,11 @@
 <?php require_once('componentes/contabancaria_modal.php');
 ?>
 <?= $this->endSection() ?>
+
+<?= $this->section('script') ?>
+<script>
+    $(document).ready(function () {
+        getBancoOption();
+    });
+</script>
+<?= $this->endSection() ?>

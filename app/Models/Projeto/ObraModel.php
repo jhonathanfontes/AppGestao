@@ -71,13 +71,11 @@ class ObraModel extends Model
 	}
 
 
-	function getObra($cod_obra = null)
+	function getObra()
 	{
 		$atributos = [
-			'ger_obra.id as cod_obra',
-			'obr_descricao as cad_obra',
-			'obr_datainicio as cad_datainicio',
-			'ger_obra.status',
+			'ger_obra.*',
+			'cad_pessoa.pes_nome as cad_nome',
 			'cad_endereco.id as cod_endereco',
 			'end_endereco as cad_endereco',
 			'end_numero as cad_numero',
@@ -88,13 +86,9 @@ class ObraModel extends Model
 			'end_cep as cad_cep',
 		];
 
-		$db = \Config\Database::connect();
-		$builder = $db->table($this->table);
-		$builder->select($atributos);
-		$builder->join('cad_endereco', 'cad_endereco.id = ger_obra.endereco_id', 'left');
-		$builder->where('ger_obra.id', $cod_obra);
-		$result = $builder->get();
-		return $result->getRow();
+		return $this->select($atributos)
+			->join('cad_pessoa', 'cad_pessoa.id = ger_obra.pessoa_id', 'left')
+			->join('cad_endereco', 'cad_endereco.id = ger_obra.endereco_id', 'left');
 	}
 
 	function getObras()

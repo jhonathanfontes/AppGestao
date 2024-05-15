@@ -12,8 +12,4 @@ php spark migrate --all
 
 
 # Populando as Tabelas
-php spark db:seed Usuario
-
-php spark db:seed Grupo
-
-php spark db:seed SubGrupo
+php spark db:seed Start

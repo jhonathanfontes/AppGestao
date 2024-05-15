@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Api\Configuracao;
+namespace App\Controllers\Api\v1\Configuracao;
 
 use App\Controllers\Api\ApiController;
 use App\Models\AuditoriaModel;
@@ -17,7 +17,7 @@ class Bancos extends ApiController
     public function __construct()
     {
         $this->bancoModel = new BancoModel();
-        $this->auditoriaModel = new AuditoriaModel();
+        // $this->auditoriaModel = new AuditoriaModel();
         $this->validation =  \Config\Services::validation();
     }
 
@@ -29,7 +29,7 @@ class Bancos extends ApiController
 
         foreach ($result as $key => $value) {
 
-            $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalBanco" onclick="getEditBanco(' . $value->ban_codigo . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+            $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalBanco" onclick="getEditBanco(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
 
             $response['data'][$key] = array(
                 esc($value->ban_codigo),
@@ -54,7 +54,7 @@ class Bancos extends ApiController
 
         if (!empty($this->request->getPost('cod_banco'))) {
 
-            $data['id_banco'] = $this->request->getPost('cod_banco');
+            $data['id'] = $this->request->getPost('cod_banco');
             $result = $this->buscaRegistro404($this->request->getPost('cod_banco'));
 
             $result->fill($data);
@@ -84,7 +84,7 @@ class Bancos extends ApiController
 
             if ($this->bancoModel->save($data)) {
 
-                $this->auditoriaModel->insertAuditoria('configuracao', 'banco', $metedoAuditoria, $dataAuditoria);
+                // $this->auditoriaModel->insertAuditoria('configuracao', 'banco', $metedoAuditoria, $dataAuditoria);
                 $cod_banco = (!empty($this->request->getPost('cod_banco'))) ? $this->request->getPost('cod_banco') : $this->bancoModel->getInsertID();
                 
                 $return = $this->bancoModel->returnSave($cod_banco);
@@ -156,7 +156,7 @@ class Bancos extends ApiController
         try {
             if ($this->bancoModel->arquivarRegistro($paramentro)) {
 
-                $this->auditoriaModel->insertAuditoria('configuracao', 'banco', 'arquivar', $banco->auditoriaAtributos());
+                // $this->auditoriaModel->insertAuditoria('configuracao', 'banco', 'arquivar', $banco->auditoriaAtributos());
 
                 return $this->response->setJSON([
                     'status' => true,

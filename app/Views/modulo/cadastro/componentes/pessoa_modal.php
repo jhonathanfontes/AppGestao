@@ -17,7 +17,7 @@
                         <label for="">ID</label>
                         <input id="id" type="number" class="form-control" disabled>
                     </div>
-                    <div class="form-group col-3">
+                    <div class="form-group col-lg-3 col-sm-2">
                         <label for="">TIPO</label>
                         <select name="cad_tipopessoa" id="cad_tipopessoa" class="form-control">
                             <option value="1" selected="selected">CLIENTE</option>
@@ -45,11 +45,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-5" id="container-nascimento">
+                    <div class="form-group col-lg-3 col-sm-12" id="container-nascimento">
                         <label for="">DATA NASCIMENTO</label>
                         <input name="cad_nascimeto" id="cad_nascimeto" type="date" class="form-control">
                     </div>
-                    <div class="form-group col-5" id="container-rg">
+                    <div class="form-group col-lg-3 col-sm-12" id="container-rg">
                         <label for="">RG</label>
                         <input name="cad_rg" id="cad_rg" type="text" class="form-control">
                     </div>

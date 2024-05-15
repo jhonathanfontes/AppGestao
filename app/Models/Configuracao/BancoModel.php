@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class BancoModel extends Model
 {
     protected $table      = 'cad_banco';
-    protected $primaryKey = 'id_banco';
+    protected $primaryKey = 'id';
     protected $returnType     = \App\Entities\Configuracao\Banco::class;
     protected $allowedFields = [
         'ban_codigo',

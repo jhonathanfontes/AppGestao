@@ -138,14 +138,14 @@ class Obras extends ApiController
 
                 if (empty($this->request->getPost('cod_orcamento'))) {
 
-                $orcamentoModel = new \App\Models\Venda\OrcamentoModel();
+                    $orcamentoModel = new \App\Models\Venda\OrcamentoModel();
 
-                $obra['pessoa_id'] = $cod_pessoa;
-                $obra['obra_id'] = $cod_obra;
-                $obra['situacao'] = '5';
-                $obra['serial'] = $cod_pessoa . getSerial();
+                    $obra['pessoa_id'] = $cod_pessoa;
+                    $obra['obra_id'] = $cod_obra;
+                    $obra['situacao'] = '5';
+                    $obra['serial'] = $cod_pessoa . getSerial();
 
-                $orcamentoModel->save($obra);
+                    $orcamentoModel->save($obra);
 
                 }
 
@@ -185,8 +185,10 @@ class Obras extends ApiController
 
     public function show($paramentro)
     {
-        $return = $this->obraModel->where('id', $paramentro)
+        $return = $this->obraModel->getObra()
+            ->where('ger_obra.id', $paramentro)
             ->first();
+
         return $this->response->setJSON($return);
     }
 

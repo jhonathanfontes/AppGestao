@@ -57,6 +57,7 @@ class Empresa extends Migration
             'status' => [
                 'type' => 'INT',
                 'comment' => '0 - Desativado, 1 - Habilitado, 9 - Arquivado',
+                'default' => 1,
             ],
             'created_user_id' => [
                 'type' => 'INT',
