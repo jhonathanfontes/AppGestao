@@ -55,24 +55,28 @@ class Empresa extends ApiController
             $endereco['id'] = $this->request->getPost('cod_endereco');
         }
 
-        $endereco['end_endereco'] = returnNull($this->request->getPost('cad_endereco'), 'S');
-        $endereco['end_numero'] = returnNull($this->request->getPost('cad_numero'), 'S');
-        $endereco['end_setor'] = returnNull($this->request->getPost('cad_bairo'), 'S');
-        $endereco['end_cidade'] = returnNull($this->request->getPost('cad_cidade'), 'S');
-        $endereco['end_estado'] = returnNull($this->request->getPost('cad_uf'), 'S');
-        $endereco['end_complemento'] = returnNull($this->request->getPost('cad_complemento'), 'S');
-        $endereco['end_cep'] = returnNull($this->request->getPost('cad_cep'), 'S');
+        if (!empty($this->request->getPost('cad_endereco'))) {
+            $endereco['end_endereco'] = returnNull($this->request->getPost('cad_endereco'), 'S');
+            $endereco['end_numero'] = returnNull($this->request->getPost('cad_numero'), 'S');
+            $endereco['end_setor'] = returnNull($this->request->getPost('cad_setor'), 'S');
+            $endereco['end_cidade'] = returnNull($this->request->getPost('cad_cidade'), 'S');
+            $endereco['end_estado'] = returnNull($this->request->getPost('cad_estado'), 'S');
+            $endereco['end_complemento'] = returnNull($this->request->getPost('cad_complemento'), 'S');
+            $endereco['end_cep'] = returnNull($this->request->getPost('cad_cep'), 'S');
 
-        if ($this->enderecoModel->save($endereco)) {
-            $data['endereco_id'] = (!empty($this->request->getPost('cod_endereco'))) ? $this->request->getPost('cod_endereco') : $this->enderecoModel->getInsertID();
+            if ($this->enderecoModel->save($endereco)) {
+                $data['endereco_id'] = (!empty($this->request->getPost('cod_endereco'))) ? $this->request->getPost('cod_endereco') : $this->enderecoModel->getInsertID();
+            }
         }
 
-        $data['emp_razao'] = returnNull($this->request->getPost('cad_razao'), 'S');
-        $data['emp_fantasia'] = returnNull($this->request->getPost('cad_fantasia'), 'S');
+        $data['emp_razao'] = returnNull($this->request->getPost('cad_nome'), 'S');
+        $data['emp_fantasia'] = returnNull($this->request->getPost('cad_apelido'), 'S');
         $data['emp_slogan'] = returnNull($this->request->getPost('cad_slogan'), 'S');
-        $data['emp_cnpj'] = limparCnpjCpf(returnNull($this->request->getPost('cad_cnpj'), 'S'));
+        $data['emp_cnpj'] = limparCnpjCpf(returnNull($this->request->getPost('cad_documento'), 'S'));
         $data['emp_email'] = returnNull($this->request->getPost('cad_email'));
         $data['emp_telefone'] = returnNull($this->request->getPost('cad_telefone'), 'S');
+        $data['status'] = returnNull($this->request->getPost('status'));
+
 
         if (!empty($this->request->getPost('cod_empresa'))) {
 
@@ -81,7 +85,7 @@ class Empresa extends ApiController
 
             $result->fill($data);
 
-            if ($result->hasChanged() == false) {
+            if ($result->hasChanged() == false && empty($this->request->getPost('cod_endereco'))) {
                 return $this->response->setJSON([
                     'status' => true,
                     'menssagem' => [
@@ -131,10 +135,11 @@ class Empresa extends ApiController
         return $this->response->setJSON($return);
     }
 
-    public function show($paramentro)
+    public function show($cod_empresa = null)
     {
-        $return = $this->empresaModel->getEmpresa($paramentro);
-        // $return = $this->empresaModel->where('id', $paramentro)->first();
+        $return = $this->empresaModel->getEmpresa()
+            ->where('con_empresa.id', $cod_empresa)
+            ->first();
         return $this->response->setJSON($return);
     }
 

@@ -94,12 +94,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('app/configuracao/auxiliar/financeiro/bandeiras'); ?>" class="nav-link <?= (url_is('app/configuracao/auxiliar/financeiro/bandeiras')) ? 'active' : ''; ?>">
-                                <i class="far <?= (url_is('app/configuracao/auxiliar/financeiro/bandeiras')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
-                                <p>BANDEIRAS</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="<?= base_url('app/configuracao/auxiliar/financeiro/contasbancarias'); ?>" class="nav-link <?= (url_is('app/configuracao/auxiliar/financeiro/contasbancarias')) ? 'active' : ''; ?>">
                                 <i class="far <?= (url_is('app/configuracao/auxiliar/financeiro/contasbancarias')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
                                 <p>CONTAS BANCÁRIAS</p>
@@ -109,12 +103,6 @@
                             <a href="<?= base_url('app/configuracao/auxiliar/financeiro/formaspagamentos'); ?>" class="nav-link <?= (url_is('app/configuracao/auxiliar/financeiro/formaspagamentos*')) ? 'active' : ''; ?>">
                                 <i class="far <?= (url_is('app/configuracao/auxiliar/financeiro/formaspagamentos*')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
                                 <p>FORMAS DE PAGAMENTOS</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="<?= base_url('app/configuracao/auxiliar/financeiro/maquinascartoes'); ?>" class="nav-link <?= (url_is('app/configuracao/auxiliar/financeiro/maquinascartoes')) ? 'active' : ''; ?>">
-                                <i class="far <?= (url_is('app/configuracao/auxiliar/financeiro/maquinascartoes')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
-                                <p>MAQUINAS DE CARTÕES</p>
                             </a>
                         </li>
                     </ul>

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Controllers\Api\Configuracao;
+namespace App\Controllers\Api\v1;
 
 use App\Controllers\Api\ApiController;
-use App\Models\AuditoriaModel;
 
 class Auditoria extends ApiController
 {
@@ -12,7 +11,7 @@ class Auditoria extends ApiController
 
     public function __construct()
     {
-        $this->auditoriaModel = new AuditoriaModel();
+        $this->auditoriaModel = new \App\Models\AuditoriaModel();
 
     }
 

@@ -4,7 +4,7 @@ namespace App\Controllers\Api\v1\Financeiro;
 
 use App\Controllers\Api\ApiController;
 use App\Entities\Financeiro\ContaPagar as FinanceiroContaPagar;
-use App\Models\Financeiro\ContaModel;
+
 use App\Models\Financeiro\MovimentacaoModel;
 
 class Contas extends ApiController
@@ -16,7 +16,7 @@ class Contas extends ApiController
 
     public function __construct()
     {
-        $this->contaModel = new contaModel();
+        $this->contaModel = new \App\Models\Financeiro\ContaModel();
         $this->movimentacaoModel = new MovimentacaoModel();
         // $this->auditoriaModel = new \App\Models\AuditoriaModel();
         $this->validation = \Config\Services::validation();
@@ -195,13 +195,8 @@ class Contas extends ApiController
             return redirect()->back();
         }
 
-        // return $this->response->setJSON($tipoconta);
-        // return $this->response->setJSON($this->request->getPost());
-
         $cod_conta = $this->request->getPost("cod_conta");
-
         $cad_valor = formatValorBD($this->request->getPost("cad_valor"));
-
         $cad_parcela = $this->request->getPost("cad_parcela");
         $cad_parcela_total = $this->request->getPost("cad_parcela_total");
         $cad_vencimento = $this->request->getPost("cad_vencimento");
@@ -268,8 +263,6 @@ class Contas extends ApiController
             $data['fin_saldo'] = $cad_valor;
             $data['situacao'] = 1;
         }
-
-        // return $this->response->setJSON($data);
 
         if (!empty($this->request->getPost('cod_conta'))) {
             $data['id'] = $this->request->getPost('cod_conta');

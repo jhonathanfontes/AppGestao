@@ -19,32 +19,29 @@ class EmpresaModel extends Model
         'emp_email',
         'emp_icone',
         'media_preco',
-        'media_distancia'
+        'media_distancia',
+        'status'
     ];
 
-    function getEmpresa($cod_empresa = null)
+    function getEmpresa()
     {
-        $db = \Config\Database::connect();
-        $builder = $db->table($this->table);
-        $builder->select('con_empresa.*, cad_endereco.*');
-        $builder->join('cad_endereco', 'cad_endereco.id = con_empresa.endereco_id');
-        $builder->where('con_empresa.id', $cod_empresa);
-        $result = $builder->get();
-        return $result->getRow();
-    }
+        $atributos = [
+            'con_empresa.*',
+            'cad_endereco.id as cod_endereco',
+            'end_endereco as cad_endereco',
+            'end_numero as cad_numero',
+            'end_setor as cad_setor',
+            'end_complemento as cad_complemento',
+            'end_cidade as cad_cidade',
+            'end_estado as cad_estado',
+            'end_cep as cad_cep',
+        ];
 
-    function getEmpresas()
-    {
-        $db = \Config\Database::connect();
-        $builder = $db->table($this->table);
-        $builder->select('con_empresa.*, cad_endereco.*');
-        $builder->join('cad_endereco', 'cad_endereco.id = con_empresa.endereco_id');
-        $builder->whereIn('con_empresa.status', ['1', '2']);
-        $builder->orderBy('emp_razao', 'asc');
-        $result = $builder->get();
-        return $result->getResult();
-    }
+        return $this->select($atributos)
+            ->join('cad_endereco', 'cad_endereco.id = con_empresa.endereco_id', 'left');
 
+    }
+    
     public function returnSave(int $codigo = null)
     {
         return $this->select('id, emp_razao')->find($codigo);

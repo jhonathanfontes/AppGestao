@@ -105,12 +105,14 @@ class Obras extends ApiController
         $entityObra = new Obra($data);
 
         if (!empty($this->request->getPost('cod_obra'))) {
+
             $data['id'] = $this->request->getPost('cod_obra');
 
             $result = $this->buscaRegistro404($data['id']);
             $result->fill($data);
 
-            if ($result->hasChanged() == false) {
+
+            if ($result->hasChanged() == false && empty($this->request->getPost('cod_endereco'))) {
                 return $this->response->setJSON([
                     'status' => true,
                     'menssagem' => [

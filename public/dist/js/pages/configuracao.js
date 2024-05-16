@@ -107,47 +107,56 @@ $(document).ready(function () {
 
 // MODULO AUXILIAR FINANCEIRO 
 
-$('#cad_cnpj').change(function () {
+function validaCnpjEmpresa(campoTexto) {
+
     var cod_empresa = document.getElementById('cod_empresa').value;
-    if (cod_empresa === '') {
-        carregaCnpjEmpresa();
-    }
-});
 
+    if (campoTexto.value != '') {
+        $.post(base_url + 'api/configuracao/consulta/empresa/documento', { cad_documento: campoTexto.value })
+            .done(function (data) {
+                if (cod_empresa == '' || cod_empresa != data.cod_empresa) {
+                    if (data) {
+                        $menssagem = "Documento já cadastrado - COD: " + data.cod_empresa + " Empresa: " + data.cad_nome;
+                        showConfirmationDialog('O CNPJ informado já esta cadastrado em nome de ' + data.cad_nome + '!', 'Deseja atualizar os dados CNPJ!', 'Sim, Atualizar!')
+                            .then((confirmed) => {
+                                if (confirmed) {
+                                    getEditPessoa(data.cod_empresa);
+                                } else {
+                                    document.getElementById("cad_documento").value = '';
+                                }
+                            });
+                    }
+                }
+            });
 
-function carregaCnpjEmpresa() {
-    var cad_cnpj = document.getElementById('cad_cnpj').value;
-    var cnpj = cad_cnpj.replace(/[^\d]+/g, '');
-
-    $.ajax({
-        url: `https://www.receitaws.com.br/v1/cnpj/${cnpj}`,
-        type: "GET",
-        dataType: 'jsonp',
-        success: function (dado) {
-            if (dado.nome == undefined) {
+        if (campoTexto.value.length == 14) {
+            //  consultaCNPJ(campoTexto.value);
+            document.getElementById("buttonSyncPessoa").value = campoTexto.value;
+            campoTexto.value = mascaraCnpj(campoTexto.value);
+            document.getElementById("buttonSyncPessoa").disabled = false;
+        } else {
+            $(function () {
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
                     showConfirmButton: false,
                     timer: 3000
                 });
-
-                toastr.error('CNPJ Não encontrado, Preencha Manualmente');
-            } else {
-                document.getElementById("cad_razao").value = dado.nome;
-                document.getElementById("cad_fantasia").value = dado.fantasia;
-                document.getElementById("cad_cep").value = dado.cep;
-                document.getElementById("cad_cidade").value = dado.municipio;
-                document.getElementById("cad_uf").value = dado.uf;
-                document.getElementById("cad_bairo").value = dado.bairro;
-                document.getElementById("cad_endereco").value = dado.logradouro;
-                document.getElementById("cad_complemento").value = dado.complemento;
-                document.getElementById("cad_telefone").value = dado.telefone;
-                document.getElementById("cad_email").value = dado.email;
-            }
+                $(function () {
+                    toastr.error('Documento informador não é valido');
+                    campoTexto.value = '';
+                });
+            });
         }
-    });
+    }
 }
+
+$('#cad_cnpj').change(function () {
+    var cod_empresa = document.getElementById('cod_empresa').value;
+    if (cod_empresa === '') {
+        carregaCnpjEmpresa();
+    }
+});
 
 function getEditBanco(Paramentro) {
 
@@ -469,22 +478,31 @@ function getEditEmpresa(Paramentro) {
         "dataType": "json",
         success: function (dado) {
             document.getElementById('modalTitleEmpresa').innerHTML = 'ATUALIZANDO A EMPRESA ' + dado.cad_razao;
-            document.getElementById("cod_empresa").value = dado.id;
-            document.getElementById("cod_endereco").value = dado.endereco_id;
-            document.getElementById("cad_razao").value = dado.emp_razao;
-            document.getElementById("cad_fantasia").value = dado.emp_fantasia;
-            document.getElementById("cad_slogan").value = dado.emp_slogan;
-            document.getElementById("cad_cnpj").value = dado.emp_cnpj;
-            document.getElementById("cad_telefone").value = dado.emp_telefone;
-            document.getElementById("cad_email").value = dado.emp_email;
+            document.getElementById("cod_empresa").value = dado.cod_empresa;
+            document.getElementById("cod_endereco").value = dado.cod_endereco;
+
+            document.getElementById("cad_nome").value = dado.cad_razao;
+            document.getElementById("cad_apelido").value = dado.cad_fantasia;
+            document.getElementById("cad_slogan").value = dado.cad_slogan;
+            document.getElementById("cad_documento").value = dado.cad_cnpj;
+            document.getElementById("cad_telefone").value = dado.cad_telefone;
+            document.getElementById("cad_email").value = dado.cad_email;
             //endereço 
-            document.getElementById("cad_endereco").value = dado.end_endereco;
-            document.getElementById("cad_numero").value = dado.end_numero;
-            document.getElementById("cad_bairo").value = dado.end_setor;
-            document.getElementById("cad_complemento").value = dado.end_complemento;
-            document.getElementById("cad_cidade").value = dado.end_cidade;
-            document.getElementById("cad_uf").value = dado.end_estado;
-            document.getElementById("cad_cep").value = dado.end_cep;
+            document.getElementById("cad_endereco").value = dado.cad_endereco;
+            document.getElementById("cad_numero").value = dado.cad_numero;
+            document.getElementById("cad_setor").value = dado.cad_setor;
+            document.getElementById("cad_complemento").value = dado.cad_complemento;
+            document.getElementById("cad_cidade").value = dado.cad_cidade;
+            document.getElementById("cad_estado").value = dado.cad_estado;
+            document.getElementById("cad_cep").value = dado.cad_cep;
+
+            if (dado.status == '1') {
+                document.getElementById("empresaAtivo").checked = true;
+            }
+            if (dado.status == '2') {
+                document.getElementById("empresaInativo").checked = true;
+            }
+
         }
     });
 }

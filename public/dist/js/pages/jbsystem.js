@@ -59,7 +59,6 @@ $(document).ready(function () {
         reverse: true
     });
 
-    $('.cnpj').mask('00.000.000/0000-00');
 });
 
 function formatMoneyBR(n, c = 2, d = ",", t = ".") {
@@ -93,38 +92,39 @@ function mascaraCnpj(valor) {
     return valor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/g, "\$1.\$2.\$3\/\$4\-\$5");
 }
 
-function consultaReceitaWsCNPJ(cnpj) {
+// Cerragar os dados do CNPJ informado
+function consultaCNPJ(cnpj) {
     $.ajax({
-        url: "https://www.receitaws.com.br/v1/cnpj/" + cnpj,
-        type: "GET",
-        dataType: 'json',
-        success: function (data) {
-            if (data.nome === undefined) {
-                callback(false);
+        'url': "https://www.receitaws.com.br/v1/cnpj/" + cnpj.value,
+        'type': "GET",
+        'dataType': 'jsonp',
+        'success': function (dado) {
+            if (dado.nome == undefined) {
+                $(function () {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    $(function () {
+                        toastr.error('CNPJ Não encontrado, Preencha Manualmente');
+                    });
+                });
             } else {
-                callback(data);
+                document.getElementById("cad_nome").value = dado.nome;
+                document.getElementById("cad_apelido").value = dado.fantasia;
+                document.getElementById("cad_cep").value = dado.cep;
+                document.getElementById("cad_endereco").value = dado.logradouro;
+                document.getElementById("cad_numero").value = dado.numero;
+                document.getElementById("cad_setor").value = dado.bairro;
+                document.getElementById("cad_cidade").value = dado.municipio;
+                document.getElementById("cad_estado").value = dado.uf;
+                document.getElementById("cad_complemento").value = dado.complemento;
+                document.getElementById("cad_telefone").value = dado.telefone;
+                document.getElementById("cad_email").value = dado.email;
             }
         }
-    });
-}
-
-function consultaReceitaWsCNPJ(cnpj) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: "https://www.receitaws.com.br/v1/cnpj/" + cnpj,
-            type: "GET",
-            dataType: 'json',
-            success: function (data) {
-                if (data.nome === undefined) {
-                    reject("CNPJ not found or invalid.");
-                } else {
-                    resolve(data);
-                }
-            },
-            error: function (xhr, status, error) {
-                reject("Error fetching data: " + status + ", " + error);
-            }
-        });
     });
 }
 

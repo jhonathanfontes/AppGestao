@@ -217,42 +217,6 @@ function formatarCampo(campoTexto) {
     }
 }
 
-// Cerragar os dados do CNPJ informado
-function consultaCNPJ(cnpj) {
-    $.ajax({
-        'url': "https://www.receitaws.com.br/v1/cnpj/" + cnpj.value,
-        'type': "GET",
-        'dataType': 'jsonp',
-        'success': function (dado) {
-            if (dado.nome == undefined) {
-                $(function () {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000
-                    });
-                    $(function () {
-                        toastr.error('CNPJ Não encontrado, Preencha Manualmente');
-                    });
-                });
-            } else {
-                document.getElementById("cad_nome").value = dado.nome;
-                document.getElementById("cad_apelido").value = dado.fantasia;
-                document.getElementById("cad_cep").value = dado.cep;
-                document.getElementById("cad_endereco").value = dado.logradouro;
-                document.getElementById("cad_numero").value = dado.numero;
-                document.getElementById("cad_setor").value = dado.bairro;
-                document.getElementById("cad_cidade").value = dado.municipio;
-                document.getElementById("cad_estado").value = dado.uf;
-                document.getElementById("cad_complemento").value = dado.complemento;
-                document.getElementById("cad_telefone").value = dado.telefone;
-                document.getElementById("cad_email").value = dado.email;
-            }
-        }
-    });
-}
-
 // GERENCIA OS PESSOAS
 function getEditPessoa(Paramentro) {
     $.ajax({

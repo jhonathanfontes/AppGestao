@@ -88,19 +88,7 @@
                     <a href="<?= base_url('app/configuracao/auxiliar/financeiro/bancos'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- ./col -->
-            <div class="col-lg-2 col-4">
-                <!-- small box -->
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <p>BANDEIRAS</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pricetag"></i>
-                    </div>
-                    <a href="<?= base_url('app/configuracao/auxiliar/financeiro/bandeiras'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
+       
             <!-- ./col -->
             <div class="col-lg-2 col-4">
                 <!-- small box -->
@@ -128,19 +116,7 @@
                 </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-2 col-4">
-                <!-- small box -->
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <p>MAQUINAS DE CARTÕES</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-pricetags"></i>
-                    </div>
-                    <a href="<?= base_url('app/configuracao/auxiliar/financeiro/maquinascartoes'); ?>" class="small-box-footer"> ACESSAR <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- ./col -->
+
         </div>
         <!-- /.container-fluid -->
 
