@@ -8,7 +8,7 @@ class FormaPagamento extends Entity
 
 {
     protected $attributes = [
-        'id_forma'  => null,
+        'id'  => null,
         'for_descricao' => null,
         'for_forma' => null,
         'for_prazo' => null,
@@ -20,7 +20,7 @@ class FormaPagamento extends Entity
     ];
 
     protected $datamap = [
-        'cod_forma'         => 'id_forma',
+        'cod_forma'         => 'id',
         'cad_descricao'     => 'for_descricao',
         'cad_forma'         => 'for_forma',
         'cad_fprazo'        => 'for_prazo',

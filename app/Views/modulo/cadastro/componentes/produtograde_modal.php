@@ -1,4 +1,5 @@
-<div class="modal fade" id="modalProdutoGrade" data-backdrop="static">
+<div class="modal fade" id="modalProdutoGrade" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-pink">

@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class VendedorModel extends Model
 {
     protected $table      = 'cad_vendedor';
-    protected $primaryKey = 'id_vendedor';
+    protected $primaryKey = 'id';
     protected $returnType     = \App\Entities\Configuracao\Vendedor::class;
     protected $allowedFields = [
         'usuario_id',
@@ -37,9 +37,8 @@ class VendedorModel extends Model
     public function getVendedor()
     {
         $atributos = [
-            'cad_vendedor.id_vendedor',
+            'cad_vendedor.id',
             'cad_vendedor.usuario_id',
-            'cad_usuario.use_username as use_username',
             'cad_usuario.use_apelido as use_apelido',
             'cad_vendedor.pessoa_id',
             'cad_pessoa.pes_nome as pessoa',
@@ -48,13 +47,13 @@ class VendedorModel extends Model
         ];
 
         return $this->select($atributos)
-            ->join('cad_usuario', 'cad_usuario.id_usuario = cad_vendedor.usuario_id', 'LEFT')
-            ->join('cad_pessoa', 'cad_pessoa.id_pessoa = cad_vendedor.pessoa_id', 'LEFT');
+            ->join('cad_usuario', 'cad_usuario.id = cad_vendedor.usuario_id', 'LEFT')
+            ->join('cad_pessoa', 'cad_pessoa.id = cad_vendedor.pessoa_id', 'LEFT');
     }
 
     public function getVendedorLogado()
     {
-        return $this->select('id_vendedor')->where('usuario_id', getUsuarioID())->first();
+        return $this->select('id')->where('usuario_id', getUsuarioID())->first();
     }
 
     public function returnSave(int $codigo = null)

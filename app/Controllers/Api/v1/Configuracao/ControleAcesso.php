@@ -25,7 +25,7 @@ class ControleAcesso extends ApiController
 
     public function getCarregaTabela()
     {
-        $response = array();
+        $response['data'] = array();
 
         $result = $this->permissaoModel->withDeleted()->findAll();
 

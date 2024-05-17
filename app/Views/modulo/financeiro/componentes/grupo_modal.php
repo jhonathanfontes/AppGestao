@@ -1,4 +1,5 @@
-<div class="modal fade" id="modalGrupo">
+<div class="modal fade" id="modalGrupo" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-orange">
@@ -55,7 +56,8 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">CANCELAR</button>
-                <button type="submit" class="btn btn-primary" id="SalvarGrupo" onclick="SalvaGrupos()"><i class="fa fa-save"></i> SALVAR</button>
+                <button type="submit" class="btn btn-primary" id="SalvarGrupo" onclick="SalvaGrupos()"><i
+                        class="fa fa-save"></i> SALVAR</button>
             </div>
             <?= form_close(); ?>
         </div>

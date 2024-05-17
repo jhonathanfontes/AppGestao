@@ -1,4 +1,5 @@
-<div class="modal fade" id="modalVendedor">
+<div class="modal fade" id="modalVendedor" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-pink">
@@ -19,22 +20,14 @@
             <label for="">PESSOA</label>
             <select name="cod_pessoa" id="cod_pessoa" class="form-control select2bs4" style="width: 100%;" required>
               <option value="">SELECIONE UMA PESSOA</option>
-              <?php if (!empty($fornecedores)) : ?>
-                <?php foreach ($fornecedores as $row) : ?>
-                  <option value="<?= $row->cod_pessoa ?>"><?= $row->cad_nome ?></option>
-                <?php endforeach; ?>
-              <?php endif; ?>
+              
             </select>
           </div>
           <div class="form-group col-6">
             <label for="">USUARIO</label>
             <select name="cod_usuario" id="cod_usuario" class="form-control select2bs4" style="width: 100%;" required>
               <option value="">SELECIONE UM USUARIO</option>
-              <?php if (!empty($usuarios)) : ?>
-                <?php foreach ($usuarios as $row) : ?>
-                  <option value="<?= $row->cod_usuario ?>"><?= $row->cad_usuario ?></option>
-                <?php endforeach; ?>
-              <?php endif; ?>
+             
             </select>
           </div>
           <div class="col-md-12">

@@ -15,13 +15,13 @@ class Vendedor extends ApiController
     public function __construct()
     {
         $this->vendedorModel = new \App\Models\Configuracao\VendedorModel();
-        $this->auditoriaModel = new AuditoriaModel();
+        // $this->auditoriaModel = new AuditoriaModel();
         $this->validation =  \Config\Services::validation();
     }
 
     public function getCarregaTabela()
     {
-        $response = array();
+        $response['data'] = array();
 
         $result = $this->vendedorModel->getVendedor()->findAll();
 

@@ -14,16 +14,18 @@ class ContasBancarias extends ApiController
 
     public function __construct()
     {
-        $this->contaBancariaModel   = new \App\Models\Configuracao\ContaBancariaModel();
-        $this->auditoriaModel       = new \App\Models\AuditoriaModel();
-        $this->validation           =  \Config\Services::validation();
+        $this->contaBancariaModel = new \App\Models\Configuracao\ContaBancariaModel();
+        // $this->auditoriaModel = new \App\Models\AuditoriaModel();
+        $this->validation = \Config\Services::validation();
     }
 
     public function getCarregaTabela()
     {
-        $response = array();
+        $response['data'] = array();
 
-        $result = $this->contaBancariaModel->getContasBancarias();
+        $result = $this->contaBancariaModel->getContasBancaria()
+            ->whereIn('cad_contabancaria.status', ['1', '2'])
+            ->findAll();
 
         foreach ($result as $key => $value) {
 
@@ -31,14 +33,14 @@ class ContasBancarias extends ApiController
             $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'contabancaria'" . ',' . $value->cod_contabancaria . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
 
             $response['data'][$key] = array(
-                esc($value->con_descricao),
-                convertTipoConta($value->con_tipo),
-                esc($value->con_agencia),
-                esc($value->con_conta),
-                esc($value->ban_descricao),
-                esc($value->emp_razao),
-                convertSimNao($value->con_pagar),
-                convertSimNao($value->con_receber),
+                esc($value->cad_contabancaria),
+                convertTipoConta($value->cad_tipo),
+                esc($value->cad_agencia),
+                esc($value->cad_conta),
+                esc($value->ban_codigo) . ' - ' . esc($value->ban_descricao),
+                esc($value->cad_titular),
+                convertSimNao($value->cad_pagamento),
+                convertSimNao($value->cad_recebimento),
                 convertStatus($value->status),
                 $ops,
             );
@@ -78,27 +80,27 @@ class ContasBancarias extends ApiController
             return redirect()->back();
         }
 
-        $data['banco_id']       = $this->request->getPost('cad_banco');
-        $data['con_agencia']    = returnNull($this->request->getPost('cad_agencia'), 'S');
-        $data['con_conta']      = returnNull($this->request->getPost('cad_conta'), 'S');
-        $data['con_descricao']  = returnNull($this->request->getPost('cad_contabancaria'), 'S');
-        $data['con_tipo']       = returnNull($this->request->getPost('cad_tipo'), 'S');
-        $data['empresa_id']     = returnNull($this->request->getPost('cad_empresa'), 'S');
-        $data['con_pagar']      = returnNull($this->request->getPost('cad_pagamento'), 'S');
-        $data['con_receber']    = returnNull($this->request->getPost('cad_recebimento'), 'S');
-        $data['tipo_titular']   = returnNull($this->request->getPost('cad_natureza'), 'S');
-        $data['con_titular']    = returnNull($this->request->getPost('cad_titular'), 'S');
-        $data['con_documento']  = returnNull($this->request->getPost('cad_documento'), 'S');
-        $data['status']         = $this->request->getPost('status');
+        $data['con_natureza'] = $this->request->getPost('cad_natureza');
+        $data['banco_id'] = $this->request->getPost('cad_banco');
+        $data['con_descricao'] = returnNull($this->request->getPost('cad_contabancaria'), 'S');
+        $data['con_agencia'] = returnNull($this->request->getPost('cad_agencia'), 'S');
+        $data['con_conta'] = returnNull($this->request->getPost('cad_conta'), 'S');
+        $data['con_tipoconta'] = $this->request->getPost('cad_tipo');
+        $data['con_documento'] = returnNull($this->request->getPost('cad_documento'), 'S');
+        $data['con_titular'] = returnNull($this->request->getPost('cad_titular'), 'S');
+        $data['con_pagamento'] = $this->request->getPost('cad_pagamento');
+        $data['con_recebimento'] = $this->request->getPost('cad_recebimento');
+        $data['empresa_id'] = returnNull($this->request->getPost('cad_empresa'), 'S');
+        $data['status'] = $this->request->getPost('status');
 
         $entityContaBancaria = new ContaBancaria($data);
 
 
 
         if (!empty($this->request->getPost('cod_contabancaria'))) {
-            $data['id_conta'] = $this->request->getPost('cod_contabancaria');
+            $data['id'] = $this->request->getPost('cod_contabancaria');
 
-            $result = $this->buscaRegistro404($data['id_conta']);
+            $result = $this->buscaRegistro404($data['id']);
 
             $result->fill($data);
 
@@ -114,12 +116,13 @@ class ContasBancarias extends ApiController
             }
 
             $metedoAuditoria = 'update';
-            $dataAuditoria = $result->auditoriaUpdateAtributos();
+            // $dataAuditoria = $result->auditoriaUpdateAtributos();
         } else {
 
             $metedoAuditoria = 'insert';
-            $dataAuditoria = $entityContaBancaria->auditoriaInsertAtributos();
-        };
+            // $dataAuditoria = $entityContaBancaria->auditoriaInsertAtributos();
+        }
+        ;
 
         try {
             if ($this->contaBancariaModel->save($data)) {

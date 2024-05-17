@@ -46,7 +46,7 @@ class Orcamento extends BaseController
             }
 
             $data = [
-                'card_title' => 'ORÇAMENTO Nº ' . $orcamento->id . '/' . date("Y", strtotime($orcamento->orc_dataorcamento)),
+                'card_title' => 'ORÇAMENTO Nº ' . date("Y", strtotime($orcamento->orc_dataorcamento)) . completeComZero(esc($orcamento->id), 8),
                 'clientes' => $this->setPessoasClientes(),
                 // 'vendedores' => $this->getVendedores(),
                 'orcamento' => $orcamento,

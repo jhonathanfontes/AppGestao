@@ -5,37 +5,36 @@ namespace App\Entities\Configuracao;
 use CodeIgniter\Entity\Entity;
 
 class ContaBancaria extends Entity
-
 {
     protected $attributes = [
-        'id_conta'      => null,
-        'con_tipo'      => null,
+        'id' => null,
+        'con_natureza' => null,
+        'banco_id' => null,
         'con_descricao' => null,
-        'banco_id'      => null,
-        'con_agencia'   => null,
-        'con_conta'     => null,
-        'tipo_titular'  => null,
-        'empresa_id'    => null,
-        'con_pagar'     => null,
-        'con_receber'   => null,
-        'con_titular'   => null,
+        'con_agencia' => null,
+        'con_conta' => null,
+        'con_tipoconta' => null,
+        'con_titular' => null,
         'con_documento' => null,
-        'status'        => null
+        'con_pagamento' => null,
+        'con_recebimento' => null,
+        'empresa_id' => null,
+        'status' => null
     ];
 
     protected $datamap = [
-        'cod_contabancaria' => 'id_conta',
-        'cad_banco'         => 'banco_id',
-        'cad_agencia'       => 'con_agencia',
-        'cad_conta'         => 'con_conta',
+        'cod_contabancaria' => 'id',
+        'cad_natureza' => 'con_natureza',
+        'cad_banco' => 'banco_id',
         'cad_contabancaria' => 'con_descricao',
-        'cad_tipo'          => 'con_tipo',
-        'cad_empresa'       => 'empresa_id',
-        'cad_pagamento'     => 'con_pagar',
-        'cad_recebimento'   => 'con_receber',
-        'cad_natureza'      => 'tipo_titular',
-        'cad_titular'       => 'con_titular',
-        'cad_documento'     => 'con_documento',
+        'cad_agencia' => 'con_agencia',
+        'cad_conta' => 'con_conta',
+        'cad_tipo' => 'con_tipoconta',
+        'cad_titular' => 'con_titular',
+        'cad_documento' => 'con_documento',
+        'cad_pagamento' => 'con_pagamento',
+        'cad_recebimento' => 'con_recebimento',
+        'cod_empresa' => 'empresa_id',
 
     ];
 

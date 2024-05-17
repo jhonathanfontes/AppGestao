@@ -115,11 +115,16 @@
                         <p> &nbsp; AUXILIAR VENDA</p> <i class="right fas fa-angle-left"></i>
                     </a>
                     <ul class="nav nav-treeview">
-
                         <li class="nav-item">
                             <a href="<?= base_url('app/configuracao/auxiliar/venda/vendedores'); ?>" class="nav-link <?= (url_is('app/configuracao/auxiliar/venda/vendedores')) ? 'active' : ''; ?>">
                                 <i class="far <?= (url_is('app/configuracao/auxiliar/venda/vendedores')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
                                 <p>VENDEDORES</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('app/configuracao/auxiliar/venda/vendedores'); ?>" class="nav-link <?= (url_is('app/configuracao/auxiliar/venda/prestadores')) ? 'active' : ''; ?>">
+                                <i class="far <?= (url_is('app/configuracao/auxiliar/venda/prestadores')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
+                                <p>PRESTADORES</p>
                             </a>
                         </li>
                     </ul>

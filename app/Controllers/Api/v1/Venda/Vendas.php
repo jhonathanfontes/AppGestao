@@ -57,7 +57,7 @@ class Vendas extends ApiController
             $ops .= '<a href="venda/imprimir/' . $value->serial . '" class="btn btn-xs btn-primary ml-2" target="_blank"><samp class="fas fa-print"></samp> IMPRIMIR</a>';
 
             $response['data'][$key] = array(
-                esc($value->id) . '/' . date("Y", strtotime(esc($value->orc_dataorcamento))),
+                date("Y", strtotime(esc($value->orc_dataorcamento))) . completeComZero(esc($value->id), 8),
                 abreviaNome(esc($value->pessoa)),
                 esc($value->usuario),
                 formatDataTimeBR(esc($value->orc_dataorcamento)),

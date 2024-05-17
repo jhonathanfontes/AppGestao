@@ -6,21 +6,22 @@ use CodeIgniter\Model;
 
 class ContaBancariaModel extends Model
 {
-    protected $table      = 'cad_contabancaria';
-    protected $primaryKey = 'id_conta';
-    protected $returnType     = \App\Entities\Configuracao\ContaBancaria::class;
+    protected $table = 'cad_contabancaria';
+    protected $primaryKey = 'id';
+    protected $returnType = \App\Entities\Configuracao\ContaBancaria::class;
     protected $allowedFields = [
+        'id',
+        'con_natureza',
         'banco_id',
+        'con_descricao',
         'con_agencia',
         'con_conta',
-        'con_descricao',
-        'con_tipo',
-        'empresa_id',
-        'con_pagar',
-        'con_receber',
-        'tipo_titular',
+        'con_tipoconta',
         'con_titular',
         'con_documento',
+        'con_pagamento',
+        'con_recebimento',
+        'empresa_id',
         'status',
         'created_user_id',
         'updated_user_id',
@@ -32,48 +33,36 @@ class ContaBancariaModel extends Model
     protected function insertAuditoria(array $data)
     {
         $data['data']['created_user_id'] = getUsuarioID();
-        $data['data']['created_at']      = getDatetimeAtual();
+        $data['data']['created_at'] = getDatetimeAtual();
         return $data;
     }
 
     protected function updateAuditoria(array $data)
     {
         $data['data']['updated_user_id'] = getUsuarioID();
-        $data['data']['updated_at']      = getDatetimeAtual();
+        $data['data']['updated_at'] = getDatetimeAtual();
         return $data;
     }
 
-    public function getContasBancarias()
+    public function getContasBancaria()
     {
         $atributos = [
-            'id_conta',
-            'con_tipo',
-            'con_descricao',
+            'cad_contabancaria.*',
             'cad_banco.ban_codigo',
-            'con_agencia',
-            'con_conta',
-            'tipo_titular',
-            'con_titular',
-            'con_documento',
-            'con_pagar',
-            'con_receber',
-            'cad_contabancaria.status',
             'cad_banco.ban_descricao',
             'con_empresa.emp_razao'
         ];
 
         $result = $this->select($atributos)
-            ->join('cad_banco', 'cad_banco.id_banco = cad_contabancaria.banco_id', 'LEFT')
-            ->join('con_empresa', 'con_empresa.id_empresa = cad_contabancaria.empresa_id', 'LEFT')
-            ->whereIn('cad_contabancaria.status', ['1', '2'])
-            ->findAll();
+            ->join('cad_banco', 'cad_banco.id = cad_contabancaria.banco_id', 'LEFT')
+            ->join('con_empresa', 'con_empresa.id = cad_contabancaria.empresa_id', 'LEFT');
 
         return $result;
     }
 
     public function returnSave(int $codigo = null)
     {
-        return $this->select('banco_id, con_descricao')->find($codigo);
+        return $this->select('id, con_descricao')->find($codigo);
     }
 
     public function arquivarRegistro(int $codigo = null)
@@ -90,7 +79,7 @@ class ContaBancariaModel extends Model
         if ($codigo != null) {
             $data['status'] = 0;
             $data['deleted_user_id'] = getUsuarioID();
-            $data['deleted_at']      = getDatetimeAtual();
+            $data['deleted_at'] = getDatetimeAtual();
             return $this->update($codigo, $data);
         }
         return false;

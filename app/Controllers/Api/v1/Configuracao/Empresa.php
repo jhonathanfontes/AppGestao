@@ -23,7 +23,7 @@ class Empresa extends ApiController
 
     public function getCarregaTabela()
     {
-        $response = array();
+        $response['data'] = array();
 
         $result = $this->empresaModel->findAll();
 

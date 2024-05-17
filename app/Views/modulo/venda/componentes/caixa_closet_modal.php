@@ -1,7 +1,8 @@
-<div class="modal fade" id="modalAbrirCaixa">
+<div class="modal fade" id="modalAbrirCaixa" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-warning">
+            <div class="modal-header <?= getenv('tema.modal.header.color'); ?>">
                 <h4 class="modal-title">ABERTURA DO CAIXA</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -16,27 +17,33 @@
                     <div class="row">
                         <div class="form-group col-2">
                             <label for="">R$ 0,01</label>
-                            <input name="moeda_01" id="moeda_01" type="number" class="moeda form-control" placeholder="R$ 0,01">
+                            <input name="moeda_01" id="moeda_01" type="number" class="moeda form-control"
+                                placeholder="R$ 0,01">
                         </div>
                         <div class="form-group col-2">
                             <label for="">R$ 0,05</label>
-                            <input name="moeda_05" id="moeda_05" type="number" class="moeda form-control" placeholder="R$ 0,05">
+                            <input name="moeda_05" id="moeda_05" type="number" class="moeda form-control"
+                                placeholder="R$ 0,05">
                         </div>
                         <div class="form-group col-2">
                             <label for="">R$ 0,10</label>
-                            <input name="moeda_10" id="moeda_10" type="number" class="moeda form-control" placeholder="R$ 0,10">
+                            <input name="moeda_10" id="moeda_10" type="number" class="moeda form-control"
+                                placeholder="R$ 0,10">
                         </div>
                         <div class="form-group col-2">
                             <label for="">R$ 0,25</label>
-                            <input name="moeda_25" id="moeda_25" type="number" class="moeda form-control" placeholder="R$ 0,25">
+                            <input name="moeda_25" id="moeda_25" type="number" class="moeda form-control"
+                                placeholder="R$ 0,25">
                         </div>
                         <div class="form-group col-2">
                             <label for="">R$ 0,50</label>
-                            <input name="moeda_50" id="moeda_50" type="number" class="moeda form-control" placeholder="R$ 0,50">
+                            <input name="moeda_50" id="moeda_50" type="number" class="moeda form-control"
+                                placeholder="R$ 0,50">
                         </div>
                         <div class="form-group col-2">
                             <label for="">R$ 1,00</label>
-                            <input name="moeda_1" id="moeda_1" type="number" class=" moeda form-control" placeholder="R$ 1,00">
+                            <input name="moeda_1" id="moeda_1" type="number" class=" moeda form-control"
+                                placeholder="R$ 1,00">
                         </div>
                     </div>
                     <label for="">CEDULAS</label>
@@ -64,32 +71,40 @@
                         </div>
                         <div class="form-group col-2">
                             <label for="">R$ 100,00</label>
-                            <input name="cedula_100" id="cedula_100" class="cedula form-control" placeholder="R$ 100,00">
+                            <input name="cedula_100" id="cedula_100" class="cedula form-control"
+                                placeholder="R$ 100,00">
                         </div>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="form-group col-3">
                             <label for="">TOTAL MOEDAS</label>
-                            <input name="total_meda" id="total_moeda1" class="form-control" placeholder="R$ 0,00" hidden>
-                            <input name="total_meda" id="total_moeda2" class="form-control" placeholder="R$ 0,00" disabled>
+                            <input name="total_meda" id="total_moeda1" class="form-control" placeholder="R$ 0,00"
+                                hidden>
+                            <input name="total_meda" id="total_moeda2" class="form-control" placeholder="R$ 0,00"
+                                disabled>
                         </div>
                         <div class="form-group col-3">
                             <label for="">TOTAL CEDULAS</label>
-                            <input name="total_cedula" id="total_cedula1" class="form-control" placeholder="R$ 0,00" hidden>
-                            <input name="total_cedula" id="total_cedula2" class="form-control" placeholder="R$ 0,00" disabled>
+                            <input name="total_cedula" id="total_cedula1" class="form-control" placeholder="R$ 0,00"
+                                hidden>
+                            <input name="total_cedula" id="total_cedula2" class="form-control" placeholder="R$ 0,00"
+                                disabled>
                         </div>
                         <div class="form-group col-3">
                             <label for="">TOTAL</label>
-                            <input name="abrir_valor" id="abrir_valor1" class="form-control" placeholder="R$ 0,00" hidden>
-                            <input name="abrir_valor" id="abrir_valor2" class="form-control" placeholder="R$ 0,00" disabled>
+                            <input name="abrir_valor" id="abrir_valor1" class="form-control" placeholder="R$ 0,00"
+                                hidden>
+                            <input name="abrir_valor" id="abrir_valor2" class="form-control" placeholder="R$ 0,00"
+                                disabled>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">CANCELAR</button>
-                <button type="submit" id="submitAbertura" class="btn btn-success" onclick="salvarAberturaCaixa()">ABRIR CAIXA</button>
+                <button type="submit" id="submitAbertura" class="btn btn-success" onclick="salvarAberturaCaixa()">ABRIR
+                    CAIXA</button>
             </div>
             <?= form_close(); ?>
         </div>
@@ -99,10 +114,11 @@
 </div>
 <!-- FIM ABRIR CAIXA -->
 
-<div class="modal fade" id="modalReabrirCaixa">
+<div class="modal fade" id="modalReabrirCaixa" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-warning">
+            <div class="modal-header <?= getenv('tema.modal.header.color'); ?>">
                 <h4 class="modal-title">REABRIR ULTIMO CAIXA</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -114,7 +130,8 @@
                         <div class="row">
                             <div class="form-group col-12">
                                 <label for="">MOTIVO</label>
-                                <input name="cad_motivo" id="cad_motivo" type="text" class="moeda form-control" placeholder="Descreva o motivo de reabertura do caixa" required>
+                                <input name="cad_motivo" id="cad_motivo" type="text" class="moeda form-control"
+                                    placeholder="Descreva o motivo de reabertura do caixa" required>
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
-<div class="modal fade" id="modalReceber" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modalReceber" data-backdrop="static" tabindex="-1" role="dialog"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header bg-orange">
@@ -31,7 +32,8 @@
         <div class="row">
           <div class="form-group col-2">
             <label for="">VALOR TOTAL</label>
-            <input name="cad_valor" id="cad_valor" type="text" minlength="3" class="valorbr form-control" placeholder="0,00" required>
+            <input name="cad_valor" id="cad_valor" type="text" minlength="3" class="valorbr form-control"
+              placeholder="0,00" required>
           </div>
           <div class="form-group col-2">
             <label for="">REFERENCIA</label>
@@ -47,22 +49,26 @@
           </div>
           <div class="form-group col-2">
             <label for="">VENCIMENTO 1ª PARC</label>
-            <input name="cad_vencimento" id="cad_vencimento" type="date" class="form-control" placeholder="Vencimento da 1ª Parcela" required>
+            <input name="cad_vencimento" id="cad_vencimento" type="date" class="form-control"
+              placeholder="Vencimento da 1ª Parcela" required>
           </div>
           <div class="form-group col-4" id="container-diasparc">
             <label for="">DIAS ENTRE PARCELAS</label>
-            <input name="cad_diasparc" type="number" maxlength="2" class="form-control" placeholder="Não preencher se o dia for sempre o mesmo">
+            <input name="cad_diasparc" type="number" maxlength="2" class="form-control"
+              placeholder="Não preencher se o dia for sempre o mesmo">
           </div>
           <div class="form-group col-6">
             <label for="">OBSERVAÇÃO</label>
             <input name="cad_observacao" id="cad_observacao" type="text" class="form-control" placeholder="">
           </div>
         </div>
-        <label style="text-shadow: 0px 0px #ff0000;">O VALOR TOTAL SERA PARCELADO PELA QUANTIDADE DE PARCELAS INFORMADO</label>
+        <label style="text-shadow: 0px 0px #ff0000;">O VALOR TOTAL SERA PARCELADO PELA QUANTIDADE DE PARCELAS
+          INFORMADO</label>
       </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">CANCELAR</button>
-        <button type="submit" class="btn btn-primary " id="submitContaReceber" onclick="salvarContaReceber()">SALVAR</button>
+        <button type="submit" class="btn btn-primary " id="submitContaReceber"
+          onclick="salvarContaReceber()">SALVAR</button>
       </div>
       <?= form_close(); ?>
     </div>
@@ -71,7 +77,8 @@
   <!-- /.modal-dialog -->
 </div>
 
-<div class="modal fade" id="modalPagamentoReceber" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modalPagamentoReceber" data-backdrop="static" tabindex="-1" role="dialog"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header bg-orange">
@@ -101,7 +108,7 @@
         </div>
         <div class="row">
           <div class="form-group" hidden>
-            <?php if (isset($caixa->codigo)) : ?>
+            <?php if (isset($caixa->codigo)): ?>
               <input type="text" name="cod_caixa" value="<?= $caixa->codigo ?>">
             <?php endif ?>
 
@@ -141,8 +148,8 @@
           <div class="col-sm-2">
             <div class="icheck-success d-inline">
               <select name="serial_caixa" id="serial_caixa" class="form-control select2bs4" style="width: 100%;">
-                <?php if (isset($caixa->codigo)) : ?>
-                  <?php foreach ($caixas as $row) : ?>
+                <?php if (isset($caixa->codigo)): ?>
+                  <?php foreach ($caixas as $row): ?>
                     <option value="<?= $row->serial ?>">CAIXA Nº <?= $row->id_caixa ?></option>
                   <?php endforeach; ?>
                 <?php endif ?>
@@ -158,17 +165,20 @@
             </div>
             <div class="col-sm-3">
               <label for="formaConta">CONTA</label>
-              <select name="pag_conta" id="pag_conta" class="form-control select2bs4" style="width: 100%;" disabled="disabled" required>
+              <select name="pag_conta" id="pag_conta" class="form-control select2bs4" style="width: 100%;"
+                disabled="disabled" required>
               </select>
             </div>
             <div class="col-sm-2">
               <label for="formaBandeira">BANDEIRA</label>
-              <select name="pag_bandeira" id="pag_bandeira" class="form-control select2bs4" style="width: 100%;" disabled="disabled" required>
+              <select name="pag_bandeira" id="pag_bandeira" class="form-control select2bs4" style="width: 100%;"
+                disabled="disabled" required>
               </select>
             </div>
             <div class="col-sm-1">
               <label for="formaParcela">PARCELA </label>
-              <select name="pag_parcela" id="pag_parcela" class="form-control select2bs4" style="width: 100%;" disabled="disabled" required>
+              <select name="pag_parcela" id="pag_parcela" class="form-control select2bs4" style="width: 100%;"
+                disabled="disabled" required>
               </select>
             </div>
             <div class="col-sm-2">
@@ -177,7 +187,8 @@
             </div>
             <div class="col-sm-2">
               <label for="formaDocumento"> RECEBER </label>
-              <button type="submit" id="ReceberSubmit" class="btn btn-success" disabled="disabled" onclick="salvarPaymentVenda()">
+              <button type="submit" id="ReceberSubmit" class="btn btn-success" disabled="disabled"
+                onclick="salvarPaymentVenda()">
                 <i class="fas fa-hand-holding-usd"> ADICIONAR </i> </button>
             </div>
           </div>
@@ -197,7 +208,8 @@
       </div>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">CANCELAR</button>
-        <button type="submit" class="btn btn-primary " id="submitPagamentoReceber" onclick="salvarPagamentoReceber()">SALVAR</button>
+        <button type="submit" class="btn btn-primary " id="submitPagamentoReceber"
+          onclick="salvarPagamentoReceber()">SALVAR</button>
       </div>
       <?= form_close(); ?>
     </div>

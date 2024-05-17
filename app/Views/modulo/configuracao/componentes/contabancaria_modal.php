@@ -1,4 +1,5 @@
-<div class="modal fade" id="modalContaBancaria">
+<div class="modal fade" id="modalContaBancaria" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-pink">
@@ -35,8 +36,8 @@
                         <div class="form-group col-3">
                             <label for="">TIPO</label>
                             <select name="cad_tipo" id="cad_tipo" class="form-control select2bs4" style="width: 100%;">
-                                <option value="C">CORRENTE</option>
-                                <option value="P">POUPANÇA</option>
+                                <option value="1">CORRENTE</option>
+                                <option value="2">POUPANÇA</option>
                             </select>
                         </div>
 
@@ -50,22 +51,22 @@
                         <div class="form-group col-3">
                             <label for="">PAGAMENTO</label>
                             <select name="cad_pagamento" id="cad_pagamento" class="form-control select2bs4" style="width: 100%;">
-                                <option value="S">PERMITIR</option>
-                                <option value="N">NÃO PERMITIR</option>
+                                <option value="1">PERMITIR</option>
+                                <option value="0">NÃO PERMITIR</option>
                             </select>
                         </div>
                         <div class="form-group col-3">
                             <label for="">RECEBIMENTO</label>
                             <select name="cad_recebimento" id="cad_recebimento" class="form-control select2bs4" style="width: 100%;">
-                                <option value="S">PERMITIR</option>
-                                <option value="N">NÃO PERMITIR</option>
+                                <option value="1">PERMITIR</option>
+                                <option value="0">NÃO PERMITIR</option>
                             </select>
                         </div>
                         <div class="form-group col-3">
                             <label for="">NATUREZA</label>
                             <select name="cad_natureza" id="cad_natureza" class="form-control select2bs4" style="width: 100%;">
-                                <option value="F">Fisica</option>
-                                <option value="J">Juridica</option>
+                                <option value="2">Fisica</option>
+                                <option value="1">Juridica</option>
                             </select>
                         </div>
                         <div class="form-group col-6">

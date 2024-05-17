@@ -1,7 +1,8 @@
-<div class="modal fade" id="modalCaixaFechar">
+<div class="modal fade" id="modalCaixaFechar" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-pink">
+           <div class="modal-header <?= getenv('tema.modal.header.color'); ?>">
                 <h4 class="modal-title">FECHAMENTO DO CAIXA <?= isset($caixa) ? 'Nº ' . $caixa->id : ''; ?></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -100,7 +101,8 @@
 </div>
 <!-- FIM FECHAR CAIXA -->
 
-<div class="modal fade" id="modalCaixaSuplmento">
+<div class="modal fade" id="modalCaixaSuplmento" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-success">
@@ -144,7 +146,8 @@
 </div>
 <!-- FIM SUPLEMENTAÇÃO -->
 
-<div class="modal fade" id="modalCaixaSangria">
+<div class="modal fade" id="modalCaixaSangria" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -213,7 +216,8 @@
 </div>
 <!-- FIM SANGRIA -->
 
-<div class="modal fade" id="cancelarMovimento">
+<div class="modal fade" id="cancelarMovimento" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -245,10 +249,11 @@
 </div>
 <!-- FIM CANCELAMENTO -->
 
-<div class="modal fade" id="modalReceberVenda">
+<div class="modal fade" id="modalReceberVenda" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-pink">
+           <div class="modal-header <?= getenv('tema.modal.header.color'); ?>">
                 <address>
                     <h4 class="modal-title">
                         <i class="fas fa-globe"></i> <span id="modalTitleReceberVenda"></span>

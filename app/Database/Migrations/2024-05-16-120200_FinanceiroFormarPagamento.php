@@ -48,6 +48,16 @@ class FinanceiroFormarPagamento extends Migration
                 'constraint' => '1',
                 'default' => 'N'
             ],
+            'conta_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
+                'null' => true,
+            ],
+            'empresa_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
+                'null' => true,
+            ],
             'status' => [
                 'type' => 'INT',
                 'default' => 1,
@@ -82,6 +92,9 @@ class FinanceiroFormarPagamento extends Migration
             ],
         ]);
         $this->forge->addPrimaryKey('id');
+
+        $this->forge->addForeignKey('conta_id', 'cad_contabancaria', 'id', 'CASCADE', 'CASCADE', 'fk_contabancaria_formapag');
+        $this->forge->addForeignKey('empresa_id', 'con_empresa', 'id', 'CASCADE', 'CASCADE', 'fk_empresa_formapag');
 
         $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_formapag');
         $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_formapag');

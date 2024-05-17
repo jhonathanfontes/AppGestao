@@ -167,7 +167,7 @@
                         <!-- /.row -->
                         <!-- Table row -->
                         <div class="row mt-2">
-                           
+
                             <div class="col-12 table-responsive">
                                 <table id="tableProdutoOrcamento" class="table table-sm table-striped"
                                     style="text-align: center;">

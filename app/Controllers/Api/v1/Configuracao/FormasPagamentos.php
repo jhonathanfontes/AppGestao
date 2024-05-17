@@ -7,23 +7,23 @@ use App\Entities\Configuracao\FormaPagamento;
 class FormasPagamentos extends \App\Controllers\Api\ApiController
 {
     private $formaPagamentoModel;
-    private $formaParcelamentoModel;
     private $auditoriaModel;
     private $validation;
 
     public function __construct()
     {
         $this->formaPagamentoModel = new \App\Models\Configuracao\FormaPagamentoModel();
-        $this->formaParcelamentoModel = new \App\Models\Configuracao\FormaParcelamentoModel();
-        $this->auditoriaModel = new \App\Models\AuditoriaModel();
-        $this->validation =  \Config\Services::validation();
+        // $this->auditoriaModel = new \App\Models\AuditoriaModel();
+        $this->validation = \Config\Services::validation();
     }
 
     public function getCarregaTabela()
     {
-        $response = array();
+        $response['data'] = array();
 
-        $result = $this->formaPagamentoModel->getFormasPagamentos();
+        $result = $this->formaPagamentoModel->getFormasPagamento()
+            ->whereIn('pdv_formapag.status', ['1', '2'])
+            ->findAll();
 
 
         foreach ($result as $key => $value) {
@@ -36,7 +36,6 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
                 esc($value->cad_descricao),
                 convertFormarPagamento($value->cad_forma),
                 ($value->con_descricao !== null) ? 'AG: ' . esc($value->con_agencia) . ' C' . esc($value->con_tipo) . ': ' . esc($value->con_conta) . ' - ' . esc($value->con_descricao) : '',
-                esc($value->maq_descricao),
                 convertSimNao($value->cad_parcela),
                 convertSimNao($value->cad_antecipa),
                 convertStatus($value->status),
@@ -62,7 +61,7 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
 
             $contas = $this->formaPagamentoModel->where('status', 1)->where('for_forma', $this->request->getPost('forma'))->orderBy('for_descricao', 'ASC')->findAll();
             foreach ($contas as $row) {
-                $option .= "<option value='$row->id_forma'>$row->for_descricao </option>" . PHP_EOL;
+                $option .= "<option value='$row->id'>$row->for_descricao </option>" . PHP_EOL;
             }
             echo $option;
         } catch (\Throwable $th) {
@@ -79,41 +78,6 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
         }
     }
 
-    public function showBandeiraParcelamento($paramentro = null)
-    {
-        try {
-
-            $formapag = $this->formaPagamentoModel->where('status', 1)->where('id_forma', $paramentro)->first();
-            $formapac = $this->formaParcelamentoModel->getBandeiraPagamento($formapag->id_forma);
-
-            return $this->response->setJSON($formapac);
-            //code...
-        } catch (\Throwable $th) {
-            return $this->response->setJSON(
-                [
-                    'status' => false,
-                    'menssagem' => [
-                        'status' => 'error',
-                        'heading' => 'NÃO FOI POSSIVEL SALVAR O REGISTRO!',
-                        'description' => $th->getMessage()
-                    ]
-                ]
-            );
-        }
-    }
-
-    public function showFormaParcelamento($paramentro = null)
-    {
-        try {
-            $formapag = $this->formaPagamentoModel->where('status', 1)->where('id_forma', $paramentro)->first();
-            $formapac = $this->formaParcelamentoModel->getFormasParcelamentos()->where('forma_id', $formapag->id_forma)->findAll();
-
-            return $this->response->setJSON($formapac);
-            //code...
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-    }
 
     public function save()
     {
@@ -121,28 +85,28 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
             return redirect()->back();
         }
 
-        $data['for_forma']      = returnNull($this->request->getPost('cad_forma'), 'S');
-        $data['for_descricao']  = returnNull($this->request->getPost('cad_descricao'), 'S');
+        $data['for_forma'] = returnNull($this->request->getPost('cad_forma'), 'S');
+        $data['for_descricao'] = returnNull($this->request->getPost('cad_descricao'), 'S');
 
         if ($this->request->getPost('cad_forma') === '3' || $this->request->getPost('cad_forma') === '4') {
-            $data['maquinacartao_id']   = returnNull($this->request->getPost('cad_maquininha'), 'S');
-            $data['conta_id']           = returnNull($this->request->getPost('cad_conta'), 'S');
-            $data['for_parcela']        = returnNull($this->request->getPost('cad_parcela'), 'S');
-            $data['for_antecipa']       = returnNull($this->request->getPost('cad_antecipa'), 'S');
+            $data['maquinacartao_id'] = returnNull($this->request->getPost('cad_maquininha'), 'S');
+            $data['conta_id'] = returnNull($this->request->getPost('cad_conta'), 'S');
+            $data['for_parcela'] = returnNull($this->request->getPost('cad_parcela'), 'S');
+            $data['for_antecipa'] = returnNull($this->request->getPost('cad_antecipa'), 'S');
             if ($this->request->getPost('cad_parcela') === 'N') {
-                $data['for_prazo']        = returnNull($this->request->getPost('cad_fprazo'), 'S');
-                $data['for_taxa']       = returnNull($this->request->getPost('cad_ftaxa'), 'S');
+                $data['for_prazo'] = returnNull($this->request->getPost('cad_fprazo'), 'S');
+                $data['for_taxa'] = returnNull($this->request->getPost('cad_ftaxa'), 'S');
             }
         }
 
-        $data['status']        = $this->request->getPost('status');
+        $data['status'] = $this->request->getPost('status');
 
         $entityFormaPagamento = new FormaPagamento($data);
 
         if (!empty($this->request->getPost('cod_formapagamento'))) {
-            $data['id_forma'] = $this->request->getPost('cod_formapagamento');
+            $data['id'] = $this->request->getPost('cod_formapagamento');
 
-            $result = $this->buscaRegistro404($data['id_forma']);
+            $result = $this->buscaRegistro404($data['id']);
             $result->fill($data);
 
             if ($result->hasChanged() == false) {
@@ -156,7 +120,8 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
                 ]);
             }
             $this->auditoriaModel->insertAuditoria('configuracao', 'formapagamento', 'atualizar', $result->auditoriaAtributos());
-        };
+        }
+        ;
 
         try {
             if ($this->formaPagamentoModel->save($data)) {
@@ -199,14 +164,14 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
 
     public function show($paramentro)
     {
-        $return = $this->formaPagamentoModel->where('id_forma', $paramentro)
+        $return = $this->formaPagamentoModel->where('id', $paramentro)
             ->first();
         return $this->response->setJSON($return);
     }
 
     public function arquivar($paramentro = null)
     {
-        $formaPagamento = $this->formaPagamentoModel->where('id_forma', $paramentro)
+        $formaPagamento = $this->formaPagamentoModel->where('id', $paramentro)
             ->where('status <>', 0)
             ->where('status <>', 3)
             ->first();

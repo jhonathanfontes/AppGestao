@@ -107,6 +107,7 @@ class ConfiguracaoContaBancaria extends Migration
 
         $this->forge->addForeignKey('banco_id', 'cad_banco', 'id', 'CASCADE', 'CASCADE', 'fk_banco_contabancaria');
         $this->forge->addForeignKey('empresa_id', 'con_empresa', 'id', 'CASCADE', 'CASCADE', 'fk_empresa_contabancaria');
+        
         $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_cre_user_contabancaria');
         $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_upd_user_contabancaria');
         $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'CASCADE', 'fk_del_user_contabancaria');

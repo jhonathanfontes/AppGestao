@@ -14,7 +14,6 @@ class FormaPagamento extends BaseController
         $data = [
             'card_title' => 'RELAÇÃO DAS FORMAS DE PAGAMENTO CADASTRADAS',
             'formapagamento'     => [
-                'maquina' => $this->setMaquinaCartao(),
                 'conta' => $this->setContaBancaria()
             ],
         ];
@@ -27,7 +26,6 @@ class FormaPagamento extends BaseController
         $data = [
             'card_title'        => 'CADASTRO DA PESSOA' . $codigo,
             'formapagamento'    => $this->setFormaPagamentoSelecionado($codigo),
-            'bandeiras'         => $this->setBandeirasCartoes(),
         ];
         return view('modulo/configuracao/formaspagamentos_view', $data);
     }

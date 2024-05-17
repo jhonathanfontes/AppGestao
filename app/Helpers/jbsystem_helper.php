@@ -228,10 +228,10 @@ function convertNatureza($forma)
 function convertTipoConta($forma)
 {
     switch ($forma) {
-        case 'C':
+        case 1:
             $return = 'CONTA CORRENTE';
             break;
-        case 'P':
+        case 2:
             $return = 'CONTA POUPANÇA';
             break;
         default:
@@ -356,10 +356,10 @@ function convertSituacao($forma)
 function convertSimNao($forma)
 {
     switch ($forma) {
-        case 'N':
+        case 0:
             $return = '<label class="badge badge-secondary">NÃO</label>';
             break;
-        case 'S':
+        case 1:
             $return = '<label class="badge badge-success">SIM</label>';
             break;
         default:

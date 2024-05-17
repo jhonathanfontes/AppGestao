@@ -165,18 +165,14 @@ if (isset($formapagamento->cad_forma) && ($formapagamento->cad_forma == 3 || $fo
 <?= $this->endSection() ?>
 
 <?= $this->section('modal_content') ?>
-<?php require_once('componentes/formaparcelamento_modal.php');
+<?php require_once('componentes/formapagamento_modal.php');
 ?>
 <?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
 <script>
     $(document).ready(function() {
-        $("#cad_bandeira").on("change", function() {
-            var cod_forma = document.getElementById('cod_forma').value;
-            var cad_bandeira = document.getElementById('cad_bandeira').value;
-            getParcelamentoBandeiraSelecionado(cod_forma, cad_bandeira);
-        });
+       
     });
 </script>
 <?= $this->endSection() ?>

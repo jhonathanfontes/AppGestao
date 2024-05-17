@@ -8,21 +8,21 @@ class Vendedor extends Entity
 
 {
     protected $attributes = [
-        'id_vendedor'   => null,
+        'id'   => null,
         'usuario_id'    => null,
         'pessoa_id'     => null,
         'status'        => null
     ];
 
     protected $datamap = [
-        'cod_vendedor'  => 'id_vendedor',
+        'cod_vendedor'  => 'id',
         'cod_usuario'   => 'usuario_id',
         'cod_pessoa'    => 'pessoa_id'
     ];
 
     public function auditoriaInsertAtributos()
     {
-        $attribute['cod_vendedor'] = $this->id_vendedor;
+        $attribute['cod_vendedor'] = $this->id;
 
         $attribute['cod_usuario'] = [
             'new' => $this->usuario_id
