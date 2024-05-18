@@ -47,6 +47,11 @@
                         <address>
                             <table>
                                 <tr style="width: 40px;">
+                                    <th>CLIENTE</th>
+                                    <td><?= isset($obra->cad_nome) ? $obra->cad_nome : 'CLIENTE NÃO INFORMADO!'; ?>
+                                    </td>
+                                </tr>
+                                <tr style="width: 40px;">
                                     <th>OBRA</th>
                                     <td><?= isset($obra->cad_obra) ? $obra->cod_obra . ' - ' . $obra->cad_obra : 'CADASTRO NÃO LOCALIZADO!'; ?>
                                     </td>

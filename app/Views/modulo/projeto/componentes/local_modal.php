@@ -1,7 +1,8 @@
-<div class="modal fade" id="modalLocal">
+<div class="modal fade" id="modalLocal"  data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-warning">
+        <div class="modal-header <?= getenv('tema.modal.header.color'); ?>">
                 <h4 class="modal-title"><span id="modalTitleLocal"></span></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -40,7 +41,7 @@
 <div class="modal fade" id="modalProdutoLocalServico" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-warning">
+        <div class="modal-header <?= getenv('tema.modal.header.color'); ?>">
                 <h4 class="modal-title"> <span id="modalTitleGradeProduto"></span></h4>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -51,7 +52,7 @@
 
             <div class="card-body">
                 <input name="cod_local" id="cod_local" hidden="hidden">
-                <input name="cod_localservico" id="cod_localservico" hidden="hidden">
+                <input name="cod_detalhe" id="cod_detalhe" hidden="hidden">
     
                 <div class="row">
                     <div class="form-group col-3">

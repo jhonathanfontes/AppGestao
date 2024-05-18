@@ -30,7 +30,10 @@ trait ProjetoTrait
         try {
             if ($cod_obra != null) {
                 $model = new \App\Models\Projeto\ObraModel();
-                return $model->getObra($cod_obra);
+                return $model->getObra()
+                    ->where('ger_obra.id', $cod_obra)
+                    ->first();
+                ;
             }
         } catch (\Throwable $th) {
             return $th->getMessage();

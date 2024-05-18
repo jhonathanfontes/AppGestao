@@ -94,10 +94,20 @@ function getEditObra(Paramentro) {
         "dataType": "json",
         success: function (dado) {
             console.log(dado);
-            document.getElementById('modalTitleObra').innerHTML = 'ATUALIZANDO A PROFISSÃO ' + dado.cad_obra;
+            document.getElementById('modalTitleObra').innerHTML = 'ATUALIZANDO A OBRA ' + dado.cad_obra;
             $('#cod_obra').val(dado.cod_obra);
             $('#cad_obra').val(dado.cad_obra);
             $('#cad_datainicio').val(dado.cad_datainicio);
+
+            $('#cod_endereco').val(dado.cod_endereco);
+            
+            $('#cad_cep').val(dado.cad_cep);
+            $('#cad_endereco').val(dado.cad_endereco);
+            $('#cad_numero').val(dado.cad_numero);
+            $('#cad_bairo').val(dado.cad_setor);
+            $('#cad_cidade').val(dado.cad_cidade);
+            $('#cad_uf').val(dado.cad_estado);
+            $('#cad_complemento').val(dado.cad_complemento);
         }
     });
 }
@@ -415,12 +425,12 @@ function getEditProdutoLocalServico(Paramentro) {
         success: function (dado) {
             document.getElementById('modalTitleGradeProduto').innerHTML = 'ATUALIZANDO ' + dado.pro_descricao + ' - ' + dado.tam_abreviacao;
 
-            document.getElementById("cod_local").value = dado.cod_local;
-            document.getElementById("cod_localservico").value = dado.cod_localservico;
-            document.getElementById("qnt_produto").value = dado.cad_quantidade;
-            document.getElementById("valor_unidade").value = formatMoneyBR(dado.cad_valor);
-            document.getElementById("valor_desc").value = formatMoneyBR(dado.cad_valor);
-            document.getElementById("valor_total").value = formatMoneyBR(dado.cad_total);
+            document.getElementById("cod_detalhe").value = dado.id;
+            document.getElementById("cod_local").value = dado.local_id;
+            document.getElementById("qnt_produto").value = dado.qtn_produto;
+            document.getElementById("valor_unidade").value = formatMoneyBR(dado.val1_unad);
+            document.getElementById("valor_desc").value = formatMoneyBR(dado.val1_unad);
+            document.getElementById("valor_total").value = formatMoneyBR(dado.val1_total);
         }
     });
 }

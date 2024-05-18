@@ -24,7 +24,7 @@ class Obra extends BaseController
     public function view(int $codigo = null)
     {
         $data = [
-            'card_title' => 'CADASTRO DA PESSOA' . $codigo,
+            'card_title' => 'GESTÃO DA OBRA: ' . completeComZero($codigo, 8),
             'obra' => $this->setObra($codigo),
             'locais' => $this->setLocalObra($codigo),
         ];
