@@ -45,21 +45,6 @@ class FormaPagamentoModel extends Model
         return $data;
     }
 
-    public function getFormasPagamento()
-    {
-        $atributos = [
-            'pdv_formapag.*',
-            'cad_contabancaria.con_descricao',
-            'cad_contabancaria.con_agencia',
-            'cad_contabancaria.con_conta',
-            'cad_contabancaria.con_tipoconta'
-        ];
-
-        $result = $this->select($atributos)
-            ->join('cad_contabancaria', 'cad_contabancaria.id = pdv_formapag.conta_id', 'LEFT');
-
-        return $result;
-    }
     public function returnSave(int $codigo = null)
     {
         return $this->select('id , for_descricao')->find($codigo);

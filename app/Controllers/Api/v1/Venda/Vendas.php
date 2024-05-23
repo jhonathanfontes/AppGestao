@@ -138,6 +138,7 @@ class Vendas extends ApiController
 
                 $data['venda_tipo'] = $this->request->getPost("cod_tipo");
                 $data['pessoa_id'] = $cod_pessoa;
+                $data['situacao'] = 4;
 
                 if ($this->buscaRegistro404($serial) == null) {
                     $data['serial'] = $serial;

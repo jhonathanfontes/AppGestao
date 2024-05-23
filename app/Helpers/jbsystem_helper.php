@@ -344,6 +344,9 @@ function convertSituacao($forma)
             $return = 'Pendente';
             break;
         case '5':
+            $return = 'Obra Pendente';
+            break;
+        case '6':
             $return = 'Agrupada';
             break;
         default:

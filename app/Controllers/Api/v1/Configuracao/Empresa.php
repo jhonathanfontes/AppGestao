@@ -131,7 +131,8 @@ class Empresa extends ApiController
 
     public function findAll()
     {
-        $return = $this->empresaModel->getEmpresas();
+        $return = $this->empresaModel->getEmpresa()
+            ->findAll();
         return $this->response->setJSON($return);
     }
 

@@ -43,7 +43,6 @@ class OrcamentoModel extends Model
 
 	protected function insertAuditoria(array $data)
 	{
-		$data['data']['situacao'] = 4;
 		$data['data']['orc_dataorcamento'] = getDatetimeAtual();
 		$data['data']['created_user_id'] = getUsuarioID();
 		$data['data']['created_at'] = getDatetimeAtual();

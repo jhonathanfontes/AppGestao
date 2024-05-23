@@ -38,7 +38,6 @@
                     <tr style="text-align: center;">
                         <th>DESCRIÇÃO</th>
                         <th>FORMA DE PAGAMENTO</th>
-                        <th>CONTA BANCARIA</th>
                         <th>PARCELA</th>
                         <th>ANTECIPA</th>
                         <th>STATUS</th>

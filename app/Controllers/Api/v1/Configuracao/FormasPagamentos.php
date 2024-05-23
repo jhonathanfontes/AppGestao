@@ -21,7 +21,7 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
     {
         $response['data'] = array();
 
-        $result = $this->formaPagamentoModel->getFormasPagamento()
+        $result = $this->formaPagamentoModel
             ->whereIn('pdv_formapag.status', ['1', '2'])
             ->findAll();
 
@@ -30,12 +30,11 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
 
             $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalFormaPagamento" onclick="getEditFormaPagamento(' . $value->cod_forma . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
             //  $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'formapagamento'" . ',' . $value->cod_forma . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
-            $ops .= '	<a class="btn btn-xs btn-success ml-2" href="formaspagamentos/view/' . $value->cod_forma . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
+            // $ops .= '	<a class="btn btn-xs btn-success ml-2" href="formaspagamentos/view/' . $value->cod_forma . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
 
             $response['data'][$key] = array(
                 esc($value->cad_descricao),
                 convertFormarPagamento($value->cad_forma),
-                ($value->con_descricao !== null) ? 'AG: ' . esc($value->con_agencia) . ' C' . esc($value->con_tipo) . ': ' . esc($value->con_conta) . ' - ' . esc($value->con_descricao) : '',
                 convertSimNao($value->cad_parcela),
                 convertSimNao($value->cad_antecipa),
                 convertStatus($value->status),
@@ -89,17 +88,16 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
         $data['for_descricao'] = returnNull($this->request->getPost('cad_descricao'), 'S');
 
         if ($this->request->getPost('cad_forma') === '3' || $this->request->getPost('cad_forma') === '4') {
-            $data['maquinacartao_id'] = returnNull($this->request->getPost('cad_maquininha'), 'S');
-            $data['conta_id'] = returnNull($this->request->getPost('cad_conta'), 'S');
-            $data['for_parcela'] = returnNull($this->request->getPost('cad_parcela'), 'S');
-            $data['for_antecipa'] = returnNull($this->request->getPost('cad_antecipa'), 'S');
-            if ($this->request->getPost('cad_parcela') === 'N') {
-                $data['for_prazo'] = returnNull($this->request->getPost('cad_fprazo'), 'S');
-                $data['for_taxa'] = returnNull($this->request->getPost('cad_ftaxa'), 'S');
-            }
+            // $data['maquinacartao_id'] = returnNull($this->request->getPost('cad_maquininha'), 'S');
+            // $data['conta_id'] = returnNull($this->request->getPost('cad_conta'), 'S');
+            $data['for_parcela'] = $this->request->getPost('cad_parcela');
+            $data['for_antecipa'] = $this->request->getPost('cad_antecipa');
+            $data['for_prazo'] = returnNull($this->request->getPost('cad_fprazo'), 'S');
+            $data['for_taxa'] = returnNull($this->request->getPost('cad_ftaxa'), 'S');
         }
 
         $data['status'] = $this->request->getPost('status');
+        // return $this->response->setJSON($data);
 
         $entityFormaPagamento = new FormaPagamento($data);
 
@@ -119,7 +117,7 @@ class FormasPagamentos extends \App\Controllers\Api\ApiController
                     ]
                 ]);
             }
-            $this->auditoriaModel->insertAuditoria('configuracao', 'formapagamento', 'atualizar', $result->auditoriaAtributos());
+            // $this->auditoriaModel->insertAuditoria('configuracao', 'formapagamento', 'atualizar', $result->auditoriaAtributos());
         }
         ;
 

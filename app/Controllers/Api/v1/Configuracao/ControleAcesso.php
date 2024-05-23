@@ -84,12 +84,12 @@ class ControleAcesso extends ApiController
         try {
             if ($this->permissaoModel->save($data)) {
 
-                $this->auditoriaModel->insertAuditoria('configuracao', 'grupodeacesso', $metedoAuditoria, $dataAuditoria);
+                // $this->auditoriaModel->insertAuditoria('configuracao', 'grupodeacesso', $metedoAuditoria, $dataAuditoria);
 
                 $cod_grupodeacesso = (!empty($this->request->getPost('cod_grupodeacesso'))) ? $this->request->getPost('cod_grupodeacesso') : $this->permissaoModel->getInsertID();
 
                 $return = $this->permissaoModel->returnSave($cod_grupodeacesso);
-
+               
                 return $this->response->setJSON([
                     'status' => true,
                     'menssagem' => [
@@ -106,8 +106,8 @@ class ControleAcesso extends ApiController
 
     public function getPermissao()
     {
-        $permissaoModel = new PermissaoModel();
-        $permissoes = $permissaoModel->findAll();
+        
+        $permissoes = $this->permissaoModel->findAll();
         $i = 0;
         foreach ($permissoes as $row) {
             $dados[$i] = array(
@@ -125,16 +125,15 @@ class ControleAcesso extends ApiController
 
     public function getPermissoes()
     {
-        $permissaoModel = new PermissaoModel();
-        $return = $permissaoModel->orderBy('per_descricao', 'ASC')
+  
+        $return = $this->permissaoModel->orderBy('per_descricao', 'ASC')
             ->findAll();
         return $this->response->setJSON($return);
     }
 
-    public function getPermissaoShow($cod_permisao)
-    {
-        $permissaoModel = new PermissaoModel();
-        $permissoe = $permissaoModel->find($cod_permisao);
+    public function getPermissaoShow($cod_permisao){
+
+        $permissoe = $this->permissaoModel->find($cod_permisao);
 
         $dados = array(
             'cod_permisao'      => $permissoe['id'],

@@ -7,7 +7,7 @@
     <!-- Default box -->
     <div class="card card-pink">
         <div class="card-body">
-            <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalMaquinaCartao" onclick="setNewMaquinaCartao()">
+            <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalVendedor" onclick="setNewVendedor()">
                 <i class="fas fa-plus-circle"></i>
                 CADASTRAR
             </button>
@@ -33,12 +33,16 @@
             </div>
         </div>
         <div class="card-body">
-            <table id="tableMaquinaCartao" class="table table-sm table-bordered table-striped">
+            <table id="tableVendedor" class="table table-sm table-bordered table-striped">
                 <thead>
                     <tr style="text-align: center;">
-                        <th>DESCRIÇÃO</th>
+                        <th>CODIGO</th>
+                        <th>USUARIO</th>
+                        <th>APELIDO</th>
+                        <th>PESSOA</th>
+                        <th>CELULAR</th>
                         <th>STATUS</th>
-                        <th>AÇÕES</th>
+                        <th style="width: 15%;">AÇÕES</th>
                     </tr>
                 </thead>
                 <tbody style="font-size: 12px;">
@@ -51,6 +55,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('modal_content') ?>
-<?php // require_once('componentes/maquinacartao_modal.php'); 
+<?php require_once('componentes/vendedores_modal.php');
 ?>
 <?= $this->endSection() ?>

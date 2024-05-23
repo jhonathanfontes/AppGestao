@@ -7,7 +7,8 @@
     <!-- Default box -->
     <div class="card card-pink">
         <div class="card-body">
-            <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalContaBancaria" onclick="setNewContaBancaria()">
+            <button class="btn btn-app bg-info" data-toggle="modal" data-target="#modalContaBancaria"
+                onclick="setNewContaBancaria()">
                 <i class="fas fa-plus-circle"></i>
                 CADASTRAR
             </button>
@@ -26,9 +27,11 @@
         <div class="card-header">
             <h3 class="card-title"><?= isset($card_title) ? $card_title : ''; ?></h3>
             <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                    title="Collapse">
                     <i class="fas fa-minus"></i></button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip"
+                    title="Remove">
                     <i class="fas fa-times"></i></button>
             </div>
         </div>
@@ -58,7 +61,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('modal_content') ?>
-<?php require_once('componentes/contabancaria_modal.php');
+<?php require_once ('componentes/contabancaria_modal.php');
 ?>
 <?= $this->endSection() ?>
 
@@ -66,6 +69,7 @@
 <script>
     $(document).ready(function () {
         getBancoOption();
+        getEmpresasOption();
     });
 </script>
 <?= $this->endSection() ?>

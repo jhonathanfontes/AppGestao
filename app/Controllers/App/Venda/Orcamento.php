@@ -33,11 +33,12 @@ class Orcamento extends BaseController
             return redirect()->to(base_url('app/modulo/venda'));
         }
 
-        // $detalhes = $this->listarDetalhes()
-        //     ->where('est_detalhe.situacao >=', 1)
-        //     ->where('est_detalhe.situacao <=', 2)
-        //     ->where('est_detalhe.orcamento_id', $orcamento->cod_orcamento)
-        //     ->findAll();
+        $detalhes = $this->listarDetalhes()
+            ->where('orcamento_id', $orcamento->cod_orcamento)
+            ->whereIn('situacao', ['1', '2', '4'])
+            ->withDeleted()
+            ->findAll();
+
 
         try {
 
@@ -50,7 +51,7 @@ class Orcamento extends BaseController
                 'clientes' => $this->setPessoasClientes(),
                 // 'vendedores' => $this->getVendedores(),
                 'orcamento' => $orcamento,
-                // 'detalhes' => $detalhes
+                'detalhes' => $detalhes
             ];
 
             return view('modulo/venda/orcamento_selling', $data);

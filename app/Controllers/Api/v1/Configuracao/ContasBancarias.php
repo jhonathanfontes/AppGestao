@@ -38,7 +38,7 @@ class ContasBancarias extends ApiController
                 esc($value->cad_agencia),
                 esc($value->cad_conta),
                 esc($value->ban_codigo) . ' - ' . esc($value->ban_descricao),
-                esc($value->cad_titular),
+                esc($value->emp_razao),
                 convertSimNao($value->cad_pagamento),
                 convertSimNao($value->cad_recebimento),
                 convertStatus($value->status),
@@ -66,7 +66,7 @@ class ContasBancarias extends ApiController
                 ->findAll();
 
             foreach ($contas as $row) {
-                $option .= "<option value='$row->id_conta'>$row->con_descricao </option>" . PHP_EOL;
+                $option .= "<option value='$row->id'>$row->con_descricao </option>" . PHP_EOL;
             }
             echo $option;
         } catch (\Throwable $th) {
@@ -90,7 +90,7 @@ class ContasBancarias extends ApiController
         $data['con_titular'] = returnNull($this->request->getPost('cad_titular'), 'S');
         $data['con_pagamento'] = $this->request->getPost('cad_pagamento');
         $data['con_recebimento'] = $this->request->getPost('cad_recebimento');
-        $data['empresa_id'] = returnNull($this->request->getPost('cad_empresa'), 'S');
+        $data['empresa_id'] = returnNull($this->request->getPost('cod_empresa'), 'S');
         $data['status'] = $this->request->getPost('status');
 
         $entityContaBancaria = new ContaBancaria($data);
@@ -127,7 +127,8 @@ class ContasBancarias extends ApiController
         try {
             if ($this->contaBancariaModel->save($data)) {
 
-                $this->auditoriaModel->insertAuditoria('configuracao', 'contabancaria', $metedoAuditoria, $dataAuditoria);
+                // $this->auditoriaModel->insertAuditoria('configuracao', 'contabancaria', $metedoAuditoria, $dataAuditoria);
+
                 $cod_contabancaria = (!empty($this->request->getPost('cod_contabancaria'))) ? $this->request->getPost('cod_contabancaria') : $this->contaBancariaModel->getInsertID();
 
                 $return = $this->contaBancariaModel->returnSave($cod_contabancaria);
@@ -166,14 +167,14 @@ class ContasBancarias extends ApiController
 
     public function show($paramentro)
     {
-        $return = $this->contaBancariaModel->where('id_conta', $paramentro)
+        $return = $this->contaBancariaModel->where('id', $paramentro)
             ->first();
         return $this->response->setJSON($return);
     }
 
     public function arquivar($paramentro = null)
     {
-        $conta = $this->contaBancariaModel->where('id_conta', $paramentro)
+        $conta = $this->contaBancariaModel->where('id', $paramentro)
             ->where('status <>', 0)
             ->where('status <>', 3)
             ->first();

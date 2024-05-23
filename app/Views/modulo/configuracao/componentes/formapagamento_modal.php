@@ -35,14 +35,7 @@
                             required>
                     </div>
                 </div>
-                <div class="form-group row" id="container-cartao" hidden>
-                    
-                    <div class="form-group col-8">
-                        <label for="">CONTA</label>
-                        <select name="cad_conta" id="cad_conta" class="form-control select2bs4" style="width: 100%;">
-                          
-                        </select>
-                    </div>
+                <div class="form-group row" id="container-cartao" hidden>               
                     <div class="form-group col-3">
                         <label for="">PARCELA</label>
                         <select name="cad_parcela" id="cad_parcela" class="form-control">
@@ -65,7 +58,7 @@
                         </div>
                         <div class="form-group col-6">
                             <label for="">PRAZO</label>
-                            <input name="cad_fprazo" id="cad_fprazo" type="number" min="1" class="form-control"
+                            <input name="cad_fprazo" id="cad_fprazo" type="number" min="1" max="12" class="form-control"
                                 placeholder="">
                         </div>
                     </div>

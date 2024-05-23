@@ -44,10 +44,7 @@
                   <option value="M">SENHOR</option>
                 </select>
               </div>
-              <div class="form-group col-4">
-                <label for="">USERNAME</label>
-                <input name="cad_username" id="cad_username" type="text" class="form-control" placeholder="DIGITE O USERNAME DO USUARIO" required>
-              </div>
+          
               <div class="col-md-8" id="pes_container-status">
                 <div class="form-group">
                   <label class="col-sm-3 col-form-label">SITUAÇÃO</label>

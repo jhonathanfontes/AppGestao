@@ -268,7 +268,7 @@ trait FinanceiroTrait
     {
         try {
             $detalheModel = new \App\Models\Estoque\DetalheModel();
-            return $detalheModel->listarDetalhes();
+            return $detalheModel->getProdutoDetalhe();
         } catch (\Throwable $th) {
             return $th->getMessage();
         }

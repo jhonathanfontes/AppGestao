@@ -195,6 +195,7 @@ class DetalheModel extends Model
 	{
 		$atributos = [
 			'est_movimentacao.id',
+			'est_movimentacao.orcamento_id',
 			'est_movimentacao.local_id',
 			'est_movimentacao.produto_id',
 			'est_movimentacao.qtn_produto',

@@ -28,35 +28,20 @@ class FinanceiroFormarPagamento extends Migration
                 'type' => 'INT',
                 'null' => true,
             ],
-            'pes_padrao' => [
-                'type' => 'VARCHAR',
-                'constraint' => '1',
-                'default' => 'N',
-            ],
             'for_taxa' => [
                 'type' => 'VARCHAR',
                 'constraint' => '10',
-                'default' => 0
+                'null' => true,
             ],
             'for_parcela' => [
-                'type' => 'VARCHAR',
+                'type' => 'BOOLEAN',
                 'constraint' => '1',
-                'default' => 'N'
+                'default' => '0'
             ],
             'for_antecipa' => [
-                'type' => 'VARCHAR',
+                'type' => 'BOOLEAN',
                 'constraint' => '1',
-                'default' => 'N'
-            ],
-            'conta_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => true,
-            ],
-            'empresa_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => true,
+                'default' => '0'
             ],
             'status' => [
                 'type' => 'INT',

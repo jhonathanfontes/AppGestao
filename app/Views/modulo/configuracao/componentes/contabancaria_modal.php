@@ -43,7 +43,7 @@
 
                         <div class="form-group col-3">
                             <label for="">EMPRESA</label>
-                            <select name="cad_empresa" id="cad_empresa" class="form-control select2bs4" style="width: 100%;">
+                            <select name="cod_empresa" id="cod_empresa" class="form-control select2bs4" style="width: 100%;">
                                 <option value="">SELECIONE UM EMPRESA</option>
                             </select>
                         </div>

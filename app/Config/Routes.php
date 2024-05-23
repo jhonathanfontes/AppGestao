@@ -295,7 +295,7 @@ $routes->group('api', function ($routes) {
             $routes->get('gruposdeacesso', 'ControleAcesso::findAll');
             $routes->get('parcela', 'Parcela::findAll');
 
-            $routes->get('empresa', 'Empresa::findAll');
+            $routes->get('empresas', 'Empresa::findAll');
 
             $routes->get('vendedor', 'Vendedor::findAll');
 
@@ -724,6 +724,7 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
 
                 // Rota app/configuracao/auxiliar/venda/vendedores
                 $routes->get('vendedores', 'Vendedor::vendedores');
+                $routes->get('prestadores', 'Prestador::prestadores');
             });
         });
     });

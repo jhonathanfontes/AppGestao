@@ -38,7 +38,7 @@ class PermissaoModel extends Model
 
     public function returnSave(int $codigo = null)
     {
-        return $this->select('id_permissao, per_descricao')->find($codigo);
+        return $this->select('id, per_descricao')->find($codigo);
     }
 
     public function getPermissoes()

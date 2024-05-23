@@ -119,6 +119,8 @@ $(document).ready(function () {
     });
 
     // CARREGA GRADE DOS PRODUTOS
+    // INICIANDO A INCLUSÃO DOS PRODUTOS/SERVIÇO
+
     $('#searchProduto').autocomplete({
         minLength: 2,
         autoFocus: true,
@@ -137,10 +139,9 @@ $(document).ready(function () {
                     }];
                     if (res.length) {
                         result = $.map(res, function (obj) {
-                            // console.log(obj);
                             return {
-                                label: obj.cad_produto + '  /  ' + obj.fab_descricao,
-                                value: obj.cad_produto + '  /  ' + obj.fab_descricao,
+                                label: obj.cad_produto + '  /  ' + obj.tam_abreviacao,
+                                value: obj.cad_produto + '  /  ' + obj.tam_abreviacao,
                                 data: obj
                             }
                         })
@@ -152,85 +153,21 @@ $(document).ready(function () {
         select: function (event, selectedData) {
             if (selectedData && selectedData.item && selectedData.item.data) {
                 var data = selectedData.item.data;
-                $.post(base_url + 'api/cadastro/exibir/busca/grade/produtos', {
-                    cod_produto: data.cod_produto
-                }, function (data) {
-                    $('#cat_grade').html(data);
-                    document.getElementById("cat_grade").disabled = false;
-                });
-            }
-        }
-    });
-
-    $('#PdvSearchProduto').autocomplete({
-        minLength: 2,
-        autoFocus: true,
-        delay: 300,
-        maxShowItems: 10,
-        source: function (request, cb) {
-            $.ajax({
-                url: base_url + 'api/cadastro/exibir/busca/produtograde/' + request.term.replace(" ", "_"),
-                method: 'GET',
-                dataType: 'json',
-                success: function (res) {
-                    var result;
-                    result = [{
-                        label: 'PRODUTO NÃO ENCONTRADO COMO ' + request.term,
-                        value: ''
-                    }];
-                    if (res.length) {
-                        result = $.map(res, function (obj) {
-                            return {
-                                label: obj.des_produto + ' - ' + obj.des_tamanho + ' / ' + obj.cad_fabricante,
-                                value: obj.des_produto + ' - ' + obj.des_tamanho + ' / ' + obj.cad_fabricante,
-                                data: obj
-                            }
-                        })
-                    }
-                    cb(result);
-                }
-            })
-        },
-        select: function (event, selectedData) {
-            if (selectedData && selectedData.item && selectedData.item.data) {
-                var data = selectedData.item.data;
-                // console.log(data);
-                $('#produtoSelect').text(data.codigo + ' ' + data.des_produto + ' - ' + data.des_tamanho + ' / ' + data.cad_fabricante);
-                $('#cat_grade').val(data.codigo);
-                $('#produto_id').val(data.produto_id);
-                $('#cod_produto').val(data.produto_id);
-                $('#est_produto').val(data.estoque);
-                $('#cod_grade').val(data.tamanho_id);
-                $('#val_venda').val(formatMoneyBR(data.valor_vendaavista));
-                $('#valor_venda').val(formatMoneyBR(data.valor_vendaavista));
-                // $('#val_aprazo').val(formatMoneyBR(data.valor_vendaprazo));
-                // $('#valor_aprazo').val(formatMoneyBR(data.valor_vendaprazo));
+                console.log(data);
+                $('#produto_id').val(data.cod_produto);
+                $('#cod_produto').val(data.cod_produto);
+                $('#val_avista').val(formatMoneyBR(data.cad_valor1));
+                $('#valor_avista').val(formatMoneyBR(data.cad_valor1));
+                $('#val_aprazo').val(formatMoneyBR(data.cad_valor2));
+                $('#valor_aprazo').val(formatMoneyBR(data.cad_valor2));
                 $('#quantidade').val('1');
 
+                if (data.cod_tipo == 1) {
+                    $('#est_produto').val(data.estoque);
+                }
                 document.getElementById("submitAdicionar").disabled = false;
             }
         }
-    });
-
-    $('#cat_grade').change(function () {
-        var cod_grade = $('#cat_grade').val();
-        $.post(base_url + 'api/cadastro/exibir/busca/grade/produto', {
-            cod_grade: cod_grade
-        }, function (r) {
-            data = JSON.parse(r);
-
-            $('#produto_id').val(data[0].produto_id);
-            $('#cod_produto').val(data[0].produto_id);
-            $('#est_produto').val(data[0].estoque);
-            $('#cod_grade').val(data[0].tamanho_id);
-            $('#val_avista').val(formatMoneyBR(data[0].valor_vendaavista));
-            $('#valor_avista').val(formatMoneyBR(data[0].valor_vendaavista));
-            $('#val_aprazo').val(formatMoneyBR(data[0].valor_vendaprazo));
-            $('#valor_aprazo').val(formatMoneyBR(data[0].valor_vendaprazo));
-            $('#quantidade').val('1');
-
-            document.getElementById("submitAdicionar").disabled = false;
-        });
     });
 
     $('#vendaAVista').change(function () {
@@ -616,7 +553,7 @@ function salvarGradeProduto() {
 }
 
 function editarGradeProduto(idDetalhe) {
-    
+
     var nameGradeProduto = $('#nameGradeProduto');
     var idDetalheInput = document.getElementById("id_detalhe");
     var codtipoInput = document.getElementById("cod_tipo");

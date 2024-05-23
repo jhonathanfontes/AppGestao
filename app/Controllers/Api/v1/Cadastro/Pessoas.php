@@ -20,15 +20,13 @@ class Pessoas extends BaseController
 
     public function getCarregaTabela()
     {
-        $response = array();
-
         $data['data'] = array();
-
         $result = $this->pessoaModel->whereIn('status', ['1', '2'])->withDeleted()->findAll();
 
         foreach ($result as $key => $value) {
 
             $documento = null;
+            
             // $ops = '<div class="btn-group">';
             $ops = '	<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalPessoa" onclick="getEditPessoa(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
             $ops .= '	<a class="btn btn-xs btn-success" href="pessoas/view/' . $value->id . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';

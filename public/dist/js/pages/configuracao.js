@@ -548,6 +548,9 @@ function salvarEmpresa() {
             cad_fantasia: {
                 required: true,
             },
+            cad_telefone: {
+                maxlength: 15,
+            },
         },
         messages: {
             cad_razao: {
@@ -555,6 +558,9 @@ function salvarEmpresa() {
             },
             cad_fantasia: {
                 required: "O Nome fantasia deve ser informado!",
+            },
+            cad_telefone: {
+                maxlength: "O campo telefone só permitir até 15 caracteres!",
             },
         },
         errorElement: 'span',
@@ -913,7 +919,7 @@ function salvarGrupoAcesso() {
                     document.getElementById("SalvarGrupoAcesso").disabled = true;
                 },
                 success: function (response) {
-                    // console.log(response);
+                    console.log(response);
                     respostaSwalFire(response)
                 },
                 error: function () {
@@ -1091,8 +1097,8 @@ function salvarSenhaUsuario() {
                     document.getElementById("submitSalvarSenhaUsuario").disabled = true;
                 },
                 success: function (response) {
-                    console.log(response);
-                    // respostaSwalFire(response);
+                    // console.log(response);
+                    respostaSwalFire(response);
                 },
                 error: function () {
                     document.getElementById("submitSalvarSenhaUsuario").disabled = false;

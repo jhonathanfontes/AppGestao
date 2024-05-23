@@ -293,6 +293,16 @@ function getFornecedoresOption() {
     });
 }
 
+function getEmpresasOption() {
+    $.get(base_url + 'api/configuracao/exibir/empresas', {}, function (response) {
+        options = '<option value="">SELECIONE UMA EMPRESA</option>';
+        for (var i = 0; i < response.length; i++) {
+            options += '<option value="' + response[i].cod_empresa + '">' + response[i].cad_razao + '</option>';
+        }
+        $('#cod_empresa').html(options);
+    });
+}
+
 //Function to display a toast notification
 function respostaToast(response) {
     // Destructure the response object to make it easier to access its properties

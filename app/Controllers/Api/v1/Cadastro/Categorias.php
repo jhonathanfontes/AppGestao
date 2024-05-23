@@ -16,7 +16,6 @@ class Categorias extends ApiController
     public function __construct()
     {
         $this->categoriaModel = new \App\Models\Cadastro\CategoriaModel();
-        // $this->auditoriaModel = new \App\Models\AuditoriaModel();
         $this->validation = \Config\Services::validation();
     }
 

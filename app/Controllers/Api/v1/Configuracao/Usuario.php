@@ -16,7 +16,7 @@ class Usuario extends ApiController
     {
         $this->usuarioModel = new UsuarioModel();
         // $this->auditoriaModel = new \App\Models\AuditoriaModel();
-        $this->validation =  \Config\Services::validation();
+        $this->validation = \Config\Services::validation();
     }
 
     public function getCarregaTabela()
@@ -28,9 +28,9 @@ class Usuario extends ApiController
         foreach ($result as $key => $value) {
 
             $imagem = [
-                'src'   => site_url("../../../dist/img/avatar/$value->use_avatar"),
+                'src' => site_url("../../../dist/img/avatar/$value->use_avatar"),
                 'class' => 'img-circle list-inline table-avatar',
-                'alt'   =>  esc($value->use_nome),
+                'alt' => esc($value->use_nome),
                 'width' => '30'
             ];
 
@@ -51,21 +51,20 @@ class Usuario extends ApiController
 
         return $this->response->setJSON($response);
     }
-    
+
     public function save()
     {
         if (!$this->request->isAJAX()) {
             return redirect()->back();
         }
 
-        $data['use_nome']       = returnNull($this->request->getPost('cad_nome'), 'S');
-        $data['use_apelido']    = returnNull($this->request->getPost('cad_apelido'), 'S');
-        $data['use_telefone']   = $this->request->getPost('cad_telefone');
-        $data['use_email']      = $this->request->getPost('cad_email');
-        $data['use_sexo']       = $this->request->getPost('cad_sexo');
-        $data['use_username']   = $this->request->getPost('cad_username');
-        $data['permissao_id']   = $this->request->getPost('cad_permissao');
-        $data['status']         = $this->request->getPost('status');
+        $data['use_nome'] = returnNull($this->request->getPost('cad_nome'), 'S');
+        $data['use_apelido'] = returnNull($this->request->getPost('cad_apelido'), 'S');
+        $data['use_telefone'] = $this->request->getPost('cad_telefone');
+        $data['use_email'] = $this->request->getPost('cad_email');
+        $data['use_sexo'] = $this->request->getPost('cad_sexo');
+        $data['permissao_id'] = $this->request->getPost('cad_permissao');
+        $data['status'] = $this->request->getPost('status');
 
         $entityUsuario = new EntitiesUsuario($data);
 
@@ -86,13 +85,14 @@ class Usuario extends ApiController
 
             $metedoAuditoria = 'insert';
             $dataAuditoria = $entityUsuario->auditoriaInsertAtributos();
-        };
+        }
+        ;
 
         try {
 
             if ($this->usuarioModel->save($data)) {
 
-                $this->auditoriaModel->insertAuditoria('configuracao', 'usuario', $metedoAuditoria, $dataAuditoria);
+                // $this->auditoriaModel->insertAuditoria('configuracao', 'usuario', $metedoAuditoria, $dataAuditoria);
 
                 $cod_usuario = (!empty($this->request->getPost('cod_usuario'))) ? $this->request->getPost('cod_usuario') : $this->usuarioModel->getInsertID();
 
@@ -145,16 +145,16 @@ class Usuario extends ApiController
         $i = 0;
         foreach ($usuarios as $row) {
             $dados[$i] = array(
-                'cad_codigo'        => $row['id'],
-                'cad_name'          => $row['use_nome'],
-                'cad_apelido'       => $row['use_apelido'],
-                'cad_email'         => $row['use_email'],
-                'cad_telefone'      => $row['use_telefone'],
-                'cad_user'          => $row['use_username'],
-                'cad_sexo'          => $row['use_sexo'],
-                'cad_avatar'        => $row['use_avatar'],
-                'cad_permissao'     => $row['permissao_id'],
-                'status'            => $row['status']
+                'cad_codigo' => $row['id'],
+                'cad_name' => $row['use_nome'],
+                'cad_apelido' => $row['use_apelido'],
+                'cad_email' => $row['use_email'],
+                'cad_telefone' => $row['use_telefone'],
+                'cad_user' => $row['use_username'],
+                'cad_sexo' => $row['use_sexo'],
+                'cad_avatar' => $row['use_avatar'],
+                'cad_permissao' => $row['permissao_id'],
+                'status' => $row['status']
             );
             $i++;
         }

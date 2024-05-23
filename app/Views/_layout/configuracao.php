@@ -122,7 +122,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('app/configuracao/auxiliar/venda/vendedores'); ?>" class="nav-link <?= (url_is('app/configuracao/auxiliar/venda/prestadores')) ? 'active' : ''; ?>">
+                            <a href="<?= base_url('app/configuracao/auxiliar/venda/prestadores'); ?>" class="nav-link <?= (url_is('app/configuracao/auxiliar/venda/prestadores')) ? 'active' : ''; ?>">
                                 <i class="far <?= (url_is('app/configuracao/auxiliar/venda/prestadores')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
                                 <p>PRESTADORES</p>
                             </a>
