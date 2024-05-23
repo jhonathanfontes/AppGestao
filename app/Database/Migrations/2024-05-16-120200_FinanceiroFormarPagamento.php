@@ -35,13 +35,11 @@ class FinanceiroFormarPagamento extends Migration
             ],
             'for_parcela' => [
                 'type' => 'BOOLEAN',
-                'constraint' => '1',
-                'default' => '0'
+                'default' => false
             ],
             'for_antecipa' => [
                 'type' => 'BOOLEAN',
-                'constraint' => '1',
-                'default' => '0'
+                'default' => false
             ],
             'status' => [
                 'type' => 'INT',
