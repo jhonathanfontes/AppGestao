@@ -63,7 +63,7 @@
                     </a>
                 </li>
             </ul>
-            <ul class="nav nav-treeview">
+            <!-- <ul class="nav nav-treeview">
                 <li class="nav-item <?= (url_is('app/venda/auxiliar/programa*')) ? 'menu-open' : ''; ?>">
                     <a href="#" class="nav-link <?= (url_is('app/venda/auxiliar/programa*')) ? 'active' : ''; ?>">
                         <i class="fab fa-buysellads text-primary"> </i>
@@ -78,7 +78,7 @@
                         </li>
                     </ul>
                 </li>
-            </ul>
+            </ul> -->
             <!-- <ul class="nav nav-treeview">
                 <li class="nav-item <?= (url_is('app/cadastro/auxiliar/produtos*')) ? 'menu-open' : ''; ?>">
                     <a href="#" class="nav-link <?= (url_is('app/cadastro/auxiliar/produtos*')) ? 'active' : ''; ?>">
@@ -115,12 +115,12 @@
                 </li>
             </ul> -->
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a href="<?= base_url('app/caixa'); ?>" class="nav-link <?= (url_is('app/caixa')) ? 'active' : ''; ?>">
                 <i class="nav-icon fas fa-cash-register"></i>
                 <p>CAIXA</p>
             </a>
-        </li>
+        </li> -->
         <div class="user-panel d-flex">
         </div>
     </ul>

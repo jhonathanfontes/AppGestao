@@ -213,4 +213,20 @@ class DetalheModel extends Model
 
 		return $result;
 	}
+
+	public function getSumProdutoDetalhe()
+	{
+		$atributos = [
+			'est_movimentacao.local_id',
+			'SUM(est_movimentacao.qtn_produto) AS qtn_produto',
+			'SUM(est_movimentacao.val1_unad) AS val1_unad',
+			'SUM(est_movimentacao.val1_total) AS val1_total',			
+			'cad_produto.pro_tipo'
+		];
+
+		$result = $this->select($atributos)
+			->join('cad_produto', 'cad_produto.id = est_movimentacao.produto_id', 'LEFT');
+
+		return $result;
+	}
 }

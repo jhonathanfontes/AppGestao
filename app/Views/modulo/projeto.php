@@ -28,12 +28,10 @@
                 </div>
             </div>
         </div>
-        <!-- Small boxes (Stat box) -->
-        <h5 class="mt-4 mb-2">GERENCIAMENTO DAS VENDAS\SERVIÇOS</h5>
+
+        <!-- <h5 class="mt-4 mb-2">GERENCIAMENTO DAS VENDAS\SERVIÇOS</h5>
         <div class="row">
-            <!-- Small boxes (Stat box) -->
             <div class="col-lg-2 col-4">
-                <!-- small box -->
                 <div class="small-box bg-orange">
                     <div class="inner">
                         <p>ORÇAMENTO</p>
@@ -45,9 +43,7 @@
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- Small boxes (Stat box) -->
             <div class="col-lg-2 col-4">
-                <!-- small box -->
                 <div class="small-box bg-orange">
                     <div class="inner">
                         <p>CANCELAMENTO</p>
@@ -59,9 +55,7 @@
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- Small boxes (Stat box) -->
             <div class="col-lg-2 col-4">
-                <!-- small box -->
                 <div class="small-box bg-orange">
                     <div class="inner">
                         <p>DEVOLUÇÃO</p>
@@ -73,14 +67,11 @@
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-        </div>
-        <!-- /.row -->
+        </div> -->
+<!-- 
         <h5 class="mt-4 mb-2">GERENCIAMENTO DO CAIXA</h5>
-        <!-- Small boxes (Stat box) -->
         <div class="row">
-            <!-- Small boxes (Stat box) -->
             <div class="col-lg-2 col-4">
-                <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
                         <p>CAIXA</p>
@@ -92,14 +83,11 @@
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-        </div>
-        <!-- /.container-fluid -->
+        </div> -->
 
-        <h5 class="mt-4 mb-2">AUXILIAR NO FINANCEIRO</h5>
-        <!-- Small boxes (Stat box) -->
+        <!-- <h5 class="mt-4 mb-2">AUXILIAR NO FINANCEIRO</h5>
         <div class="row">
             <div class="col-lg-2 col-4">
-                <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
                         <p>GRUPO</p>
@@ -111,9 +99,7 @@
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- ./col -->
             <div class="col-lg-2 col-4">
-                <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
                         <p>SUBGRUPO</p>
@@ -125,8 +111,7 @@
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-            <!-- ./col -->
-        </div>
+        </div> -->
     </div>
     <!-- /.container-fluid -->
 </section>

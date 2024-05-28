@@ -100,7 +100,7 @@ function getEditObra(Paramentro) {
             $('#cad_datainicio').val(dado.cad_datainicio);
 
             $('#cod_endereco').val(dado.cod_endereco);
-            
+
             $('#cad_cep').val(dado.cad_cep);
             $('#cad_endereco').val(dado.cad_endereco);
             $('#cad_numero').val(dado.cad_numero);
@@ -286,6 +286,7 @@ function getCarregaLocal(Paramentro) {
             document.getElementById("quantidade").disabled = false;
 
             carregaProdutoOrcamento(dado.cod_obra, dado.cod_local);
+            carregaServicoOrcamento(dado.cod_obra, dado.cod_local);
         }
     });
 }
@@ -352,6 +353,7 @@ function addProdutoOrcamento() {
                 success: function (response) {
                     respostaSwalFire(response, false);
                     carregaProdutoOrcamento(response.data.cod_obra, response.data.cod_local);
+                    carregaServicoOrcamento(response.data.cod_obra, response.data.cod_local);
                     document.getElementById("formAddProduto").reset();
                     $('#cod_local').val(response.data.cod_local);
                     $('#cod_obra').val(response.data.cod_obra);
@@ -398,6 +400,32 @@ function carregaProdutoOrcamento(cod_obra, cod_local) {
         ajax: {
             type: "POST",
             url: base_url + "api/projeto/tabela/produtoorcamento",
+            data: { cod_obra, cod_local },
+            dataType: "json",
+            async: true
+        },
+        columnDefs: [
+            { targets: [0, 2], className: 'text-center' },
+            { targets: [1], className: 'text-justify' },
+            { targets: [5, 6], className: 'no-print' }
+        ],
+        order: [[0, 'asc']]
+    });
+
+    // Destruir a tabela anterior antes de inicializar uma nova
+    table.destroy();
+}
+
+function carregaServicoOrcamento(cod_obra, cod_local) {
+    const table = $("#tableServicoOrcamento").DataTable({
+        paging: false,
+        searching: false,
+        ordering: false,
+        info: false,
+        processing: true,
+        ajax: {
+            type: "POST",
+            url: base_url + "api/projeto/tabela/servicoorcamento",
             data: { cod_obra, cod_local },
             dataType: "json",
             async: true

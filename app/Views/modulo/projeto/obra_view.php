@@ -190,7 +190,38 @@
                                     <tbody>
                                     </tbody>
                                     <tfooter>
-
+                                        <tr style="text-align: center;">
+                                            <th colspan="2">RESUMO DOS PRODUTOS</th>
+                                            <th><span id="calQuantidadeProdutos">00</span></th>
+                                            <th>TOTAL</th>
+                                            <th><span id="calTotalProdutos">0,00</span></th>
+                                            <th colspan="2"></th>
+                                        </tr>
+                                    </tfooter>
+                                </table>
+                                <table id="tableServicoOrcamento" class="table table-sm table-striped"
+                                    style="text-align: center;">
+                                    <thead>
+                                        <tr style="text-align: center;">
+                                            <th>CODIGO</th>
+                                            <th>DESCRIÇÃO / TAMANHO</th>
+                                            <th>QUANTIDADE</th>
+                                            <th>VALOR</th>
+                                            <th>TOTAL</th>
+                                            <th class="no-print">ACÕES</th>
+                                            <th class="no-print"> <a onclick="MarcarDesmarcar();">EXCLUIR</a></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfooter>
+                                        <tr style="text-align: center;">
+                                            <th colspan="2">RESUMO DOS SERVIÇOS</th>
+                                            <th><span id="calQuantidadeProdutos">00</span></th>
+                                            <th>TOTAL</th>
+                                            <th><span id="calTotalProdutos">0,00</span></th>
+                                            <th colspan="2"></th>
+                                        </tr>
                                     </tfooter>
                                 </table>
                             </div>

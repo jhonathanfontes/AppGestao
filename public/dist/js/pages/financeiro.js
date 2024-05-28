@@ -757,28 +757,6 @@ function getCancelar(Paramentro, Codigo) {
 
 // SUBGRUPOS CLASSIFICAÇÃO RECEITA E DESPESAS
 
-function getContasOption(url, placeholder) {
-    $.get(url, {}, function (response) {
-        var options = '<option value="">' + placeholder + '</option>';
-        for (var i = 0; i < response.length; i++) {
-            options += '<option value="' + response[i].cod_subgrupo + '">' + response[i].cad_subgrupo + '</option>';
-        }
-        $('#cod_subgrupo').html(options);
-    });
-}
-
-function getContasReceitaOption() {
-    var url = base_url + 'api/financeiro/exibir/subgrupos/receitas';
-    var placeholder = 'SELECIONE A CLASSIFICAÇÃO DA RECEITA';
-    getContasOption(url, placeholder);
-}
-
-function getContasDespesaOption() {
-    var url = base_url + 'api/financeiro/exibir/subgrupos/despesas';
-    var placeholder = 'SELECIONE A CLASSIFICAÇÃO DA DESPESA';
-    getContasOption(url, placeholder);
-}
-
 function receberCheckbox() {
     var inputs, x, selecionados = 0;
     var valor = 0;

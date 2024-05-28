@@ -18,7 +18,8 @@
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
+                                <img class="profile-user-img img-fluid img-circle"
+                                    src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
                             </div>
 
                             <h3 class="profile-username text-center">Nina Mcintire</h3>
@@ -52,7 +53,8 @@
                                         <div class="form-group row post clearfix">
                                             <label for="inputEmpresa" class="col-sm-2 col-form-label">Empresa</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control select2bs4" style="width: 100%;" name="codEmpresa" id="codEmpresa">
+                                                <select class="form-control select2bs4" style="width: 100%;"
+                                                    name="cod_empresa" id="cod_empresa">
                                                 </select>
                                             </div>
 
@@ -60,22 +62,27 @@
                                         <div class="form-group row post">
                                             <label for="inputCliente" class="col-sm-2 col-form-label">Cliente</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control select2bs4" style="width: 100%;" name="codCliente" id="codCliente">
+                                                <select class="form-control select2bs4" style="width: 100%;"
+                                                    name="cod_pessoa" id="cod_pessoa">
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group row post">
-                                            <label for="inputSubGrupoVenda" class="col-sm-2 col-form-label">Venda</label>
+                                            <label for="inputSubGrupoVenda"
+                                                class="col-sm-2 col-form-label">Venda</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control select2bs4" style="width: 100%;" name="codSubGrupoVenda" id="codSubGrupoVenda">
+                                                <select class="form-control select2bs4" style="width: 100%;"
+                                                    name="cod_subgrupo" id="cod_subgrupo">
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group row post">
-                                            <label for="inputSubGrupoFolhaPagamento" class="col-sm-2 col-form-label">Folha de
+                                            <label for="inputSubGrupoFolhaPagamento"
+                                                class="col-sm-2 col-form-label">Folha de
                                                 Pagamento</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control select2bs4" style="width: 100%;" name="codSubGrupoFolhaPagamento" id="codSubGrupoFolhaPagamento">
+                                                <select class="form-control select2bs4" style="width: 100%;"
+                                                    name="codSubGrupoFolhaPagamento" id="codSubGrupoFolhaPagamento">
                                                 </select>
                                             </div>
                                         </div>
@@ -107,4 +114,14 @@
 <?= $this->section('modal_content') ?>
 <?php // require_once('componentes/categoria_modal.php'); 
 ?>
+<?= $this->endSection() ?>
+
+<?= $this->section('script') ?>
+<script>
+    $(document).ready(function () {
+        getEmpresasOption();
+        getClientesOption();
+        getContasReceitaOption();
+    });
+</script>
 <?= $this->endSection() ?>

@@ -64,7 +64,7 @@ class Locais extends ApiController
         }
     }
 
-    public function getCarregaTabelaLocalServico()
+    public function getCarregaTabelaLocalProduto()
     {
         $response['data'] = array();
 
@@ -72,10 +72,21 @@ class Locais extends ApiController
 
         $result = $this->detalheProdutoModel
             ->getProdutoDetalhe()
+            ->where('cad_produto.pro_tipo', 1)
             ->where('local_id', $cod_local)
             ->whereIn('situacao', ['1', '2', '4'])
             ->withDeleted()
             ->findAll();
+
+        $resultSum = $this->detalheProdutoModel
+            ->getSumProdutoDetalhe()
+            ->where('cad_produto.pro_tipo', 1)
+            ->where('local_id', $cod_local)
+            ->whereIn('situacao', ['1', '2', '4'])
+            ->withDeleted()
+            ->groupBy('est_movimentacao.local_id')
+            ->groupBy('cad_produto.pro_tipo')
+            ->first();
 
         try {
             if (empty($result)) {
@@ -83,9 +94,6 @@ class Locais extends ApiController
             }
 
             $sequencia = 0;
-            $totalQuantidade = 0;
-            $totalValor = 0;
-            $totalTotal = 0;
 
             foreach ($result as $key => $value) {
                 // Botões de operações
@@ -93,9 +101,9 @@ class Locais extends ApiController
 
                 $checkbox = '<div class="custom-control custom-checkbox">
                             <input class="custom-control-input" type="checkbox"
-                                id="deleteCheckbox[' . $sequencia . ']" name="cod_detalhe[]"
+                                id="deleteCheckbox[1' . $sequencia . ']" name="cod_detalhe[]"
                                 value="' . $value->id . '">
-                            <label for="deleteCheckbox[' . $sequencia . ']"
+                            <label for="deleteCheckbox[1' . $sequencia . ']"
                                 class="custom-control-label"></label>
                         </div>';
 
@@ -108,25 +116,12 @@ class Locais extends ApiController
                     $editButton,
                     $checkbox
                 );
-
-                // Soma dos campos
-                $totalQuantidade += $value->qtn_produto;
-                $totalValor += $value->val1_unad;
-                $totalTotal += $value->val1_total;
-
                 $sequencia++;
             }
 
-            // Adiciona a linha de soma no footer
-            $response['footer'] = array(
-                '',
-                '',
-                'Total: ' . $totalQuantidade,
-                'Total: ' . formatValorBR($totalValor),
-                'Total: ' . formatValorBR($totalTotal),
-                '',
-                ''
-            );
+            $response['totalizador'] = $resultSum;
+
+
 
             return $this->response->setJSON($response);
 
@@ -144,6 +139,79 @@ class Locais extends ApiController
         }
     }
 
+    public function getCarregaTabelaLocalServico()
+    {
+        $response['data'] = array();
+
+        $cod_local = $this->request->getPost('cod_local');
+
+        $result = $this->detalheProdutoModel
+            ->getProdutoDetalhe()
+            ->where('cad_produto.pro_tipo', 2)
+            ->where('local_id', $cod_local)
+            ->whereIn('situacao', ['1', '2', '4'])
+            ->withDeleted()
+            ->findAll();
+
+        $resultSum = $this->detalheProdutoModel
+            ->getSumProdutoDetalhe()
+            ->where('cad_produto.pro_tipo', 2)
+            ->where('local_id', $cod_local)
+            ->whereIn('situacao', ['1', '2', '4'])
+            ->withDeleted()
+            ->groupBy('est_movimentacao.local_id')
+            ->groupBy('cad_produto.pro_tipo')
+            ->first();
+
+        try {
+            if (empty($result)) {
+                return $this->response->setJSON($response);
+            }
+
+            $sequencia = 0;
+
+            foreach ($result as $key => $value) {
+                // Botões de operações
+                $editButton = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalProdutoLocalServico" onclick="getEditProdutoLocalServico(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+
+                $checkbox = '<div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox"
+                                id="deleteCheckbox[2' . $sequencia . ']" name="cod_detalhe[]"
+                                value="' . $value->id . '">
+                            <label for="deleteCheckbox[2' . $sequencia . ']"
+                                class="custom-control-label"></label>
+                        </div>';
+
+                $response['data'][$key] = array(
+                    esc($value->produto_id),
+                    esc($value->pro_descricao) . ' - ' . esc($value->tam_abreviacao),
+                    esc($value->qtn_produto),
+                    formatValorBR(esc($value->val1_unad)),
+                    formatValorBR(esc($value->val1_total)),
+                    $editButton,
+                    $checkbox
+                );
+
+                $response['totalizador'] = $resultSum;
+
+                $sequencia++;
+            }   
+
+            return $this->response->setJSON($response);
+
+        } catch (\Throwable $th) {
+            return $this->response->setJSON(
+                [
+                    'status' => false,
+                    'menssagem' => [
+                        'status' => 'error',
+                        'heading' => 'NÃO FOI POSSÍVEL PROCESSAR O REGISTRO!',
+                        'description' => $th->getMessage()
+                    ]
+                ]
+            );
+        }
+    }
 
     public function save()
     {

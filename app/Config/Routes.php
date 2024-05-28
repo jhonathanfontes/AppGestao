@@ -143,7 +143,8 @@ $routes->group('api', function ($routes) {
         // Carrega dados da TableDatta
         $routes->group('tabela', function ($routes) {
             $routes->post('obras', 'Obras::getCarregaTabela');
-            $routes->post('produtoorcamento', 'Locais::getCarregaTabelaLocalServico');
+            $routes->post('produtoorcamento', 'Locais::getCarregaTabelaLocalProduto');
+            $routes->post('servicoorcamento', 'Locais::getCarregaTabelaLocalServico');
         });
 
         // Salvar dados Cadastro
