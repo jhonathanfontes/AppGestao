@@ -195,7 +195,7 @@ class Locais extends ApiController
                 $response['totalizador'] = $resultSum;
 
                 $sequencia++;
-            }   
+            }
 
             return $this->response->setJSON($response);
 
@@ -213,14 +213,33 @@ class Locais extends ApiController
         }
     }
 
+    public function getCarregaResumoLocal()
+    {
+        $response['data'] = array();
+
+        $cod_local = $this->request->getPost('cod_local');
+
+        $result = $this->detalheProdutoModel
+            ->getSumProdutoDetalhe()
+            ->where('local_id', $cod_local)
+            ->whereIn('situacao', ['1', '2', '4'])
+            ->withDeleted()
+            ->first();
+        if ($result) {
+            $response['data'] = $result;
+        }
+        return $this->response->setJSON($response);
+    }
+
     public function save()
     {
         if (!$this->request->isAJAX()) {
             return redirect()->back();
-        }
+        }     
 
         $data['loc_descricao'] = returnNull($this->request->getPost('cad_local'), 'S');
         $data['loc_datainicio'] = returnNull(esc($this->request->getPost('cad_datainicio')));
+        $data['loc_observacao'] = returnNull($this->request->getPost('cad_observacao'));
         $data['obra_id'] = $this->request->getPost('cod_obra');
 
         $entityLocal = new Local($data);
@@ -357,9 +376,24 @@ class Locais extends ApiController
 
             $quantidade = $this->request->getPost('quantidade');
             $produto = $this->produtoModel->where('id', $this->request->getPost('cod_produto'))->first();
+            
             $orcamentoObra = $this->localModel->getOrcamentoObraLocal()
                 ->where('ger_local.id', $this->request->getPost('cod_local'))
                 ->first();
+
+            if (!empty($this->request->getPost('cod_detalhe'))) {
+                $valor = formatValorBD($this->request->getPost("valor_desc"));
+
+                $data['id'] = $this->request->getPost('cod_detalhe');
+                $data['val1_un'] = bcadd($valor, '0', 2);
+                $data['val1_unad'] = bcadd($valor, '0', 2);
+                $data['val1_total'] = bcadd(($valor * $quantidade), '0', 2);
+
+            } else {
+                $data['val1_un'] = bcadd($produto->cad_valor1, '0', 2);
+                $data['val1_unad'] = bcadd($produto->cad_valor1, '0', 2);
+                $data['val1_total'] = bcadd(($produto->cad_valor1 * $quantidade), '0', 2);
+            }
 
             $data['orcamento_id'] = $orcamentoObra->cod_orcamento;
             $data['local_id'] = $this->request->getPost('cod_local');
@@ -367,9 +401,7 @@ class Locais extends ApiController
             $data['del_tipo'] = 'S';
             $data['qtn_produto'] = $quantidade;
             $data['qtn_saldo'] = $quantidade;
-            $data['val1_un'] = bcadd($produto->cad_valor1, '0', 2);
-            $data['val1_unad'] = bcadd($produto->cad_valor1, '0', 2);
-            $data['val1_total'] = bcadd(($produto->cad_valor1 * $quantidade), '0', 2);
+
 
             $data['val2_un'] = bcadd($produto->cad_valor2, '0', 2);
             $data['val2_unad'] = bcadd($produto->cad_valor2, '0', 2);
@@ -378,9 +410,7 @@ class Locais extends ApiController
             $data['situacao'] = '4';
             $data['serial'] = $orcamentoObra->serial;
 
-
             // return $this->response->setJSON($data);
-
 
             if ($this->detalheProdutoModel->save($data)) {
 
@@ -481,6 +511,7 @@ class Locais extends ApiController
             );
         }
     }
+
     private function buscaRegistro404(int $codigo = null)
     {
         if (!$codigo || !$resultado = $this->localModel->withDeleted(true)->find($codigo)) {

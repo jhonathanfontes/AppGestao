@@ -1,12 +1,16 @@
 $(document).ready(function () {
     // CARREGA DADOS DA TELA DAS OBRAS
-    var pessoasColumnDefs = [
-        { className: "dt-body-center", targets: [0, 1, 2] }
+    var obrasColumnDefs = [
+        { className: "dt-body-center", targets: 0 },
+        { className: "dt-body-center", targets: 1 },
+        { className: "dt-body-center", targets: 2 },
+        { className: "dt-body-center", targets: 3 },
+        { className: "dt-body-center", targets: 4 },
     ];
-    var pessoasOrder = [
+    var obrasOrder = [
         [0, 'asc']
     ];
-    initializeDataTable("#tableObras", base_url + "api/projeto/tabela/obras", pessoasColumnDefs, pessoasOrder);
+    initializeDataTable("#tableObras", base_url + "api/projeto/tabela/obras", obrasColumnDefs, obrasOrder);
 
     //Quando o campo cep perde o foco.
     $('#cad_cep').change(function () {
@@ -84,6 +88,8 @@ $(document).ready(function () {
             limpa_formulário_cep();
         }
     });
+
+
 });
 
 // GERENCIAMENTO DAS OBRAS
@@ -95,6 +101,8 @@ function getEditObra(Paramentro) {
         success: function (dado) {
             console.log(dado);
             document.getElementById('modalTitleObra').innerHTML = 'ATUALIZANDO A OBRA ' + dado.cad_obra;
+            $('#cod_pessoa').val(dado.pessoa_id).trigger('change');
+
             $('#cod_obra').val(dado.cod_obra);
             $('#cad_obra').val(dado.cad_obra);
             $('#cad_datainicio').val(dado.cad_datainicio);
@@ -180,13 +188,20 @@ function getEditLocal(Paramentro) {
         "type": "GET",
         "dataType": "json",
         success: function (dado) {
-            document.getElementById('modalTitleLocal').innerHTML = 'ATUALIZANDO A PROFISSÃO ' + dado.cad_local;
+            document.getElementById('modalTitleLocal').innerHTML = 'ATUALIZANDO A LOCAL ' + dado.cad_local;
             $('#id_local').val(dado.cod_local);
             $('#cod_pessoa').val('').trigger('change');
             $('#cod_local_obra').val(dado.cod_obra);
             $('#cad_local').val(dado.cad_local);
             $('#cad_datainicio').val(dado.cad_datainicio);
 
+            if (dado.cad_observacao != null) {
+                $('#cad_observacao').summernote('pasteHTML', dado.cad_observacao);
+            } else {
+                console.log(1);
+                $('#cad_observacao').summernote('reset');
+            }
+            
             $('#cad_cep').val(dado.cad_cep);
             $('#cad_endereco').val(dado.cad_endereco);
             $('#cad_numero').val(dado.cad_numero);
@@ -284,9 +299,7 @@ function getCarregaLocal(Paramentro) {
             $('#cod_obra').val(dado.cod_obra);
             document.getElementById("searchProduto").disabled = false;
             document.getElementById("quantidade").disabled = false;
-
-            carregaProdutoOrcamento(dado.cod_obra, dado.cod_local);
-            carregaServicoOrcamento(dado.cod_obra, dado.cod_local);
+            carregaLocal(dado.cod_obra, dado.cod_local);
         }
     });
 }
@@ -352,8 +365,8 @@ function addProdutoOrcamento() {
                 },
                 success: function (response) {
                     respostaSwalFire(response, false);
-                    carregaProdutoOrcamento(response.data.cod_obra, response.data.cod_local);
-                    carregaServicoOrcamento(response.data.cod_obra, response.data.cod_local);
+                    carregaLocal(response.data.cod_obra, response.data.cod_local);
+
                     document.getElementById("formAddProduto").reset();
                     $('#cod_local').val(response.data.cod_local);
                     $('#cod_obra').val(response.data.cod_obra);
@@ -390,6 +403,68 @@ function addProdutoOrcamento() {
     });
 }
 
+function salvarDetalheProduto() {
+    $("#formUpdateGradeProduto").submit(function (e) {
+        e.preventDefault();
+    });
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formUpdateGradeProduto').attr('action'),
+                type: "POST",
+                data: $('#formUpdateGradeProduto').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    document.getElementById("submitAdicionar").disabled = true;
+                },
+                success: function (response) {
+                    respostaSwalFire(response, false);
+                    carregaLocal(response.data.cod_obra, response.data.cod_local);
+
+                    document.getElementById("formUpdateGradeProduto").reset();
+                    $('#cod_local').val(response.data.cod_local);
+                    $('#cod_obra').val(response.data.cod_obra);
+                    $('#modalProdutoLocalServico').modal('hide');
+                },
+                error: function () {
+                    document.getElementById("submitAdicionar").disabled = false;
+                }
+            });
+        }
+    });
+
+    $('#formUpdateGradeProduto').validate({
+        rules: {
+            cod_local: {
+                required: true,
+            },
+        },
+        messages: {
+            cod_local: {
+                required: "A descricção deve ser informada!",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}
+
+function carregaLocal(cod_obra, cod_local) {
+    carregaProdutoOrcamento(cod_obra, cod_local);
+    carregaResumoProdutoOrcamento(cod_obra, cod_local);
+    carregaServicoOrcamento(cod_obra, cod_local);
+    carregaResumoServicoOrcamento(cod_obra, cod_local);
+}
+
 function carregaProdutoOrcamento(cod_obra, cod_local) {
     const table = $("#tableProdutoOrcamento").DataTable({
         paging: false,
@@ -405,9 +480,17 @@ function carregaProdutoOrcamento(cod_obra, cod_local) {
             async: true
         },
         columnDefs: [
-            { targets: [0, 2], className: 'text-center' },
-            { targets: [1], className: 'text-justify' },
-            { targets: [5, 6], className: 'no-print' }
+            { className: "dt-body-center", targets: 0, width: "10%" },
+            { className: "text-justify", targets: 1 },
+            { className: "dt-body-center", targets: 2, width: "10%" },
+            { className: "dt-body-center", targets: 3, width: "10%" },
+            { className: "dt-body-center", targets: 4, width: "10%" },
+            { className: "dt-body-center no-print", targets: 5, width: "10%" },
+            { className: "dt-body-center no-print", targets: 6, width: "5%" }
+
+            // { targets: [0, 2], className: 'text-center' },
+            // { targets: [1], className: 'text-justify' },
+            // { targets: [5, 6], className: 'no-print' }
         ],
         order: [[0, 'asc']]
     });
@@ -431,15 +514,86 @@ function carregaServicoOrcamento(cod_obra, cod_local) {
             async: true
         },
         columnDefs: [
-            { targets: [0, 2], className: 'text-center' },
-            { targets: [1], className: 'text-justify' },
-            { targets: [5, 6], className: 'no-print' }
+            { className: "dt-body-center", targets: 0, width: "10%" },
+            { className: "text-justify", targets: 1 },
+            { className: "dt-body-center", targets: 2, width: "10%" },
+            { className: "dt-body-center", targets: 3, width: "10%" },
+            { className: "dt-body-center", targets: 4, width: "10%" },
+            { className: "dt-body-center no-print", targets: 5, width: "10%" },
+            { className: "dt-body-center no-print", targets: 6, width: "5%" }
         ],
         order: [[0, 'asc']]
     });
 
     // Destruir a tabela anterior antes de inicializar uma nova
     table.destroy();
+}
+
+function carregaResumoProdutoOrcamento(cod_obra, cod_local) {
+    $.ajax({
+        type: "POST",
+        url: base_url + "api/projeto/tabela/produtoorcamento",
+        data: { cod_obra, cod_local },
+        dataType: "json",
+        success: function (dado) {
+            if (dado.totalizador) {
+                $("#calQuantidadeProdutos").text(dado.totalizador.qtn_produto);
+                $("#totalProdutosLocal").val(dado.totalizador.val1_total);
+                $("#calTotalProdutos").text(formatMoneyBR(dado.totalizador.val1_total));
+            } else {
+                $("#calQuantidadeProdutos").text(0);
+                $("#totalProdutosLocal").val(0);
+                $("#calTotalProdutos").text(formatMoneyBR(0));
+            }
+            totalizadorOrcamento();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Erro na requisição AJAX:", textStatus, errorThrown);
+
+            // Exibe uma mensagem de erro ao usuário
+            alert("Ocorreu um erro ao carregar o resumo do produto orçamentário. Por favor, tente novamente.");
+        }
+    });
+}
+
+function carregaResumoServicoOrcamento(cod_obra, cod_local) {
+    $.ajax({
+        type: "POST",
+        url: base_url + "api/projeto/tabela/servicoorcamento",
+        data: { cod_obra, cod_local },
+        dataType: "json",
+        success: function (dado) {
+            if (dado.totalizador) {
+                $("#calQuantidadeServicos").text(dado.totalizador.qtn_produto);
+                $("#totalServicosLocal").val(dado.totalizador.val1_total);
+                $("#calTotalServicos").text(formatMoneyBR(dado.totalizador.val1_total));
+            } else {
+                $("#calQuantidadeServicos").text(0);
+                $("#totalServicosLocal").val(0);
+                $("#calTotalServicos").text(formatMoneyBR(0));
+            }
+            totalizadorOrcamento();
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Erro na requisição AJAX:", textStatus, errorThrown);
+
+            // Exibe uma mensagem de erro ao usuário
+            alert("Ocorreu um erro ao carregar o resumo do produto orçamentário. Por favor, tente novamente.");
+        }
+    });
+}
+
+function totalizadorOrcamento() {
+    var val_produto = $("#totalProdutosLocal").val() != "" ? parseFloat($("#totalProdutosLocal").val()) : 0;
+    var val_servico = $("#totalServicosLocal").val() != "" ? parseFloat($("#totalServicosLocal").val()) : 0;
+    var totalizador = val_produto + val_servico;
+
+    if (totalizador > 0) {
+        $("#totalOrcamento").text(formatMoneyBR(totalizador));
+        $("#totalAPagarOrcamento").text(formatMoneyBR(totalizador));
+
+    }
 }
 
 // ATUALIZAR A GRADE DO LOCAL 
@@ -453,27 +607,28 @@ function getEditProdutoLocalServico(Paramentro) {
         success: function (dado) {
             document.getElementById('modalTitleGradeProduto').innerHTML = 'ATUALIZANDO ' + dado.pro_descricao + ' - ' + dado.tam_abreviacao;
 
-            document.getElementById("cod_detalhe").value = dado.id;
-            document.getElementById("cod_local").value = dado.local_id;
-            document.getElementById("qnt_produto").value = dado.qtn_produto;
-            document.getElementById("valor_unidade").value = formatMoneyBR(dado.val1_unad);
-            document.getElementById("valor_desc").value = formatMoneyBR(dado.val1_unad);
-            document.getElementById("valor_total").value = formatMoneyBR(dado.val1_total);
+            document.getElementById("e_cod_detalhe").value = dado.id;
+            document.getElementById("e_cod_local").value = dado.local_id;
+            document.getElementById("e_cod_produto").value = dado.produto_id;
+            document.getElementById("e_qnt_produto").value = dado.qtn_produto;
+            document.getElementById("e_valor_unidade").value = formatMoneyBR(dado.val1_unad);
+            document.getElementById("e_valor_desc").value = formatMoneyBR(dado.val1_unad);
+            document.getElementById("e_valor_total").value = formatMoneyBR(dado.val1_total);
         }
     });
 }
 
 function atualizaGradeProduto() {
-    var qnt_produto = $("#qnt_produto").val() != "" ? $("#qnt_produto").val() : 0;
-    var valor_unidade = $("#valor_unidade").val() != "" ? $("#valor_unidade").val() : 0;
-    var valor_desc = $("#valor_desc").val() != "" ? $("#valor_desc").val() : 0;
+    var qnt_produto = $("#e_qnt_produto").val() != "" ? $("#e_qnt_produto").val() : 0;
+    var valor_unidade = $("#e_valor_unidade").val() != "" ? $("#e_valor_unidade").val() : 0;
+    var valor_desc = $("#e_valor_desc").val() != "" ? $("#e_valor_desc").val() : 0;
     var val_desc = valor_desc.replace('.', '').replace(',', '.');
 
     if (val_desc == 0) {
-        document.getElementById("valor_desc").value = formatMoneyBR(valor_unidade);
+        document.getElementById("e_valor_desc").value = formatMoneyBR(valor_unidade);
         var valor_desc = valor_unidade;
     }
 
     var new_valor = qnt_produto * val_desc;
-    document.getElementById("valor_total").value = formatMoneyBR(new_valor);
+    document.getElementById("e_valor_total").value = formatMoneyBR(new_valor);
 }

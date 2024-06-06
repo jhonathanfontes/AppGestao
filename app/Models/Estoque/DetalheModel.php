@@ -55,7 +55,7 @@ class DetalheModel extends Model
 
 	public function returnSave(int $codigo = null)
 	{
-		return $this->select('id_detalhe, orcamento_id, estoque_id')->find($codigo);
+		return $this->select('id, orcamento_id, estoque_id')->find($codigo);
 	}
 
 	public function arquivarRegistro(int $codigo = null)

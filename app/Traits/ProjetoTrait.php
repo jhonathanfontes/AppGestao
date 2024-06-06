@@ -25,7 +25,7 @@ trait ProjetoTrait
         }
     }
 
-    public function setObra(int $cod_obra = null)
+    public function setObra(int $cod_obra = null, string $serial = null)
     {
         try {
             if ($cod_obra != null) {
@@ -35,10 +35,18 @@ trait ProjetoTrait
                     ->first();
                 ;
             }
+            if ($serial != null) {
+                $model = new \App\Models\Projeto\ObraModel();
+                return $model->getObra()
+                    ->where('ger_obra.serial', $serial)
+                    ->first();
+                ;
+            }
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
     }
+ 
     public function setLocal(int $cod_obra = null, int $cod_local = null)
     {
         try {

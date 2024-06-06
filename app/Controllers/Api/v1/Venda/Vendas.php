@@ -10,11 +10,10 @@ class Vendas extends ApiController
     private $pessoaModel;
     private $orcamentoModel;
     private $vendaModel;
-    private $produtoGradeModel;
-    private $estoqueModel;
+    private $detalheProdutoModel;
+    private $produtoModel;
     private $vendedorModel;
 
-    private $pagamentoModel;
     private $formaPagamentoModel;
     private $formaPacelamentoModel;
 
@@ -33,8 +32,8 @@ class Vendas extends ApiController
         $this->pessoaModel = new \App\Models\Cadastro\PessoaModel();
         $this->orcamentoModel = new \App\Models\Venda\OrcamentoModel();
         $this->vendaModel = new \App\Models\Venda\VendaModel();
-        $this->produtoGradeModel = new \App\Models\Cadastro\ProdutoGradeModel();
-        // $this->estoqueModel = new \App\Models\Estoque\DetalheModel();
+        $this->detalheProdutoModel = new \App\Models\Estoque\DetalheModel();
+        $this->produtoModel = new \App\Models\Cadastro\ProdutoModel;
         $this->vendedorModel = new \App\Models\Configuracao\VendedorModel();
 
         // $this->auditoriaModel = new \App\Models\AuditoriaModel();
@@ -301,37 +300,50 @@ class Vendas extends ApiController
 
             $quantidade = $this->request->getPost('quantidade');
             $orcamento = $this->orcamentoModel->where('serial', $this->request->getPost('serial'))->first();
-            $produto = $this->produtoGradeModel->getProdutoGrade()
-                ->where('pdv_produtograde.codigo', $this->request->getPost('cat_grade'))
-                ->where('pdv_produtograde.status', 1)
-                ->first();
+            $produto = $this->produtoModel->where('id', $this->request->getPost('cod_produto'))->first();
 
-            $data['orcamento_id'] = $orcamento->id_orcamento;
-            $data['produto_id'] = $produto->produto_id;
-            $data['tamanho_id'] = $produto->tamanho_id;
-            $data['mvd_tipo'] = 'S';
+            // return $this->response->setJSON($orcamento);
+
+            if (!empty($this->request->getPost('cod_detalhe'))) {
+                $valor = formatValorBD($this->request->getPost("valor_desc"));
+
+                $data['id'] = $this->request->getPost('cod_detalhe');
+
+                if ($orcamento->orc_tipopagamento == '1') {
+                    $data['val1_un'] = bcadd($valor, '0', 2);
+                    $data['val1_unad'] = bcadd($valor, '0', 2);
+                    $data['val1_total'] = bcadd(($valor * $quantidade), '0', 2);
+                }
+
+                if ($orcamento->orc_tipopagamento == '2') {
+                    $data['val2_un'] = bcadd($valor, '0', 2);
+                    $data['val2_unad'] = bcadd($valor, '0', 2);
+                    $data['val2_total'] = bcadd(($valor * $quantidade), '0', 2);
+                }
+
+            } else {
+                $data['val1_un'] = bcadd($produto->cad_valor1, '0', 2);
+                $data['val1_unad'] = bcadd($produto->cad_valor1, '0', 2);
+                $data['val1_total'] = bcadd(($produto->cad_valor1 * $quantidade), '0', 2);
+
+                $data['val2_un'] = bcadd($produto->cad_valor2, '0', 2);
+                $data['val2_unad'] = bcadd($produto->cad_valor2, '0', 2);
+                $data['val2_total'] = bcadd(($produto->cad_valor2 * $quantidade), '0', 2);
+            }
+
+            $data['orcamento_id'] = $orcamento->id;
+            $data['produto_id'] = $produto->id;
+            $data['del_tipo'] = 'S';
             $data['qtn_produto'] = $quantidade;
             $data['qtn_saldo'] = $quantidade;
-
-            $data['mvd_val_un'] = bcadd($produto->valor_vendaavista, '0', 2);
-            $data['mvd_val_unad'] = bcadd($produto->valor_vendaavista, '0', 2);
-            $data['mvd_total'] = bcadd(($produto->valor_vendaavista * $quantidade), '0', 2);
-            $data['mvd_total_unad'] = bcadd(($produto->valor_vendaavista * $quantidade), '0', 2);
-
-
-            $data['mpd_val_un'] = bcadd($produto->valor_vendaprazo, '0', 2);
-            $data['mpd_val_unad'] = bcadd($produto->valor_vendaprazo, '0', 2);
-            $data['mpd_total'] = bcadd(($produto->valor_vendaprazo * $quantidade), '0', 2);
-            $data['mpd_total_unad'] = bcadd(($produto->valor_vendaprazo * $quantidade), '0', 2);
-
+            $data['situacao'] = '4';
             $data['serial'] = $orcamento->serial;
-            $data['fleg_atualiza'] = null;
 
-            if ($this->estoqueModel->save($data)) {
+            if ($this->detalheProdutoModel->save($data)) {
 
-                $cod_detalhe = (!empty($this->request->getPost('cod_detalhe'))) ? $this->request->getPost('cod_detalhe') : $this->estoqueModel->getInsertID();
+                $cod_detalhe = (!empty($this->request->getPost('cod_detalhe'))) ? $this->request->getPost('cod_detalhe') : $this->detalheProdutoModel->getInsertID();
 
-                $return = $this->estoqueModel->returnSave($cod_detalhe);
+                $return = $this->detalheProdutoModel->returnSave($cod_detalhe);
 
                 return $this->response->setJSON([
                     'status' => true,
@@ -354,15 +366,6 @@ class Vendas extends ApiController
                 ]
             );
         }
-
-        return $this->response->setJSON(
-            [
-                'data' => $data,
-                'orcamento' => $orcamento,
-                'produto' => $produto,
-                'post' => $this->request->getPost()
-            ]
-        );
     }
 
     public function delProdutoOrcamento()

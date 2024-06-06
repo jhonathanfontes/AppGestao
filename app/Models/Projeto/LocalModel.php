@@ -13,6 +13,7 @@ class LocalModel extends Model
 	protected $allowedFields = [
 		'loc_descricao',
 		'loc_datainicio',
+		'loc_observacao',
 		'obra_id',
 		'status',
 		'created_user_id',

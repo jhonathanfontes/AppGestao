@@ -16,32 +16,17 @@ class Obra extends BaseController
         ];
         return view('modulo/projeto/obra', $data);
     }
-    public function show($paramentro)
-    {
-        return $paramentro;
-    }
 
-    public function view(int $codigo = null)
+    public function view(string $serial = null)
     {
+        $obra = $this->setObra(null, $serial);
+
         $data = [
-            'card_title' => 'GESTÃO DA OBRA: ' . completeComZero($codigo, 8),
-            'obra' => $this->setObra($codigo),
-            'locais' => $this->setLocalObra($codigo),
+            'card_title' => 'GESTÃO DA OBRA: ' . date("Y", strtotime($obra->created_at)) . completeComZero(esc($obra->id), 8),
+            'obra' => $obra,
+            'locais' => $this->setLocalObra($obra->id),
         ];
         return view('modulo/projeto/obra_view', $data);
-    }
-    public function view_local(int $cod_obra = null, int $cod_local = null)
-    {
-        $local = $this->setLocal($cod_obra, $cod_local);
-        if (!isset($local)) {
-            echo 'Local Não existe';
-        }
-        $data = [
-            'card_title' => 'CADASTRO DA PESSOA ' . $cod_obra . ' CADASTRO DA PESSOA ' . $cod_local,
-            'obra' => $this->setObra($cod_obra),
-            'local' => $this->setLocal($cod_obra, $cod_local),
-        ];
-        return view('modulo/projeto/obra_local_view', $data);
     }
 
 }

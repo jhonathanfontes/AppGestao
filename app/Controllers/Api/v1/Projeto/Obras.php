@@ -27,23 +27,28 @@ class Obras extends ApiController
     {
         $response['data'] = array();
 
-        $result = $this->obraModel->whereIn('status', ['1', '2'])->withDeleted()->findAll();
-        try {
+        $result = $this->obraModel->getObra()->
+            whereIn('ger_obra.status', ['1', '2'])->
+            withDeleted()->
+            findAll();
 
+        try {
+            // return $this->response->setJSON($result);
             if (empty($result)):
                 return $this->response->setJSON($response);
             endif;
 
             foreach ($result as $key => $value) {
 
-                $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalObra" onclick="getEditObra(' . $value->id . ')"><samp class="far fa-edit"></samp> EDITAR</button>';
+                $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalObra" onclick="getEditObra(' . $value->cod_obra . ')"><samp class="far fa-sm fa-edit"></samp> EDITAR</button>';
                 // $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'obra'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
-                $ops .= ' <a class="btn btn-xs btn-success" href="obra/view/' . $value->id . '"><span class="fas fa-tasks"></span> GERENCIAR </a>';
+                $ops .= ' <a class="btn btn-xs btn-success" href="obra/view/' . $value->serial . '"><span class="fas fa-sm fa-tasks"></span> GERENCIAR </a>';
 
                 $response['data'][$key] = array(
-                    completeComZero(esc($value->id), 8),
-                    esc($value->obr_descricao),
-                    esc($value->obr_datainicio) ? esc(formatDataBR($value->obr_datainicio)) : '<label class="badge badge-danger">SEM DATA PREVISTA</label>',
+                    date("Y", strtotime($value->created_at)) . completeComZero(esc($value->cod_obra), 8),
+                    esc($value->cad_obra),
+                    esc($value->cad_datainicio) ? esc(formatDataBR($value->cad_datainicio)) : '<span class="badge badge-danger">SEM DATA PREVISTA</span>',
+                    esc($value->cad_nome),
                     $ops,
                 );
             }
@@ -128,6 +133,16 @@ class Obras extends ApiController
 
         } else {
 
+            $getSerial = $cod_pessoa . getSerial();
+
+            if ($this->buscaRegistro404Serial($getSerial) == null) {
+                $serial = $getSerial;
+            } else {
+                $serial = $cod_pessoa . getSerial();
+            }
+
+            $data['serial'] = $serial;
+
             $metedoAuditoria = 'insert';
             // $dataAuditoria = $entityObra->auditoriaInsertAtributos();
 
@@ -138,14 +153,18 @@ class Obras extends ApiController
                 // $this->auditoriaModel->insertAuditoria('cadastro', 'obra', $metedoAuditoria, $dataAuditoria);
                 $cod_obra = (!empty($this->request->getPost('cod_obra'))) ? $this->request->getPost('cod_obra') : $this->obraModel->getInsertID();
 
-                if (empty($this->request->getPost('cod_orcamento'))) {
+                $rowObra = $this->obraModel->getObra()
+                    ->where('ger_obra.id', $cod_obra)
+                    ->first();
+
+                if (empty($rowObra->cod_orcamento)) {
 
                     $orcamentoModel = new \App\Models\Venda\OrcamentoModel();
 
                     $obra['pessoa_id'] = $cod_pessoa;
                     $obra['obra_id'] = $cod_obra;
                     $obra['situacao'] = '5';
-                    $obra['serial'] = $cod_pessoa . getSerial();
+                    $obra['serial'] = $serial;
 
                     $orcamentoModel->save($obra);
 
@@ -248,5 +267,17 @@ class Obras extends ApiController
             return null;
         }
         return $resultado;
+    }
+    private function buscaRegistro404Serial(string $serial = null)
+    {
+        if (
+            !$serial || !$resultado = $this->obraModel->withDeleted(true)
+                ->where('serial', $serial)
+                ->find()
+        ) {
+            return null;
+        }
+        return $resultado;
+
     }
 }

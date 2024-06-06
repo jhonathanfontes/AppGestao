@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="<?php echo site_url('plugins/datatables-responsive/css/responsive.bootstrap4.min.css'); ?>">
 <link rel="stylesheet" href="<?php echo site_url('plugins/datatables-buttons/css/buttons.bootstrap4.min.css'); ?>">
 
+<!-- summernote -->
+<link rel="stylesheet" href="<?php echo site_url('plugins/summernote/summernote-bs4.min.css'); ?>">
+
 <?= $this->renderSection('stylesheet_css') ?>
 
 <?= $this->endSection() ?>
@@ -191,6 +194,7 @@
 <script src="<?php echo site_url('plugins/datatables-buttons/js/buttons.html5.min.js'); ?>"></script>
 <script src="<?php echo site_url('plugins/datatables-buttons/js/buttons.print.min.js'); ?>"></script>
 <script src="<?php echo site_url('plugins/datatables-buttons/js/buttons.colVis.min.js'); ?>"></script>
+<script src="<?php echo site_url('plugins/summernote/summernote-bs4.min.js'); ?>"></script>
 <!-- JBsystem -->
 <script src="<?php echo site_url('dist/js/pages/jbsystem.js'); ?>"></script>
 <!-- Modulo -->

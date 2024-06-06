@@ -16,6 +16,7 @@ class ObraModel extends Model
 		'pessoa_id',
 		'endereco_id',
 		'status',
+		'serial',
 		'created_user_id',
 		'updated_user_id',
 		'deleted_user_id'
@@ -70,25 +71,26 @@ class ObraModel extends Model
 		return false;
 	}
 
-
 	function getObra()
 	{
 		$atributos = [
 			'ger_obra.*',
-			'cad_pessoa.pes_nome as cad_nome',
-			'cad_endereco.id as cod_endereco',
-			'end_endereco as cad_endereco',
-			'end_numero as cad_numero',
-			'end_setor as cad_setor',
-			'end_complemento as cad_complemento',
-			'end_cidade as cad_cidade',
-			'end_estado as cad_estado',
-			'end_cep as cad_cep',
+			'cad_pessoa.pes_nome AS cad_nome',
+			'cad_endereco.id AS cod_endereco',
+			'end_endereco AS cad_endereco',
+			'end_numero AS cad_numero',
+			'end_setor AS cad_setor',
+			'end_complemento AS cad_complemento',
+			'end_cidade AS cad_cidade',
+			'end_estado AS cad_estado',
+			'end_cep AS cad_cep',
+			'pdv_orcamento.id AS cod_orcamento'
 		];
 
 		return $this->select($atributos)
-			->join('cad_pessoa', 'cad_pessoa.id = ger_obra.pessoa_id', 'left')
-			->join('cad_endereco', 'cad_endereco.id = ger_obra.endereco_id', 'left');
+			->join('cad_pessoa', 'cad_pessoa.id = ger_obra.pessoa_id', 'LEFT')
+			->join('cad_endereco', 'cad_endereco.id = ger_obra.endereco_id', 'LEFT')
+			->join('pdv_orcamento', 'pdv_orcamento.obra_id = ger_obra.id', 'LEFT');
 	}
 
 	function getObras()

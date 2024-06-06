@@ -163,24 +163,24 @@
                                                 <?php $sequencia = 1; ?>
                                                 <?php foreach ($detalhes as $detalhe): ?>
                                                     <tr>
-                                                        <td><?= $detalhe->cod_produto ?></td>
+                                                        <td><?= $detalhe->produto_id ?></td>
                                                         <td style="text-align: justify;">
-                                                            <?= $detalhe->produto . ' / ' . $detalhe->tamanho ?>
+                                                            <?= $detalhe->pro_descricao . ' / ' . $detalhe->tam_abreviacao ?>
                                                             <?php if ($detalhe->presente == 'S') { ?> <i
                                                                     class="fas fa-gift"></i>
                                                             <?php } ?>
                                                         </td>
                                                         <td><?= $detalhe->qtn_produto ?></td>
-                                                        <td><?= number_format((($orcamento->orc_tipo == 1) ? $detalhe->valor_un : $detalhe->praz_valor_un), 2, ',', '.') ?>
+                                                        <td><?= number_format((($orcamento->orc_tipo == 1) ? $detalhe->val1_un : $detalhe->val2_un), 2, ',', '.') ?>
                                                         </td>
-                                                        <td><?= number_format((($orcamento->orc_tipo == 1) ? $detalhe->valor_unad : $detalhe->praz_valor_unad), 2, ',', '.') ?>
+                                                        <td><?= number_format((($orcamento->orc_tipo == 1) ? $detalhe->val1_unad : $detalhe->val2_unad), 2, ',', '.') ?>
                                                         </td>
-                                                        <td><?= number_format((($orcamento->orc_tipo == 1) ? $detalhe->total_unad : $detalhe->praz_total_unad), 2, ',', '.') ?>
+                                                        <td><?= number_format((($orcamento->orc_tipo == 1) ? $detalhe->val1_total : $detalhe->val2_total), 2, ',', '.') ?>
                                                         </td>
                                                         <td class="no-print" width="200">
-                                                            <button class="btn btn-sm btn-primary" data-toggle="modal"
+                                                            <button class="btn btn-xs btn-primary" data-toggle="modal"
                                                                 data-target="#editarGradeProduto"
-                                                                onclick="editarGradeProduto(<?php echo $detalhe->cod_detalhe ?>);">
+                                                                onclick="editarGradeProduto(<?php echo $detalhe->id ?>);">
                                                                 <samp class="fas fa-edit fa-sm"></samp> ALTERAR</button>
                                                         </td>
                                                         <td style="text-align: center;">

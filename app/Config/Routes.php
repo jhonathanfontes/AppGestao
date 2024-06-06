@@ -201,7 +201,7 @@ $routes->group('api', function ($routes) {
 
         // Criar as Consultas
         $routes->group('consulta', function ($routes) {
-            $routes->post('pessoa/documento', 'Pessoas::checkDocumento');
+            $routes->post('resumo/projeto', 'Locais::getCarregaResumoLocal');
             $routes->post('contabancaria', 'ContaBancaria::optionContaBancaria');
         });
 

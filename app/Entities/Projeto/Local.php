@@ -10,6 +10,7 @@ class Local extends Entity
         'id' => null,
         'loc_descricao' => null,
         'loc_datainicio' => null,
+        'loc_observacao' => null,
         'obra_id ' => null,
         'status' => null,
 
@@ -19,6 +20,7 @@ class Local extends Entity
         'cod_local' => 'id',
         'cad_local' => 'loc_descricao',
         'cad_datainicio' => 'loc_datainicio',
+        'cad_observacao' => 'loc_observacao',
         'cod_obra' => 'obra_id'
     ];
 

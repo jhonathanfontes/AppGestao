@@ -136,8 +136,8 @@
                                 <div class="hidden">
                                     <input type="text" name="cod_obra" id="cod_obra" hidden="hidden">
                                     <input type="text" name="cod_local" id="cod_local" hidden="hidden">
-                                    <input type="text" name="cod_produto" id="cod_produto" class="form-control" hidden
-                                        required>
+                                    <input type="text" name="cod_produto" id="cod_produto" class="form-control"
+                                        hidden="hidden" required>
                                 </div>
                                 <div class="col-sm-5">
                                     <label>CODIGO DE BARRA / PRODUTO / SERVIÇO</label>
@@ -194,32 +194,25 @@
                                             <th colspan="2">RESUMO DOS PRODUTOS</th>
                                             <th><span id="calQuantidadeProdutos">00</span></th>
                                             <th>TOTAL</th>
-                                            <th><span id="calTotalProdutos">0,00</span></th>
+                                            <th>R$ <span id="calTotalProdutos">0,00</span>
+                                                <input type="hidden" id="totalProdutosLocal">
+                                            </th>
                                             <th colspan="2"></th>
                                         </tr>
                                     </tfooter>
                                 </table>
                                 <table id="tableServicoOrcamento" class="table table-sm table-striped"
                                     style="text-align: center;">
-                                    <thead>
-                                        <tr style="text-align: center;">
-                                            <th>CODIGO</th>
-                                            <th>DESCRIÇÃO / TAMANHO</th>
-                                            <th>QUANTIDADE</th>
-                                            <th>VALOR</th>
-                                            <th>TOTAL</th>
-                                            <th class="no-print">ACÕES</th>
-                                            <th class="no-print"> <a onclick="MarcarDesmarcar();">EXCLUIR</a></th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                     </tbody>
                                     <tfooter>
                                         <tr style="text-align: center;">
                                             <th colspan="2">RESUMO DOS SERVIÇOS</th>
-                                            <th><span id="calQuantidadeProdutos">00</span></th>
+                                            <th><span id="calQuantidadeServicos">00</span></th>
                                             <th>TOTAL</th>
-                                            <th><span id="calTotalProdutos">0,00</span></th>
+                                            <th>R$ <span id="calTotalServicos">0,00</span>
+                                                <input type="hidden" id="totalServicosLocal">
+                                            </th>
                                             <th colspan="2"></th>
                                         </tr>
                                     </tfooter>
@@ -234,21 +227,16 @@
                             <div class="col-4">
                                 <div class="table-responsive">
                                     <table class="table table-sm">
-                                        <?php
-                                        $total = 0;
-                                        $apagar = 0;
-                                        ?>
                                         <thead>
                                             <tr>
                                                 <th style="width:50%">TOTAL</th>
-                                                <td>R$ <?php echo number_format($total, 2, ',', '.') ?></td>
+                                                <td>R$ <span id="totalOrcamento">0,00</span></td>
                                             </tr>
                                         </thead>
-
                                         <tfoot>
                                             <tr>
                                                 <th>TOTAL A PAGAR</th>
-                                                <td>R$ <?php echo number_format($apagar, 2, ',', '.') ?></td>
+                                                <td>R$ <span id="totalAPagarOrcamento">0,00</span></td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -301,21 +289,10 @@
                         <input name="venda_serial" value="" hidden="hidden">
                         <input name="venda_id" value="" hidden="hidden">
                         <input name="venda_val" value="" hidden="hidden">
-                        <button type="submit" id="submitFinalizar" class="btn btn-success float-right"
-                            style="margin-right: 5px;" onclick="finishOrcamento()" <?= (empty($detalhes)) ? 'disabled' : ''; ?>><i class="far fa-credit-card"></i> FINALIZAR VENDA </button>
+                        <button type="submit" id="submitFinalizar" class="btn btn-secondary float-right"
+                            style="margin-right: 5px;" onclick="finishOrcamento()"><i class="fa fa-sm fa-file"> GERAR
+                                ORÇAMENTO</i></button>
                         <?= form_close() ?>
-                        <?php if (1 == 1) { ?>
-                            <button type="button" class="btn btn-danger float-right" id="buttonDescVista"
-                                data-toggle="modal" data-target="#alterarDesconto" style="margin-right: 5px;"
-                                <?= (empty($detalhes)) ? 'disabled' : ''; ?>>
-                                DESCONTO</button>
-                        <?php }
-                        if (1 == 2) { ?>
-                            <button type="button" class="btn btn-danger float-right" id="buttonDescPrazo"
-                                data-toggle="modal" data-target="#alterarDesconto" style="margin-right: 5px;"
-                                <?= (empty($detalhes)) ? 'disabled' : ''; ?>>
-                                DESCONTO</button>
-                        <?php } ?>
                     </div>
                 </div>
             </div>
@@ -331,4 +308,22 @@
 
 <?= $this->section('modal_content') ?>
 <?php require_once ('componentes/local_modal.php'); ?>
+<?= $this->endSection() ?>
+
+<?= $this->section('script') ?>
+<script>
+    $(document).ready(function () {
+        $('#cad_observacao').summernote({
+            height: 150,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],           
+                ['view', ['codeview']],
+            ],
+        });
+    });
+</script>
 <?= $this->endSection() ?>

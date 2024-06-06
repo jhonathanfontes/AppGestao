@@ -34,7 +34,7 @@ class Orcamento extends BaseController
         }
 
         $detalhes = $this->listarDetalhes()
-            ->where('orcamento_id', $orcamento->cod_orcamento)
+            ->where('est_movimentacao.orcamento_id', $orcamento->id)
             ->whereIn('situacao', ['1', '2', '4'])
             ->withDeleted()
             ->findAll();
