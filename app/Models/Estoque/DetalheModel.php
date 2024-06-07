@@ -146,51 +146,6 @@ class DetalheModel extends Model
 		return false;
 	}
 
-	public function listarDetalhes()
-	{
-		$atributos = [
-			'est_detalhe.id_detalhe AS cod_detalhe',
-			'est_detalhe.orcamento_id AS cod_orcamento',
-			'est_detalhe.estoque_id AS cod_estoque',
-			'est_detalhe.produto_id AS cod_produto',
-			'cad_produto.pro_descricao AS produto',
-			'est_detalhe.tamanho_id AS cod_tamanho',
-			'cad_tamanho.tam_descricao AS tamanho',
-			'est_detalhe.mvd_tipo AS tipo',
-			'est_detalhe.qtn_produto AS qtn_produto',
-			'est_detalhe.qtn_devolvido AS qtn_devolvido',
-			'est_detalhe.qtn_saldo AS qtn_saldo',
-			'est_detalhe.mvd_val_un AS valor_un',
-			'est_detalhe.mvd_val_ad AS valor_ad',
-			'est_detalhe.mvd_val_unad AS valor_unad',
-			'est_detalhe.mvd_total AS total',
-			'est_detalhe.mvd_total_unad AS total_unad',
-			'est_detalhe.mpd_val_un AS praz_valor_un',
-			'est_detalhe.mpd_val_ad AS praz_valor_ad',
-			'est_detalhe.mpd_val_unad AS praz_valor_unad',
-			'est_detalhe.mpd_total AS praz_total',
-			'est_detalhe.mpd_total_unad AS praz_total_unad',
-			'est_detalhe.situacao AS situacao',
-			'est_detalhe.serial AS serial',
-			'est_detalhe.sug_avista AS sug_avista',
-			'est_detalhe.sug_prazo AS sug_prazo',
-			'est_detalhe.est_presente AS presente',
-			'est_detalhe.created_user_id AS cod_usuario',
-			'cad_usuario.use_nome AS usuario',
-			'est_detalhe.created_at AS data_cadastro',
-			'cad_produto.fabricante_id as cod_fabricante',
-			'cad_fabricante.fab_descricao as cad_fabricante'
-		];
-
-		$return = $this->select($atributos)
-			->join('cad_produto', 'cad_produto.id_produto = est_detalhe.produto_id')
-			->join('cad_tamanho', 'cad_tamanho.id_tamanho = est_detalhe.tamanho_id')
-			->join('cad_usuario', 'cad_usuario.id_usuario = est_detalhe.created_user_id')
-			->join('cad_fabricante', 'cad_fabricante.id_fabricante = cad_produto.fabricante_id');
-
-		return $return;
-	}
-
 	public function getProdutoDetalhe()
 	{
 		$atributos = [
@@ -198,11 +153,18 @@ class DetalheModel extends Model
 			'est_movimentacao.orcamento_id',
 			'est_movimentacao.local_id',
 			'est_movimentacao.produto_id',
+			'cad_produto.pro_descricao',
+			'cad_produto.pro_tipo',
 			'est_movimentacao.qtn_produto',
+			'est_movimentacao.qtn_devolvido',
+			'est_movimentacao.qtn_saldo',
+			'est_movimentacao.val1_un',
 			'est_movimentacao.val1_unad',
 			'est_movimentacao.val1_total',
+			'est_movimentacao.val2_un',
+			'est_movimentacao.val2_unad',
+			'est_movimentacao.val2_total',
 			'est_movimentacao.situacao',
-			'cad_produto.pro_descricao',
 			'cad_tamanho.tam_abreviacao',
 			'cad_tamanho.tam_descricao'
 		];
@@ -220,7 +182,7 @@ class DetalheModel extends Model
 			'est_movimentacao.local_id',
 			'SUM(est_movimentacao.qtn_produto) AS qtn_produto',
 			'SUM(est_movimentacao.val1_unad) AS val1_unad',
-			'SUM(est_movimentacao.val1_total) AS val1_total',			
+			'SUM(est_movimentacao.val1_total) AS val1_total',
 			'cad_produto.pro_tipo'
 		];
 

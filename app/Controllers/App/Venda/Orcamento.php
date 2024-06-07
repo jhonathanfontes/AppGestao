@@ -34,9 +34,11 @@ class Orcamento extends BaseController
         }
 
         $detalhes = $this->listarDetalhes()
-            ->where('est_movimentacao.orcamento_id', $orcamento->id)
+            ->where('est_movimentacao.orcamento_id', $orcamento->cod_orcamento)
             ->whereIn('situacao', ['1', '2', '4'])
             ->withDeleted()
+            ->orderBy('pro_tipo')
+            ->orderBy('id')
             ->findAll();
 
 
@@ -47,7 +49,7 @@ class Orcamento extends BaseController
             }
 
             $data = [
-                'card_title' => 'ORÇAMENTO Nº ' . date("Y", strtotime($orcamento->orc_dataorcamento)) . completeComZero(esc($orcamento->id), 8),
+                'card_title' => 'ORÇAMENTO Nº ' . date("Y", strtotime($orcamento->orc_dataorcamento)) . completeComZero(esc($orcamento->cod_orcamento), 8),
                 'clientes' => $this->setPessoasClientes(),
                 // 'vendedores' => $this->getVendedores(),
                 'orcamento' => $orcamento,

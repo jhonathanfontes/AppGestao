@@ -131,7 +131,7 @@ class OrcamentoModel extends Model
 	public function returnOrcamentos()
 	{
 		$atributos = [
-			'pdv_orcamento.id',
+			'pdv_orcamento.id as cod_orcamento',
 			'orc_tipoorcamento as venda_tipo',
 			'orc_tipopagamento as orc_tipo',
 			'orc_dataorcamento',

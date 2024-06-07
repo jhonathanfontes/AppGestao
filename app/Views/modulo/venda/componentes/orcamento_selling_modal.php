@@ -190,36 +190,29 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <?= form_open(base_url('/api/venda/atualiza/orcamento/gradeproduto'), ['method' => 'post', 'id' => 'formUpdateGradeProduto']) ?>
+            <?= form_open(base_url('/api/venda/atualiza/orcamento/produto'), ['method' => 'post', 'id' => 'formUpdateGradeProduto']) ?>
 
             <div class="card-body">
-                <input name="id_detalhe" id="id_detalhe" hidden="hidden">
+                <input name="cod_detalhe" id="id_detalhe" hidden="hidden">
                 <input name="cod_tipo" id="cod_tipo" hidden="hidden">
                 <input name="serial" value="<?php echo $orcamento->serial ?>" hidden="hidden">
                 <input name="cod_orcamento" value="<?php echo $orcamento->cod_orcamento ?>" hidden="hidden">
                 <div class="row">
-                    <div class="form-group col-2">
+                    <div class="form-group col-3">
                         <label for="">QUANTIDADE</label>
                         <input name="qnt_produto" id="qnt_produto" class="form-control" onblur="atualizaGradeProduto();">
                     </div>
-                    <div class="form-group col-2">
+                    <div class="form-group col-3">
                         <label for="">VALOR UNITARIO</label>
                         <input name="valor_unidade" id="valor_unidade" class="form-control" disabled="disabled">
                     </div>
-                    <div class="form-group col-2">
+                    <div class="form-group col-3">
                         <label for="">VALOR COM DESCONTO</label>
                         <input name="valor_desc" id="valor_desc" class="valorbr form-control" onblur="atualizaGradeProduto();">
                     </div>
-                    <div class="form-group col-2">
+                    <div class="form-group col-3">
                         <label for="">TOTAL</label>
                         <input name="valor_total" id="valor_total" class="form-control" disabled="disabled">
-                    </div>
-                    <div class="form-group col-4">
-                        <label for="">PRESENTE</label>
-                        <select name="presente" id="presente" class="form-control">
-                            <option value="N">NÃO</option>
-                            <option value="S">SIM</option>
-                        </select>
                     </div>
                 </div>
             </div>

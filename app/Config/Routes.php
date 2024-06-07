@@ -486,8 +486,7 @@ $routes->group('api', function ($routes) {
                 $routes->post('formapagamento', 'Vendas::updateFormaPagamentoOrcamento');
                 $routes->post('cliente', 'Vendas::updateClienteOrcamento');
                 $routes->post('vendedor', 'Vendas::updateVendedorOrcamento');
-                $routes->post('gradeproduto', 'Vendas::updateGradeProdutoOrcamento');
-                $routes->post('gradeproduto', 'Vendas::updateGradeProdutoOrcamento');
+                $routes->post('produto', 'Vendas::updateProdutoOrcamento');
             });
         });
 

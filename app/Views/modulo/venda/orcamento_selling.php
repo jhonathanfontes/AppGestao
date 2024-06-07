@@ -161,14 +161,13 @@
                                                 value="venda/selling/<?php echo $orcamento->serial ?>" hidden="hidden">
                                             <?php if (!empty($detalhes)): ?>
                                                 <?php $sequencia = 1; ?>
+                                                <?php $sumValorTotal = 0; ?>
                                                 <?php foreach ($detalhes as $detalhe): ?>
+                                                    <?php $sumValorTotal = $sumValorTotal + (($orcamento->orc_tipo == 1) ? $detalhe->val1_total : $detalhe->val2_total); ?>
                                                     <tr>
                                                         <td><?= $detalhe->produto_id ?></td>
                                                         <td style="text-align: justify;">
                                                             <?= $detalhe->pro_descricao . ' / ' . $detalhe->tam_abreviacao ?>
-                                                            <?php if ($detalhe->presente == 'S') { ?> <i
-                                                                    class="fas fa-gift"></i>
-                                                            <?php } ?>
                                                         </td>
                                                         <td><?= $detalhe->qtn_produto ?></td>
                                                         <td><?= number_format((($orcamento->orc_tipo == 1) ? $detalhe->val1_un : $detalhe->val2_un), 2, ',', '.') ?>
@@ -183,7 +182,7 @@
                                                                 onclick="editarGradeProduto(<?php echo $detalhe->id ?>);">
                                                                 <samp class="fas fa-edit fa-sm"></samp> ALTERAR</button>
                                                         </td>
-                                                        <td style="text-align: center;">
+                                                        <td class="no-print" style="text-align: center;">
                                                             <div class="custom-control custom-checkbox">
                                                                 <input class="custom-control-input" type="checkbox"
                                                                     id="deleteCheckbox[<?= $sequencia ?>]" name="cod_detalhe[]"
@@ -198,23 +197,9 @@
                                             </tbody>
                                             <tfoot>
                                                 <tr>
-                                                    <th>TOTAL</th>
-                                                    <th></th>
-                                                    <th><?php echo $orcamento->qtn_produto; ?></th>
-                                                    <?php if ($orcamento->orc_tipo == 1) { ?>
-                                                        <th><?php echo number_format($orcamento->valor_bruto, 2, ',', '.') ?>
-                                                        </th>
-                                                        <th></th>
-                                                        <th><?php echo number_format($orcamento->valor_total, 2, ',', '.') ?>
-                                                        </th>
-                                                    <?php }
-                                                    if ($orcamento->orc_tipo == 2) { ?>
-                                                        <th><?php echo number_format($orcamento->praz_bruto, 2, ',', '.') ?>
-                                                        </th>
-                                                        <th></th>
-                                                        <th><?php echo number_format($orcamento->praz_total, 2, ',', '.') ?>
-                                                        </th>
-                                                    <?php } ?>
+                                                    <th colspan="5" style="text-align: left;">TOTAL</th>
+                                                    <th><?php echo number_format($sumValorTotal, 2, ',', '.') ?></th>
+
                                                     <td colspan="2" style="text-align: center;"><button
                                                             class="btn btn-sm btn-danger" onclick="DeletarDetalhes()"
                                                             id="DeletarDetalheSelect" hidden> <samp
@@ -239,9 +224,9 @@
                                     <div class="table-responsive">
                                         <table class="table table-sm">
                                             <?php
-                                            $total = ($orcamento->orc_tipo == 1) ? $orcamento->valor_bruto : $orcamento->praz_bruto;
-                                            $desconto = ($orcamento->orc_tipo == 1) ? $orcamento->valor_desconto : $orcamento->praz_desconto;
-                                            $apagar = ($orcamento->orc_tipo == 1) ? $orcamento->valor_total : $orcamento->praz_total;
+                                            $total = ($orcamento->orc_tipo == 1) ? $orcamento->valor1_bruto : $orcamento->valor2_bruto;
+                                            $desconto = ($orcamento->orc_tipo == 1) ? $orcamento->valor1_desconto : $orcamento->valor2_desconto;
+                                            $apagar = ($orcamento->orc_tipo == 1) ? $orcamento->valor1_total : $orcamento->valor2_total;
                                             ?>
                                             <thead>
                                                 <tr>
@@ -276,7 +261,7 @@
                                         <div class="info-box-content text-center">
                                             <span class="info-box-text">VENDA</span>
                                             <span class="info-box-number"
-                                                style="font-size: 14px;"><?= isset($orcamento) ? 'R$ ' . number_format($orcamento->valor_total, 2, ',', '.') : null; ?></span>
+                                                style="font-size: 14px;"><?= isset($orcamento) ? 'R$ ' . number_format($apagar, 2, ',', '.') : null; ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -296,8 +281,6 @@
 
                         </div>
                     </div>
-
-
 
                     <!-- this row will not appear when printing -->
                     <div class="row no-print">

@@ -526,7 +526,7 @@ function salvarGradeProduto() {
                 },
                 success: function (response) {
                     // console.log(response);
-                    respostaSwalFire(response)
+                    respostaSwalFire(response, true)
                 }
             });
         }
