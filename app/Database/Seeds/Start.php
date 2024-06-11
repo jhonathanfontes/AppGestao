@@ -11,5 +11,10 @@ class Start extends Seeder
         $this->call('UsuarioSeeder');
         $this->call('GrupoSeeder');
         $this->call('SubGrupoSeeder');
+
+        $this->call('View');
+        $this->call('Procedure');
+        $this->call('Trigger');
+
     }
 }

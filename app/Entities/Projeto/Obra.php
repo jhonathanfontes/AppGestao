@@ -7,10 +7,10 @@ use CodeIgniter\Entity\Entity;
 class Obra extends Entity
 {
     protected $attributes = [
-        'id'  => null,
+        'id' => null,
         'obr_descricao' => null,
         'obr_datainicio' => null,
-        'status'        => null,
+        'situacao' => null,
 
     ];
 
@@ -20,21 +20,21 @@ class Obra extends Entity
         'cad_datainicio' => 'obr_datainicio'
     ];
 
-    protected $dates   = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
 
     public function auditoriaInsertAtributos()
     {
         $attribute['cod_obra'] = $this->id;
-        
+
         $attribute['cad_obra'] = [
             'new' => $this->cat_descricao
         ];
-       
+
         $attribute['status'] = [
             'new' => $this->status
         ];
-       
+
         return serialize($attribute);
     }
 
@@ -51,10 +51,10 @@ class Obra extends Entity
             ];
         }
 
-        if ($this->hasChanged('status')) {
-            $attribute['status'] = [
-                'old' => $this->original['status'],
-                'new' => $this->status
+        if ($this->hasChanged('situacao')) {
+            $attribute['situacao'] = [
+                'old' => $this->original['situacao'],
+                'new' => $this->situacao
             ];
         }
 

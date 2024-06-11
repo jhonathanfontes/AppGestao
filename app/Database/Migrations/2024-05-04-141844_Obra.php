@@ -34,10 +34,10 @@ class Obra extends Migration
                 'unsigned' => true,
                 'null' => true,
             ],
-            'status' => [
+            'situacao' => [
                 'type' => 'INT',
                 'default' => 1,
-                'comment' => '1 -Habilitado, 2 - Desativado, 3 - Pendente, 9 - Arquivado',
+                'comment' => '0 - Excluida, 1 - Em Aberto, 2 - Finalizada, 3 - Cancelada, 4 - Pendente, 5 - Obra Pendente',
             ],
             'empresa_id' => [
                 'type' => 'INT',

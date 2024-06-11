@@ -632,3 +632,52 @@ function atualizaGradeProduto() {
     var new_valor = qnt_produto * val_desc;
     document.getElementById("e_valor_total").value = formatMoneyBR(new_valor);
 }
+
+
+// FINALIZAR O PROJETO
+
+function geraOrcamento() {
+    $("#formGeraOrcamento").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $.validator.setDefaults({
+        submitHandler: function () {
+            $.ajax({
+                url: $('#formGeraOrcamento').attr('action'),
+                type: "POST",
+                data: $('#formGeraOrcamento').serialize(),
+                dataType: "json",
+                beforeSend: function () {
+                    // document.getElementById("submitFinalizar").disabled = true;
+                },
+                success: function (response) {
+                    // console.log(response);
+                    respostaSwalFire(response, false)
+                    // setTimeout(function () {
+                    //     window.location.href = base_url + "app/caixa/receber/" + response.data.serial;
+                    // }, 1500);
+                }
+            });
+        }
+    });
+
+    $('#formGeraOrcamento').validate({
+        rules: {
+            cod_orcamento: {
+                required: true,
+            }
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+}

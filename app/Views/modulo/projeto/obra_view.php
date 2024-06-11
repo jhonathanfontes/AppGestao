@@ -31,6 +31,7 @@
 <section class="content">
     <!-- Card Body - Formulario -->
     <div class="card card-warning">
+        <?php // var_dump($obra) ?>
         <div class="card-body">
             <div class="invoice p-3 mb-3">
                 <!-- title row -->
@@ -285,13 +286,12 @@
                 <!-- this row will not appear when printing -->
                 <div class="row no-print">
                     <div class="col-12">
-                        <?= form_open(base_url('/api/venda/finaliza/orcamento'), ['method' => 'post', 'id' => 'formfinishOrcamento']) ?>
-                        <input name="venda_serial" value="" hidden="hidden">
-                        <input name="venda_id" value="" hidden="hidden">
-                        <input name="venda_val" value="" hidden="hidden">
+                        <?= form_open(base_url('/api/projeto/gera/orcamento'), ['method' => 'post', 'id' => 'formGeraOrcamento']) ?>
+                        <input name="serial" value="<?= $obra->serial ?>" hidden="hidden">
+                        <input name="cod_obra" value="<?= $obra->id ?>" hidden="hidden">
+                        <input name="cod_orcamento" value="<?= $obra->cod_orcamento ?>" hidden="hidden">
                         <button type="submit" id="submitFinalizar" class="btn btn-secondary float-right"
-                            style="margin-right: 5px;" onclick="finishOrcamento()"><i class="fa fa-sm fa-file"> GERAR
-                                ORÇAMENTO</i></button>
+                            style="margin-right: 5px;" onclick="geraOrcamento()"><i class="fa fa-sm fa-file"> GERAR ORÇAMENTO</i></button>
                         <?= form_close() ?>
                     </div>
                 </div>
@@ -320,7 +320,7 @@
                 ['font', ['bold', 'underline', 'clear']],
                 ['fontname', ['fontname']],
                 ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],           
+                ['para', ['ul', 'ol', 'paragraph']],
                 ['view', ['codeview']],
             ],
         });

@@ -15,7 +15,7 @@ class ObraModel extends Model
 		'obr_datainicio',
 		'pessoa_id',
 		'endereco_id',
-		'status',
+		'situacao',
 		'serial',
 		'created_user_id',
 		'updated_user_id',
@@ -118,5 +118,20 @@ class ObraModel extends Model
 		$builder->orderBy('emp_razao', 'asc');
 		$result = $builder->get();
 		return $result->getResult();
+	}
+
+	public function countProdutoObra(int $cod_obra = null)
+	{
+		$atributos = [
+			'ger_obra.id',
+			'count(est_movimentacao.id) AS totalProdutos'
+		];
+
+		return $this->select($atributos)
+			->join('ger_local', 'ger_local.obra_id = ger_obra.id', 'LEFT')
+			->join('est_movimentacao', 'est_movimentacao.local_id = ger_local.id AND est_movimentacao.situacao IN (1, 2, 4)', 'LEFT')
+			->where('ger_obra.id', $cod_obra)
+			->groupBy('ger_obra.id')
+			->first();
 	}
 }

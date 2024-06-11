@@ -28,7 +28,7 @@ class Obras extends ApiController
         $response['data'] = array();
 
         $result = $this->obraModel->getObra()->
-            whereIn('ger_obra.status', ['1', '2'])->
+            whereIn('ger_obra.situacao', ['1', '2', '4'])->
             withDeleted()->
             findAll();
 
@@ -261,6 +261,41 @@ class Obras extends ApiController
         }
     }
 
+    public function geraOrcamento()
+    {
+        if (!$this->request->isAJAX()) {
+            return redirect()->back();
+        }
+
+        $obra = $this->buscaRegistro404Serial($this->request->getPost('serial'));
+
+        if ($this->request->getPost('cod_obra') != $obra->cod_obra or $obra->situacao != '1') {
+            return $this->response->setJSON([
+                'status' => true,
+                'menssagem' => [
+                    'status' => 'error',
+                    'heading' => 'ERRO, NÃO POSSIVEL PROCESSAR A SOLICITAÇÃO!',
+                    'description' => "NÃO FOI LOCALIZADO O ORÇAMENTO!"
+                ]
+            ]);
+        }
+
+        if ($this->obraModel->countProdutoObra($obra->cod_obra)->totalProdutos <= 0) {
+            return $this->response->setJSON([
+                'status' => true,
+                'menssagem' => [
+                    'status' => 'error',
+                    'heading' => 'ERRO, NÃO POSSIVEL PROCESSAR A SOLICITAÇÃO!',
+                    'description' => "NÃO FOI LOCALIZADO PRODUTOS OU SERVIÇOS NESTE ORÇAMENTO!"
+                ]
+            ]);
+        }
+
+        return $this->response->setJSON($obra);
+
+
+    }
+
     private function buscaRegistro404(int $codigo = null)
     {
         if (!$codigo || !$resultado = $this->obraModel->withDeleted(true)->find($codigo)) {
@@ -268,15 +303,17 @@ class Obras extends ApiController
         }
         return $resultado;
     }
+
     private function buscaRegistro404Serial(string $serial = null)
     {
         if (
             !$serial || !$resultado = $this->obraModel->withDeleted(true)
                 ->where('serial', $serial)
-                ->find()
+                ->first()
         ) {
             return null;
         }
+
         return $resultado;
 
     }

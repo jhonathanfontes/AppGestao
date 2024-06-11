@@ -13,7 +13,7 @@ class AddCampoObra extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '200',
                 'comment' => 'CODIGO GERADO AUTOMATICAMENTO POR TRANSAÇÃO',
-                'after' => 'status'
+                'after' => 'situacao'
             ]
         ];
         $this->forge->addColumn('ger_obra', $fields);

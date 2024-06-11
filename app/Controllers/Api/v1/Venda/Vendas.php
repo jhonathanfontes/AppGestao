@@ -900,7 +900,7 @@ class Vendas extends ApiController
 
         try {
 
-            $this->contaReceberModel = new \App\Models\Financeiro\ContaReceberModel();
+            // $this->contaReceberModel = new \App\Models\Financeiro\ContaReceberModel();
             $this->movimentacaoModel = new \App\Models\Financeiro\MovimentacaoModel();
 
             $cod_orcamento = $this->request->getPost('cod_orcamento');
@@ -983,7 +983,7 @@ class Vendas extends ApiController
 
         try {
 
-            $this->contaReceberModel = new \App\Models\Financeiro\ContaReceberModel();
+            // $this->contaReceberModel = new \App\Models\Financeiro\ContaReceberModel();
             $this->movimentacaoModel = new \App\Models\Financeiro\MovimentacaoModel();
 
             $cod_venda = $this->request->getPost('cod_venda');

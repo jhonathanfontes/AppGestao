@@ -205,6 +205,11 @@ $routes->group('api', function ($routes) {
             $routes->post('contabancaria', 'ContaBancaria::optionContaBancaria');
         });
 
+         // GENRENCIA OS ORÇAMENTOS
+         $routes->group('gera', function ($routes) {
+            $routes->post('orcamento', 'Obras::geraOrcamento');
+        });
+
         // Deletar dados Cadastro
         $routes->group('remover', function ($routes) {
             $routes->post('obra/(:segment)', 'Obras::remove/$1');
