@@ -71,7 +71,7 @@ class ObraModel extends Model
 		return false;
 	}
 
-	function getObra()
+	public function getObra()
 	{
 		$atributos = [
 			'ger_obra.*',
@@ -93,7 +93,7 @@ class ObraModel extends Model
 			->join('pdv_orcamento', 'pdv_orcamento.obra_id = ger_obra.id', 'LEFT');
 	}
 
-	function getObras()
+	public function getObras()
 	{
 		$atributos = [
 			'ger_obra.id as cod_obra',

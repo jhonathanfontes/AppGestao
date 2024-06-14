@@ -12,6 +12,32 @@ $(document).ready(function () {
     ];
     initializeDataTable("#tableObras", base_url + "api/projeto/tabela/obras", obrasColumnDefs, obrasOrder);
 
+    // CARREGA DADOS DA TELA DAS OBRAS EM ANDAMENTO
+    var obrasandamentoColumnDefs = [
+        { className: "dt-body-center", targets: 0 },
+        { className: "dt-body-center", targets: 1 },
+        { className: "dt-body-center", targets: 2 },
+        { className: "dt-body-center", targets: 3 },
+        { className: "dt-body-center", targets: 4 },
+    ];
+    var obrasandamentoOrder = [
+        [0, 'asc']
+    ];
+    initializeDataTable("#tableObrasAndamento", base_url + "api/projeto/tabela/obrasandamento", obrasandamentoColumnDefs, obrasandamentoOrder);
+
+    // CARREGA DADOS DA TELA DAS OBRAS EM ANDAMENTO
+    var obrasfinalizadasColumnDefs = [
+        { className: "dt-body-center", targets: 0 },
+        { className: "dt-body-center", targets: 1 },
+        { className: "dt-body-center", targets: 2 },
+        { className: "dt-body-center", targets: 3 },
+        { className: "dt-body-center", targets: 4 },
+    ];
+    var obrasfinalizadasOrder = [
+        [0, 'asc']
+    ];
+    initializeDataTable("#tableObrasFinalizadas", base_url + "api/projeto/tabela/obrasfinalizadas", obrasfinalizadasColumnDefs, obrasfinalizadasOrder);
+
     //Quando o campo cep perde o foco.
     $('#cad_cep').change(function () {
 
@@ -201,7 +227,7 @@ function getEditLocal(Paramentro) {
                 console.log(1);
                 $('#cad_observacao').summernote('reset');
             }
-            
+
             $('#cad_cep').val(dado.cad_cep);
             $('#cad_endereco').val(dado.cad_endereco);
             $('#cad_numero').val(dado.cad_numero);

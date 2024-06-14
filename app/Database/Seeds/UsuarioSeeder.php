@@ -12,7 +12,7 @@ class UsuarioSeeder extends Seeder
             'use_nome' => 'Administrador',
             'use_apelido' => 'Administrador',
             'use_cpf' => '00000000000',
-            'use_password' => password_hash('admin', PASSWORD_DEFAULT),
+            'use_password' => password_hash('admin1', PASSWORD_DEFAULT),
             'use_email' => 'admin@example.com',
             'use_telefone' => '00000000000',
             'use_avatar' => '',

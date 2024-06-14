@@ -66,22 +66,30 @@
                     </a>
                 </li>
             </ul>
-            <!-- <ul class="nav nav-treeview">
-                <li class="nav-item <?= (url_is('app/venda/auxiliar/programa*')) ? 'menu-open' : ''; ?>">
-                    <a href="#" class="nav-link <?= (url_is('app/venda/auxiliar/programa*')) ? 'active' : ''; ?>">
+            <ul class="nav nav-treeview">
+                <li class="nav-item <?= (url_is('app/projeto/gerenciar/obra*')) ? 'menu-open' : ''; ?>">
+                    <a href="#" class="nav-link <?= (url_is('app/projeto/gerenciar/obra*')) ? 'active' : ''; ?>">
                         <i class="fab fa-buysellads text-primary"> </i>
-                        <p> &nbsp; AUXILIAR VENDAS</p> <i class="right fas fa-angle-left"></i>
+                        <p> &nbsp; GERENCIAR OBRAS</p> <i class="right fas fa-angle-left"></i>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?= base_url('app/venda/auxiliar/programa/fidelidade'); ?>" class="nav-link <?= (url_is('app/venda/auxiliar/programa/fidelidade')) ? 'active' : ''; ?>">
-                                <i class="far <?= (url_is('app/venda/auxiliar/programa/fidelidade')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
-                                <p>PROGRAMA DE FIDELIDADE</p>
+                            <a href="<?= base_url('app/projeto/gerenciar/obra/andamento'); ?>" class="nav-link <?= (url_is('app/projeto/gerenciar/obra/andamento*')) ? 'active' : ''; ?>">
+                                <i class="far <?= (url_is('app/projeto/gerenciar/obra/andamento')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
+                                <p>OBRAS EM ANDAMENTO</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url('app/projeto/gerenciar/obra/finalizada'); ?>" class="nav-link <?= (url_is('app/projeto/gerenciar/obra/finalizada*')) ? 'active' : ''; ?>">
+                                <i class="far <?= (url_is('app/projeto/gerenciar/obra/finalizada')) ? 'fa-dot-circle text-warning' : ''; ?> nav-icon"></i>
+                                <p>OBRAS FINALIZADAS</p>
                             </a>
                         </li>
                     </ul>
                 </li>
-            </ul> -->
+            </ul> 
             <!-- <ul class="nav nav-treeview">
                 <li class="nav-item <?= (url_is('app/cadastro/auxiliar/produtos*')) ? 'menu-open' : ''; ?>">
                     <a href="#" class="nav-link <?= (url_is('app/cadastro/auxiliar/produtos*')) ? 'active' : ''; ?>">

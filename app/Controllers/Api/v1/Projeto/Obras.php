@@ -28,7 +28,7 @@ class Obras extends ApiController
         $response['data'] = array();
 
         $result = $this->obraModel->getObra()->
-            whereIn('ger_obra.situacao', ['1', '2', '4'])->
+            where('ger_obra.situacao', '5')->
             withDeleted()->
             findAll();
 
@@ -42,7 +42,7 @@ class Obras extends ApiController
 
                 $ops = '<button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modalObra" onclick="getEditObra(' . $value->cod_obra . ')"><samp class="far fa-sm fa-edit"></samp> EDITAR</button>';
                 // $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'obra'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
-                $ops .= ' <a class="btn btn-xs btn-success" href="obra/view/' . $value->serial . '"><span class="fas fa-sm fa-tasks"></span> GERENCIAR </a>';
+                $ops .= ' <a class="btn btn-xs btn-success" href="' . base_url('app/projeto/obra/view/' . $value->serial) . '"><span class="fas fa-sm fa-tasks"></span> GERENCIAR </a>';
 
                 $response['data'][$key] = array(
                     date("Y", strtotime($value->created_at)) . completeComZero(esc($value->cod_obra), 8),
@@ -69,6 +69,95 @@ class Obras extends ApiController
         }
     }
 
+    public function getCarregaTabelaAndamento()
+    {
+        $response['data'] = array();
+
+        $result = $this->obraModel->getObra()->
+            where('ger_obra.situacao', '1')->
+            withDeleted()->
+            findAll();
+
+        try {
+            // return $this->response->setJSON($result);
+            if (empty($result)):
+                return $this->response->setJSON($response);
+            endif;
+
+            foreach ($result as $key => $value) {
+
+                // $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'obra'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+                $ops = ' <a class="btn btn-xs btn-success" href="' . base_url('app/projeto/gerenciar/obra/andamento/view/' . $value->serial) . '"><span class="fas fa-sm fa-tasks"></span> GERENCIAR </a>';
+
+                $response['data'][$key] = array(
+                    date("Y", strtotime($value->created_at)) . completeComZero(esc($value->cod_obra), 8),
+                    esc($value->cad_obra),
+                    esc($value->cad_datainicio) ? esc(formatDataBR($value->cad_datainicio)) : '<span class="badge badge-danger">SEM DATA PREVISTA</span>',
+                    esc($value->cad_nome),
+                    $ops,
+                );
+            }
+
+            return $this->response->setJSON($response);
+
+        } catch (\Throwable $th) {
+            return $this->response->setJSON(
+                [
+                    'status' => false,
+                    'menssagem' => [
+                        'status' => 'error',
+                        'heading' => 'NÃO FOI POSSIVEL PROCESSAR O REGISTRO!',
+                        'description' => $th->getMessage()
+                    ]
+                ]
+            );
+        }
+    }
+
+    public function getCarregaTabelaFinalizado()
+    {
+        $response['data'] = array();
+
+        $result = $this->obraModel->getObra()->
+            where('ger_obra.situacao', '2')->
+            withDeleted()->
+            findAll();
+
+        try {
+            // return $this->response->setJSON($result);
+            if (empty($result)):
+                return $this->response->setJSON($response);
+            endif;
+
+            foreach ($result as $key => $value) {
+
+                // $ops .= '<button type="button" class="btn btn-xs btn-dark ml-2" onclick="getArquivar(' . "'obra'" . ',' . $value->id . ')"><samp class="fa fa-archive"></samp> ARQUIVAR</button>';
+                $ops = ' <a class="btn btn-xs btn-success" href="' . base_url('app/projeto/gerenciar/obra/finalizada/view/' . $value->serial) . '"><span class="fas fa-sm fa-tasks"></span> GERENCIAR </a>';
+
+                $response['data'][$key] = array(
+                    date("Y", strtotime($value->created_at)) . completeComZero(esc($value->cod_obra), 8),
+                    esc($value->cad_obra),
+                    esc($value->cad_datainicio) ? esc(formatDataBR($value->cad_datainicio)) : '<span class="badge badge-danger">SEM DATA PREVISTA</span>',
+                    esc($value->cad_nome),
+                    $ops,
+                );
+            }
+
+            return $this->response->setJSON($response);
+
+        } catch (\Throwable $th) {
+            return $this->response->setJSON(
+                [
+                    'status' => false,
+                    'menssagem' => [
+                        'status' => 'error',
+                        'heading' => 'NÃO FOI POSSIVEL PROCESSAR O REGISTRO!',
+                        'description' => $th->getMessage()
+                    ]
+                ]
+            );
+        }
+    }
     public function save()
     {
         if (!$this->request->isAJAX()) {
@@ -76,7 +165,6 @@ class Obras extends ApiController
         }
 
         $endereco = [];
-
 
         if (!empty($this->request->getPost('cod_endereco'))) {
             $endereco['id'] = $this->request->getPost('cod_endereco');
@@ -106,6 +194,7 @@ class Obras extends ApiController
         $data['pessoa_id'] = $cod_pessoa;
         $data['obr_descricao'] = returnNull($this->request->getPost('cad_obra'), 'S');
         $data['obr_datainicio'] = returnNull(esc($this->request->getPost('cad_datainicio')));
+        $data['situacao'] = '5';
 
         $entityObra = new Obra($data);
 
@@ -284,21 +373,85 @@ class Obras extends ApiController
             return $this->response->setJSON([
                 'status' => true,
                 'menssagem' => [
-                    'status' => 'error',
-                    'heading' => 'ERRO, NÃO POSSIVEL PROCESSAR A SOLICITAÇÃO!',
+                    'status' => 'warning',
+                    'heading' => 'ATENÇÃO, NÃO FOI POSSIVEL GERAR O ORÇAMENTO!',
                     'description' => "NÃO FOI LOCALIZADO PRODUTOS OU SERVIÇOS NESTE ORÇAMENTO!"
                 ]
             ]);
         }
 
-        return $this->response->setJSON($obra);
+        return $this->response->setJSON($this->gerarArrayObra($obra->cod_obra));
 
+    }
 
+    private function gerarArrayObra(int $cod_obra = null)
+    {
+        if (
+            !$cod_obra || !$obra = $this->obraModel->getObra()
+                ->where('ger_obra.id', $cod_obra)
+                ->first()
+        ) {
+            return null;
+        }
+        $localModel = new \App\Models\Projeto\LocalModel();
+
+        $locais = $localModel->where('obra_id', $cod_obra)->
+            whereIn('status', ['1', '2'])
+            ->withDeleted()
+            ->findAll();
+
+        $data['cod_obra'] = $obra->cod_obra;
+        $data['cad_obra'] = $obra->cad_obra;
+        $data['cod_orcamento'] = $obra->cod_orcamento;
+        $data['cod_pessoa'] = $obra->pessoa_id;
+        $data['cad_nome'] = $obra->cad_nome;
+        $data['cod_endereco'] = $obra->endereco_id;
+        $data['cad_endereco'] = $obra->cad_endereco;
+        $data['cad_setor'] = $obra->cad_setor;
+        $data['cad_numero'] = $obra->cad_numero;
+        $data['cad_cidade'] = $obra->cad_cidade;
+        $data['cad_estado'] = $obra->cad_estado;
+        $data['cad_cep'] = $obra->cad_cep;
+        $data['cad_complemento'] = $obra->cad_complemento;
+        $data['serial'] = $obra->serial;
+        $data['situacao'] = $obra->situacao;
+        $data['data'] = $obra->created_at;
+
+        if ($locais) {
+            $detalheProdutoModel = new \App\Models\Estoque\DetalheModel();
+
+            $countDetalhe = 0;
+            foreach ($locais as $row) {
+                $detalhesProdutos = $detalheProdutoModel
+                    ->getProdutoDetalhe()
+                    ->where('local_id', $row->cod_local)
+                    ->whereIn('situacao', ['1', '2', '4'])
+                    ->withDeleted()
+                    ->orderBy('cad_produto.pro_tipo')
+                    ->findAll();
+
+                $data['local'][$countDetalhe] = [
+                    'cod_local' => $row->cod_local,
+                    'cad_local' => $row->cad_local,
+                    'cad_datainicio' => $row->cad_datainicio,
+                    'cad_observacao' => $row->cad_observacao,
+                    'detalhes' => $detalhesProdutos,
+                ];
+
+                $countDetalhe++;
+            }
+        }
+
+        return $data;
     }
 
     private function buscaRegistro404(int $codigo = null)
     {
-        if (!$codigo || !$resultado = $this->obraModel->withDeleted(true)->find($codigo)) {
+        if (
+            !$codigo || !$resultado = $this->obraModel->withDeleted(true)
+                ->where('id', $codigo)
+                ->first()
+        ) {
             return null;
         }
         return $resultado;

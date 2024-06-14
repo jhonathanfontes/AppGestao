@@ -1,4 +1,8 @@
-var base_url = "http://localhost:8080/";
+// var base_url = "http://app.gestao/";
+
+var url = window.location.hostname; // obter o dominio
+var base_url = "http://" + url ;
+
 // CARREGA DADOS DA TABLE
 $(document).ready(function () {
 
