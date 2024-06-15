@@ -1,3 +1,4 @@
+.env
 */config/development
 */logs/log-*.php
 !*/logs/index.html
@@ -22,4 +23,3 @@ application/logs/*
 /writable/logs/*
 /writable/session/*
 /vendor/
-.env
