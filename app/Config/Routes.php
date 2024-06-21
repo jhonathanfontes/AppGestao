@@ -207,8 +207,8 @@ $routes->group('api', function ($routes) {
             $routes->post('contabancaria', 'ContaBancaria::optionContaBancaria');
         });
 
-         // GENRENCIA OS ORÇAMENTOS
-         $routes->group('gera', function ($routes) {
+        // GENRENCIA OS ORÇAMENTOS
+        $routes->group('gera', function ($routes) {
             $routes->post('orcamento', 'Obras::geraOrcamento');
         });
 
@@ -648,8 +648,8 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
                 $routes->get('tamanhos', 'Tamanhos::produto');
             });
 
-              // Carrega dados da TableDatta
-              $routes->group('servicos', function ($routes) {
+            // Carrega dados da TableDatta
+            $routes->group('servicos', function ($routes) {
                 // Rota Cadastro/Categoria
                 $routes->get('categorias', 'Categorias::servico');
                 // Rota Cadastro/Tamanho
@@ -771,7 +771,14 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
     });
 
     // Modulo APP Relatorio
-    $routes->group('relatorio', ['namespace' => 'App\Controllers\App\Relatorio'], function ($routes) {
+    $routes->group('relatorio', function ($routes) {
+
+        // Rota Relatorio/Financeiro
+        $routes->group('projeto', ['namespace' => 'App\Controllers\App\Projeto'], function ($routes) {
+            $routes->group('pdf', function ($routes) {
+                $routes->get('obra/(:segment)', 'Obra::aprova_pdf/$1');
+            });
+        });
 
         // Rota Relatorio/Financeiro
         $routes->group('financeiro', function ($routes) {
@@ -813,12 +820,13 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
         $routes->group('obra', function ($routes) {
             $routes->get('/', 'Obra::index');
             $routes->get('view/(:segment)', 'Obra::view/$1');
-            $routes->get('view/(:segment)/(:segment)', 'Obra::view_local/$1/$2');
+            $routes->get('aprova/view/(:segment)', 'Obra::view_aprova/$1');
+            // $routes->get('view/(:segment)/(:segment)', 'Obra::view_local/$1/$2');
         });
 
-         // Carrega dados da Gerenciar
+        // Carrega dados da Gerenciar
         $routes->group('gerenciar', function ($routes) {
-          
+
             $routes->group('obra', function ($routes) {
                 // Rota Gerenciar/Andamento
                 $routes->get('andamento', 'Obra::andamento');

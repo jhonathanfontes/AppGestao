@@ -358,7 +358,7 @@ class Obras extends ApiController
 
         $obra = $this->buscaRegistro404Serial($this->request->getPost('serial'));
 
-        if ($this->request->getPost('cod_obra') != $obra->cod_obra or $obra->situacao != '1') {
+        if ($this->request->getPost('cod_obra') != $obra->cod_obra or $obra->situacao != '5') {
             return $this->response->setJSON([
                 'status' => true,
                 'menssagem' => [
