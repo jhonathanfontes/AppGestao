@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><?= $card_title; ?></title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -86,7 +86,7 @@
 <body>
     <div class="container">
         <div class="flex-row">
-           
+
             <div class="cabecario">
                 <hr>
                 <div>

@@ -139,8 +139,11 @@ function formatValorBR($valor)
     return 'R$ ' . number_format($valor, 2, ',', '.');
 }
 
-function formatValorBD($valor)
+function formatValorBD($valor = 0)
 {
+    if ($valor == null) {
+        $valor = 0;
+    }
     $verificaPonto = ".";
     if (strpos("[" . $valor . "]", $verificaPonto)):
         $valor = str_replace('.', '', $valor);
