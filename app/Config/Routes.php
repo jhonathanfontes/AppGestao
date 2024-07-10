@@ -851,3 +851,32 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
 });
 
 
+// Rota Prestador
+$routes->group('appprestador', ['filter' => 'auth'], function ($routes) {
+    // Redirecionamento  para o Dashboard
+    $routes->addRedirect('/', 'appprestador/dashboard');
+
+    // Modulo APP Dashboard
+    $routes->get('dashboard', 'AppPrestador\Dashboard::index');
+
+    // Rota Servico
+    $routes->group('servico', function ($routes) {
+        $routes->get('andamento', 'AppPrestador\Dashboard::index');
+        $routes->get('finalizado', 'AppPrestador\Dashboard::index');
+    });
+
+     // Rota Servico
+     $routes->group('relatorio', function ($routes) {
+        $routes->get('servico', 'AppPrestador\Dashboard::index');
+    });
+});
+
+
+// Rota Prestador
+$routes->group('appdespacho', ['filter' => 'auth'], function ($routes) {
+    // Redirecionamento  para o Dashboard
+    $routes->addRedirect('/', 'appdespacho/dashboard');
+
+    // Modulo APP Dashboard
+    $routes->get('dashboard', 'AppDespacho\Dashboard::index');
+});
