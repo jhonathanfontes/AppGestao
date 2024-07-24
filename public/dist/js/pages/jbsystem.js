@@ -1,4 +1,4 @@
-var url = window.location.hostname; // obter o dominio
+var url = window.location.host; // obter o dominio
 var base_url = "http://" + url + "/";
 
 $(document).ready(function () {

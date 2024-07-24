@@ -848,6 +848,8 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
         // VENDAS
         $routes->get('receber/(:segment)', 'Caixa::caixaReceberVenda/$1');
     });
+
+    
 });
 
 
