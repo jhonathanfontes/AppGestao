@@ -604,6 +604,7 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
         $routes->get('financeiro', 'App\Modulo::financeiro');
         $routes->get('venda', 'App\Modulo::venda');
         $routes->get('projeto', 'App\Modulo::projeto');
+        $routes->get('rh', 'App\Modulo::rh');
     });
 
     // Modulo APP Cadastro
@@ -849,7 +850,60 @@ $routes->group('app', ['filter' => 'auth'], function ($routes) {
         $routes->get('receber/(:segment)', 'Caixa::caixaReceberVenda/$1');
     });
 
-    
+     // Modulo APP Rh
+     $routes->group('rh', ['namespace' => 'App\Controllers\App\Rh'], function ($routes) {
+        // Redirecionamento  para o modulo Cadastro
+        $routes->addRedirect('/', 'app/modulo/rh');
+        // Rota Cadastro/Pessoa
+        $routes->group('colaborador', function ($routes) {
+            $routes->get('/', 'Colaborador::colaborador');
+            $routes->get('view/(:segment)', 'Colaborador::colaborador_view/$1');
+        });
+        // Rota Cadastro/Produto
+        $routes->group('produtos', function ($routes) {
+            $routes->get('/', 'Produtos::index');
+            $routes->get('show/(:segment)', 'Produtos::show/$1');
+            $routes->get('(:segment)', 'Produtos::show/$1');
+            $routes->get('view/(:segment)', 'Produtos::view/$1');
+        });
+
+        // Rota Cadastro/Servico
+        $routes->group('servicos', function ($routes) {
+            $routes->get('/', 'Servicos::index');
+            $routes->get('show/(:segment)', 'Servicos::show/$1');
+            $routes->get('(:segment)', 'Servicos::show/$1');
+            $routes->get('view/(:segment)', 'Servicos::view/$1');
+        });
+
+        // Carrega dados da Auxiliares
+        $routes->group('auxiliar', function ($routes) {
+            // Carrega dados da TableDatta
+            $routes->group('pessoas', function ($routes) {
+                // Rota Cadastro/Profissoes
+                $routes->get('profissoes', 'Profissoes::index');
+            });
+            // Carrega dados da TableDatta
+            $routes->group('produtos', function ($routes) {
+                // Rota Cadastro/Categoria
+                $routes->get('categorias', 'Categorias::produto');
+                // Rota Cadastro/Tamanho
+                $routes->get('tamanhos', 'Tamanhos::produto');
+            });
+
+            // Carrega dados da TableDatta
+            $routes->group('servicos', function ($routes) {
+                // Rota Cadastro/Categoria
+                $routes->get('categorias', 'Categorias::servico');
+                // Rota Cadastro/Tamanho
+                $routes->get('unidade', 'Tamanhos::servico');
+            });
+
+            $routes->group('servicos', function ($routes) {
+                // Rota Cadastro/Tamanho
+                $routes->get('unidade', 'Tamanhos::index');
+            });
+        });
+    });
 });
 
 

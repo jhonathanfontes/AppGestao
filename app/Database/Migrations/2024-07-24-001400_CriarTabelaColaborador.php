@@ -5,7 +5,7 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 use CodeIgniter\Database\RawSql;
 
-class CriarTabelaVale extends Migration
+class CriarTabelaColaborador extends Migration
 {
     public function up()
     {
@@ -16,29 +16,35 @@ class CriarTabelaVale extends Migration
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'colaborador_id' => [
+            'pessoa_id' => [
+                'type' => 'INT',
+                'unsigned' => true,
+                'null' => true,
+                'comment' => 'USUARIO SOLICITOU',
+            ]
+            ,
+            'usuario_id' => [
                 'type' => 'INT',
                 'unsigned' => true,
                 'null' => true,
                 'comment' => 'USUARIO SOLICITOU',
             ],
-            'dt_solicitacao' => [
+            'dt_admissao' => [
                 'type' => 'DATE',
                 'null' => true,
             ],
-            'valor' => [
+            'dt_desligamento' => [
+                'type' => 'DATE',
+                'null' => true,
+            ],
+            'salario' => [
                 'type' => 'double precision',
                 'default' => 0
-            ],
-            'motivo_solicitacao' => [
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-                'null' => true,
             ],
             'status' => [
                 'type' => 'INT',
                 'default' => 1,
-                'comment' => '1 - Solicitado, 2 - Aprovado, 3 - Cancelado, 4 - Reprovado',
+                'comment' => '1 - Ativo, 2 - Inativo',
             ],
             'created_user_id' => [
                 'type' => 'INT',
@@ -66,37 +72,23 @@ class CriarTabelaVale extends Migration
             'deleted_at' => [
                 'type' => 'TIMESTAMP',
                 'null' => true,
-            ],
-            'can_data' => [
-                'type' => 'TIMESTAMP',
-                'null' => true,
-            ],
-            'can_user_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => true,
-            ],
-            'can_motivo' => [
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-                'null' => true,
             ]
         ]);
 
         $this->forge->addPrimaryKey('id');
 
-        $this->forge->addForeignKey('colaborador_id', 'cad_colaborador', 'id', 'CASCADE', 'NO ACTION', 'fk_colaborador_vale');
+        $this->forge->addForeignKey('pessoa_id', 'cad_pessoa', 'id', 'CASCADE', 'NO ACTION', 'fk_pessoa_colaborador');
+        $this->forge->addForeignKey('usuario_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_usuario_colaborador');
 
-        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_vale');
-        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_vale');
-        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_vale');
-        $this->forge->addForeignKey('can_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_can_user_vale');
+        $this->forge->addForeignKey('created_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_cre_user_colaborador');
+        $this->forge->addForeignKey('updated_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_upd_user_colaborador');
+        $this->forge->addForeignKey('deleted_user_id', 'cad_usuario', 'id', 'CASCADE', 'NO ACTION', 'fk_del_user_colaborador');
 
-        $this->forge->createTable('fin_vale', false, ['ENGINE' => 'InnoDB']);
+        $this->forge->createTable('cad_colaborador', false, ['ENGINE' => 'InnoDB']);
     }
 
     public function down()
     {
-        $this->forge->dropTable('fin_vale');
+        $this->forge->dropTable('cad_colaborador');
     }
 }
