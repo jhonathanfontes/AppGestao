@@ -8,6 +8,7 @@ use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use App\Libraries\Auth;
 
 /**
  * Class BaseController
@@ -43,6 +44,8 @@ abstract class BaseController extends Controller
      */
     // protected $session;
 
+    protected $auth;
+
     /**
      * @return void
      */
@@ -54,7 +57,41 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
+
+        $this->auth = new Auth();
     }
+
+    protected function getRequest()
+    {
+        if ($this->request instanceof IncomingRequest) {
+            return $this->request;
+        }
+
+        return new IncomingRequest(
+            new CLIRequest(),
+            new \CodeIgniter\HTTP\Response()
+        );
+    }
+
+    protected function getEmpresaId(): ?int
+    {
+        return $this->auth->getEmpresaId();
+    }
+
+    protected function getEmpresaNome(): ?string
+    {
+        return $this->auth->getEmpresaNome();
+    }
+
+    protected function verificarEmpresa(): bool
+    {
+        if (!$this->getEmpresaId()) {
+            return redirect()->to(base_url('empresas/selecionar'));
+        }
+
+        return true;
+    }
+
     protected function usuarioLogado()
     {
         return service('autenticacao')->usuarioLogado();
@@ -74,5 +111,4 @@ abstract class BaseController extends Controller
         readfile($path);
         exit;
     }
-    
 }

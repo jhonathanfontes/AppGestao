@@ -1,0 +1,106 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}Salários - AppGestao{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Salários</h1>
+    {% if auth().hasPermission('salarios.criar') %}
+    <a href="{{ base_url('salarios/criar') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Novo Salário
+    </a>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Colaborador</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Data Início</th>
+                        <th>Data Fim</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for salario in salarios %}
+                    <tr>
+                        <td>{{ salario.id }}</td>
+                        <td>{{ salario.colaborador_nome }}</td>
+                        <td>
+                            {% if salario.tipo_salario == 'base' %}
+                                <span class="badge bg-primary">Base</span>
+                            {% elseif salario.tipo_salario == 'adicional' %}
+                                <span class="badge bg-success">Adicional</span>
+                            {% else %}
+                                <span class="badge bg-info">Bônus</span>
+                            {% endif %}
+                        </td>
+                        <td>R$ {{ salario.salario_valor|number_format(2, ',', '.') }}</td>
+                        <td>{{ salario.data_inicio|date('d/m/Y') }}</td>
+                        <td>{{ salario.data_fim ? salario.data_fim|date('d/m/Y') : '-' }}</td>
+                        <td>
+                            {% if salario.status == 1 %}
+                                <span class="badge bg-success">Ativo</span>
+                            {% elseif salario.status == 2 %}
+                                <span class="badge bg-danger">Inativo</span>
+                            {% else %}
+                                <span class="badge bg-warning">Pendente</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                {% if auth().hasPermission('salarios.visualizar') %}
+                                <a href="{{ base_url('salarios/visualizar/' ~ salario.id) }}" 
+                                   class="btn btn-sm btn-info" 
+                                   title="Visualizar">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                {% endif %}
+                                
+                                {% if auth().hasPermission('salarios.editar') %}
+                                <a href="{{ base_url('salarios/editar/' ~ salario.id) }}" 
+                                   class="btn btn-sm btn-warning" 
+                                   title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% endif %}
+                                
+                                {% if auth().hasPermission('salarios.excluir') %}
+                                <button type="button" 
+                                        class="btn btn-sm btn-danger" 
+                                        title="Excluir"
+                                        onclick="confirmarExclusao({{ salario.id }})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">Nenhum salário encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmarExclusao(id) {
+    if (confirm('Tem certeza que deseja excluir este salário?')) {
+        window.location.href = "{{ base_url('salarios/excluir/') }}" + id;
+    }
+}
+</script>
+{% endblock %} 

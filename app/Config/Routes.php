@@ -22,6 +22,28 @@ $routes->group('autenticacao', ['namespace' => 'App\Controllers\App'], function 
     $routes->get('recover/password', 'Autenticacao::RedefinirSenha', ['filter' => 'autenticado']);
 });
 
+// Módulo de Vales
+$routes->group('vales', ['namespace' => 'App\Controllers', 'filter' => 'permission:vales.visualizar'], function($routes) {
+    $routes->get('/', 'ValesController::index');
+    $routes->get('criar', 'ValesController::criar', ['filter' => 'permission:vales.criar']);
+    $routes->post('criar', 'ValesController::criar', ['filter' => 'permission:vales.criar']);
+    $routes->get('editar/(:num)', 'ValesController::editar/$1', ['filter' => 'permission:vales.editar']);
+    $routes->post('editar/(:num)', 'ValesController::editar/$1', ['filter' => 'permission:vales.editar']);
+    $routes->get('excluir/(:num)', 'ValesController::excluir/$1', ['filter' => 'permission:vales.excluir']);
+    $routes->get('visualizar/(:num)', 'ValesController::visualizar/$1');
+});
+
+// Módulo de Salários
+$routes->group('salarios', ['namespace' => 'App\Controllers', 'filter' => 'permission:salarios.visualizar'], function($routes) {
+    $routes->get('/', 'SalariosController::index');
+    $routes->get('criar', 'SalariosController::criar', ['filter' => 'permission:salarios.criar']);
+    $routes->post('criar', 'SalariosController::criar', ['filter' => 'permission:salarios.criar']);
+    $routes->get('editar/(:num)', 'SalariosController::editar/$1', ['filter' => 'permission:salarios.editar']);
+    $routes->post('editar/(:num)', 'SalariosController::editar/$1', ['filter' => 'permission:salarios.editar']);
+    $routes->get('excluir/(:num)', 'SalariosController::excluir/$1', ['filter' => 'permission:salarios.excluir']);
+    $routes->get('visualizar/(:num)', 'SalariosController::visualizar/$1');
+});
+
 // Rota Api
 $routes->group('api', function ($routes) {
 

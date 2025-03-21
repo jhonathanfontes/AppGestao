@@ -1,0 +1,45 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}Selecionar Empresa - AppGestao{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">Selecionar Empresa</h3>
+                </div>
+                <div class="card-body">
+                    {% if empresas|length == 1 %}
+                        <div class="alert alert-info">
+                            Você tem acesso a apenas uma empresa. Redirecionando...
+                        </div>
+                        <script>
+                            setTimeout(function() {
+                                window.location.href = "{{ base_url('app/dashboard') }}";
+                            }, 2000);
+                        </script>
+                    {% else %}
+                        <form action="{{ base_url('empresas/selecionar') }}" method="post">
+                            {{ csrf_field() }}
+                            <div class="mb-3">
+                                <label for="empresa_id" class="form-label">Selecione a empresa:</label>
+                                <select class="form-select" id="empresa_id" name="empresa_id" required>
+                                    <option value="">Selecione uma empresa</option>
+                                    {% for empresa in empresas %}
+                                        <option value="{{ empresa.id }}">{{ empresa.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Continuar</button>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

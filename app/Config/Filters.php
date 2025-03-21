@@ -12,6 +12,8 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
+use App\Filters\TwigFilter;
+use App\Filters\PermissionFilter;
 
 class Filters extends BaseFilters
 {
@@ -35,7 +37,9 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'auth'         => \App\Filters\AuthFilter::class,
-        'autenticado'  => \App\Filters\AutenticadoFilter::class
+        'autenticado'  => \App\Filters\AutenticadoFilter::class,
+        'twig'          => TwigFilter::class,
+        'permission'    => PermissionFilter::class,
     ];
 
     /**

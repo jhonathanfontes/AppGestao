@@ -1,0 +1,96 @@
+{% extends "layouts/main.twig" %}
+
+{% block title %}Colaboradores - AppGestao{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Colaboradores</h1>
+    {% if auth().hasPermission('colaboradores.criar') %}
+    <a href="{{ base_url('colaboradores/criar') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Novo Colaborador
+    </a>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for colaborador in colaboradores %}
+                    <tr>
+                        <td>{{ colaborador.id }}</td>
+                        <td>{{ colaborador.nome }}</td>
+                        <td>{{ colaborador.cpf }}</td>
+                        <td>{{ colaborador.email }}</td>
+                        <td>{{ colaborador.telefone }}</td>
+                        <td>
+                            {% if colaborador.status == 1 %}
+                                <span class="badge bg-success">Ativo</span>
+                            {% elseif colaborador.status == 2 %}
+                                <span class="badge bg-danger">Inativo</span>
+                            {% else %}
+                                <span class="badge bg-warning">Pendente</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                {% if auth().hasPermission('colaboradores.visualizar') %}
+                                <a href="{{ base_url('colaboradores/visualizar/' ~ colaborador.id) }}" 
+                                   class="btn btn-sm btn-info" 
+                                   title="Visualizar">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                {% endif %}
+                                
+                                {% if auth().hasPermission('colaboradores.editar') %}
+                                <a href="{{ base_url('colaboradores/editar/' ~ colaborador.id) }}" 
+                                   class="btn btn-sm btn-warning" 
+                                   title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% endif %}
+                                
+                                {% if auth().hasPermission('colaboradores.excluir') %}
+                                <button type="button" 
+                                        class="btn btn-sm btn-danger" 
+                                        title="Excluir"
+                                        onclick="confirmarExclusao({{ colaborador.id }})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">Nenhum colaborador encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmarExclusao(id) {
+    if (confirm('Tem certeza que deseja excluir este colaborador?')) {
+        window.location.href = "{{ base_url('colaboradores/excluir/') }}" + id;
+    }
+}
+</script>
+{% endblock %} 

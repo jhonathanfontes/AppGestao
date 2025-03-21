@@ -25,11 +25,16 @@ class AuthFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        $autenticacao = service('autenticacao');
-
-        if ($autenticacao->getlogado() === false) {
-            return redirect()->to(site_url('autenticacao'))->with('infor', 'Necessario realizar o Login!');
+        if (!auth()->loggedIn()) {
+            return redirect()->to(base_url('login'));
         }
+
+        // Verifica se o usuário tem uma empresa selecionada
+        if (!session()->has('empresa_id') && !in_array($request->uri->getPath(), ['empresas/selecionar', 'empresas/trocar'])) {
+            return redirect()->to(base_url('empresas/selecionar'));
+        }
+
+        return $request;
     }
 
     /**
